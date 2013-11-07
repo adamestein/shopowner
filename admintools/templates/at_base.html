@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Admin Tools
+{% endblock %}
+
+{% block header %}
+    Admin Tools
+{% endblock %}
+
+{% block content %}
+    <p>
+        The following tools are used to perform administrative tasks.
+        Under normal conditions, these tools should not be needed that
+        much.
+    </p>
+
+    <p>
+        A password is required unless otherwise noted.
+    </p>
+
+    <ul>
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="dbcopy/">Database Copy</a>
+            <span class="aligned_desc">
+                Copy the database
+            </span>
+        </li>
+
+        <li>
+            <a class="aligned_link" href="/admin/">Django Admin</a>
+            <span class="aligned_desc">
+                Access the <a href="http://www.djangoproject.com/" target="_blank">Django</a> admin site
+            </span>
+        </li>
+    </ul>
+{% endblock %}
+

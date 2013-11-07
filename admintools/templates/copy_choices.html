@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Database Copy
+{% endblock %}
+
+{% block header %}
+    Database Copy
+{% endblock %}
+
+{% block content %}
+    <p>
+        The production (release) database can be copied to the developement (sandbox) or the other
+        way around.
+    </p>
+
+    <p>
+        <font style="color: red;">Warning</font>: copying <strong>to</strong> a database that is in use will
+        effectively cause a logout
+    </p>
+
+    <p>
+        Which way to copy?
+    </p>
+
+    <ul style="list-style: none;">
+        <li>
+            <a class="aligned_link" href="release/sandbox">Release --> Sandbox</a>
+        </li>
+
+        <br />
+
+        <li>
+            <a class="aligned_link" href="sandbox/release">Sandbox --> Release</a>
+        </li>
+    </ul>
+{% endblock %}
+

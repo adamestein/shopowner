@@ -1,0 +1,48 @@
+{% extends "at_base.html" %}
+
+{% block extrahead %}
+    <script type="text/javascript"
+        src="{{ STATIC_URL }}js/xp_progress.js">
+
+    /***********************************************
+    * WinXP Progress Bar- By Brian Gosselin- http://www.scriptasylum.com/
+    * Script featured on Dynamic Drive- http://www.dynamicdrive.com
+    * Please keep this notice intact
+    ***********************************************/
+
+    </script>
+{% endblock %}
+
+{% block title %}
+    Database Copy
+{% endblock %}
+
+{% block header %}
+    Database Copy
+{% endblock %}
+
+{% block content %}
+    <div id="progress" style="margin-top: 2em;margin-left: 3%;margin-right: 3%;margin-bottom: 2em;">
+        <center>
+            <span id="pmessage">{{ pmessage|safe }}</span>
+
+            <script type="text/javascript">
+                var bar = createBar(300, 15, "white", 1, "black",
+                                    "#7f9760", 85, 7, 3,"");
+            </script>
+        </center>
+    </div>
+
+    <div id="message">
+        <p>
+            <em>{{ from_db }}</em> has been copied to <em>{{ to_db }}</em>.
+        </p>
+
+        <p>
+            <font style="color: red;">Warning</font>: copying <strong>to</strong> a database that is in use will
+            effectively cause a logout
+        </p>
+
+    </div>
+{% endblock %}
+
