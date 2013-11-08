@@ -26,8 +26,8 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hhincwe_booth',
-        'USER': 'hhincwe_booth',
+        'NAME': 'hhincwe_shopowner',
+        'USER': 'hhincwe_shopownr',
         'PASSWORD': 'ALNRj6uF',
         'HOST': 'mysql1209.ixwebhosting.com',
         'PORT': '3306',
@@ -85,7 +85,7 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/booth_static/'
+STATIC_URL = '/shopowner_static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -184,8 +184,8 @@ if REMOTE_SERVER == True:
     locale.setlocale( locale.LC_ALL, '' )
 
 # Account URLs
-LOGIN_URL = "/booth/accounts/login/"
-LOGOUT_URL = "/booth/accounts/logout/"
+LOGIN_URL = "/shopowner/accounts/login/"
+LOGOUT_URL = "/shopowner/accounts/logout/"
 
 VERSION = "1.0"
 

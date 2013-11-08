@@ -6,16 +6,16 @@ admin.autodiscover()
 
 # Admin URL patterns
 urlpatterns = patterns('',
-    url(r'^booth/admin/tools/', include('admintools.urls')),
-    url(r'^booth/admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^booth/admin/', include(admin.site.urls)),
+    url(r'^shopowner/admin/tools/', include('admintools.urls')),
+    url(r'^shopowner/admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^shopowner/admin/', include(admin.site.urls)),
 )
 
 # Account URL patterns
 urlpatterns += patterns('',
-    url(r'^booth/accounts/login/$', 'django.contrib.auth.views.login',
+    url(r'^shopowner/accounts/login/$', 'django.contrib.auth.views.login',
         {"extra_context": {"title": "User Login"}}),
-    url(r'^booth/accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
+    url(r'^shopowner/accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
 )
 
 if settings.DEBUG:

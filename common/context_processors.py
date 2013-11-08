@@ -7,7 +7,7 @@ def version(request):
         mode = ""
 
     version_dict = {
-        "version": "Booth Apps %sv" % mode + settings.VERSION
+        "version": "Shop Owner Apps %sv" % mode + settings.VERSION
     }
 
     return version_dict

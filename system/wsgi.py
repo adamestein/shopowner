@@ -1,5 +1,5 @@
 """
-WSGI config for Booth Apps project.
+WSGI config for Shop Owner Apps project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
