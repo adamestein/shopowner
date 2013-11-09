@@ -21,11 +21,19 @@ urlpatterns += patterns('',
 from common.views.generic import NavigationTemplateView
 from common.navigation import Navigation
 
-# Inventory
+# Top level shop owner page
 urlpatterns += patterns('',
     url(r'^shopowner/$', NavigationTemplateView.as_view(
         template_name = "home.html",
         navigation = Navigation("")
+    )),
+)
+
+# Inventory
+urlpatterns += patterns('',
+    url(r'^shopowner/inventory/$', NavigationTemplateView.as_view(
+        template_name = "inventory_home.html",
+        navigation = Navigation("inventory")
     )),
 )
 

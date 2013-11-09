@@ -12,3 +12,18 @@ class NavigationTestCase(TestCase):
 
         self.assertEqual(Navigation(""), ans)
 
+        # Inventory
+        ans = (
+            ["Inventory", ""],
+            ["Sales", "/shopowner/sales/"],
+        )
+
+        self.assertEqual(Navigation("inventory"), ans)
+
+        # Sales
+        ans = (
+            ["Inventory", "/shopowner/inventory/"],
+            ["Sales", ""],
+        )
+
+        self.assertEqual(Navigation("sales"), ans)

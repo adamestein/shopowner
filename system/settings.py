@@ -131,6 +131,7 @@ WSGI_APPLICATION = 'system.wsgi.application'
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), '../templates').replace('\\','/'),
     os.path.join(os.path.dirname(__file__), '../admintools/templates').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), '../inventory/templates').replace('\\','/'),
 )
 
 INSTALLED_APPS = (

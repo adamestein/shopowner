@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Inventory Applications
+{% endblock %}
+
+{% block header %}
+    Inventory Applications
+{% endblock %}
+
+{% block content %}
+    <p>
+        Keep track of shop inventory.
+    </p>
+
+    <ul>
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="/shopowner/inventory/add/">Add Item</a>
+            <span class="aligned_desc">
+                Add an item to inventory
+            </span>
+        </li>
+
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="/shopowner/inventory/edit/">Edit Item</a>
+            <span class="aligned_desc">
+                Edit an item in inventory (can also be used to remove an item)
+            </span>
+        </li>
+
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="/shopowner/inventory/list/">List Items</a>
+            <span class="aligned_desc">
+                List items in inventory (the list can be filtered)
+            </span>
+        </li>
+    </ul>
+{% endblock %}
+
