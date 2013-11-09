@@ -18,6 +18,17 @@ urlpatterns += patterns('',
     url(r'^shopowner/accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
 )
 
+from common.views.generic import NavigationTemplateView
+from common.navigation import Navigation
+
+# Inventory
+urlpatterns += patterns('',
+    url(r'^shopowner/$', NavigationTemplateView.as_view(
+        template_name = "home.html",
+        navigation = Navigation("")
+    )),
+)
+
 if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^(?P<path>(css|js)/.*)$', 'django.views.static.serve', {

@@ -28,9 +28,9 @@ class Item(models.Model):
     )
 
     picture = models.URLField(
-        editable = False,
         blank = True,
         null = True,
+        help_text = "URL to the full-sized image of the item",
     )
 
     discount = models.FloatField(
@@ -58,9 +58,14 @@ class Item(models.Model):
         help_text = "Set to indicate item was removed and not because it was sold",
     )
 
+    comments = models.TextField(
+        blank = True,
+    )
+
     class Meta:
         unique_together = (("user", "number"),)
 
+# Owner selling the item
 class Seller(models.Model):
     first_name = models.CharField(
         max_length = 20,

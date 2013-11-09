@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Shop Owner Applications
+{% endblock %}
+
+{% block header %}
+    Shop Owner Applications
+{% endblock %}
+
+{% block content %}
+    <p>
+        Applications to help run the shop.
+    </p>
+
+    <ul>
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="/shopowner/inventory/">Inventory</a>
+            <span class="aligned_desc">
+                Add and List inventory
+            </span>
+        </li>
+
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="/shopowner/sales/">sales</a>
+            <span class="aligned_desc">
+                Track sales over time
+            </span>
+        </li>
+    </ul>
+{% endblock %}
+
