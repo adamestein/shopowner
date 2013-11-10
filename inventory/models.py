@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from common.format import currency
+
 # Item being kept track off
 class Item(models.Model):
     user = models.ForeignKey(User,
@@ -65,6 +67,9 @@ class Item(models.Model):
     class Meta:
         unique_together = (("user", "number"),)
 
+    def __unicode__(self):
+        return self.number + ": " + self.desc + " (%s)" % currency(self.price)
+
 # Owner selling the item
 class Seller(models.Model):
     first_name = models.CharField(
@@ -74,4 +79,7 @@ class Seller(models.Model):
     last_name = models.CharField(
         max_length = 20,
     )
+
+    def __unicode__(self):
+        return self.last_name + ", " + self.first_name
 

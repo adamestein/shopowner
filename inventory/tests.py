@@ -1,16 +1,9 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
+from django.utils import unittest
 
-Replace this with more appropriate tests for your application.
-"""
+from test.inventory.models import HumanReadableModelTestCase
 
-from django.test import TestCase
+def suite():
+    suite_hr = unittest.TestLoader().loadTestsFromTestCase(HumanReadableModelTestCase)
 
+    return unittest.TestSuite([suite_hr])
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
