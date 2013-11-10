@@ -24,26 +24,40 @@ from common.navigation import Navigation
 # Top level shop owner page
 urlpatterns += patterns('',
     url(r'^shopowner/$', NavigationTemplateView.as_view(
-        template_name = "home.html",
-        navigation = Navigation("")
+        navigation = Navigation(""),
+        template_name = "home.html"
     )),
 )
 
+from common.views.generic import NavigationCreateView
 from inventory.models import Seller
 from inventory.navigation import Navigation as InventoryNavigation
 
 # Inventory
 urlpatterns += patterns('',
     url(r'^shopowner/inventory/$', NavigationTemplateView.as_view(
-        template_name = "inventory_home.html",
-        navigation = Navigation("inventory")
+        navigation = Navigation("inventory"),
+        template_name = "inventory_home.html"
+    )),
+
+    url(r'^shopowner/seller/add/$', NavigationCreateView.as_view(
+        action = "Add",
+        model = Seller,
+        navigation = Navigation("add_seller"),
+        success_url = "../updated/",
+        template_name = "seller_form.html"
     )),
 
     url(r'^shopowner/seller/list/$', NavigationListView.as_view(
         model = Seller,
-        template_name = "seller_list.html",
-        navigation = InventoryNavigation("list_sellers")
+        navigation = InventoryNavigation("list_sellers"),
+        template_name = "seller_list.html"
     )),
+
+    url(r'^shopowner/seller/updated/$', NavigationTemplateView.as_view(
+        navigation = InventoryNavigation(""),
+        template_name = "seller_updated.html"
+    ))
 )
 
 if settings.DEBUG:

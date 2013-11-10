@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Inventory Applications: {{ action }} Seller
+{% endblock %}
+
+{% block header %}
+    {{ action }} Seller
+{% endblock %}
+
+{% block content %}
+    <p>
+        Enter the <em>first</em> and <em>last</em> names as required, then press <strong>Add</strong>
+        to save the information.
+    </p>
+
+    <form action="" method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        {% ifequal action "Add" %}
+            {% include "form_buttons.html" with submit_name="Add" %}
+        {% endifequal %}
+    </form>
+{% endblock %}
+

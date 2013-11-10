@@ -80,6 +80,10 @@ class Seller(models.Model):
         max_length = 20,
     )
 
+    class Meta:
+        ordering = ("last_name", "first_name")
+        unique_together = (("first_name", "last_name"),)
+
     def __unicode__(self):
         return self.last_name + ", " + self.first_name
 

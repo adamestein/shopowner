@@ -9,12 +9,16 @@
 {% endblock %}
 
 {% block content %}
-    {% for seller in object_list %}
-        <p>TBD</p>
-    {% empty %}
-        <p>
-            There are no sellers to list.
-        </p>
-    {% endfor %}
+    {% if object_list %}
+        <p>Sellers (sorted by last name):</p>
+
+        <ol>
+            {% for seller in object_list %}
+                <li>{{ seller }}</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>There are no sellers to list.</p>
+    {% endif %}
 {% endblock %}
 
