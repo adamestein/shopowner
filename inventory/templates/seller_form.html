@@ -10,7 +10,20 @@
 
 {% block content %}
     <p>
-        Enter the <em>first</em> and <em>last</em> names as required, then press <strong>Add</strong>
+        {% ifequal action "Add" %}
+            Enter
+        {% else %}
+            Change
+        {% endifequal %}
+
+        the <em>first</em> and <em>last</em> names as required, then press
+        
+        {% ifequal action "Add" %}
+            <strong>Add</strong>
+        {% else %}
+            <strong>Update</strong>
+        {% endifequal %}
+
         to save the information.
     </p>
 
@@ -21,6 +34,8 @@
 
         {% ifequal action "Add" %}
             {% include "form_buttons.html" with submit_name="Add" %}
+        {% else %}
+            {% include "form_buttons.html" with submit_name="Update" %}
         {% endifequal %}
     </form>
 {% endblock %}

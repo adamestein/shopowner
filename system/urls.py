@@ -29,21 +29,35 @@ urlpatterns += patterns('',
     )),
 )
 
-from common.views.generic import NavigationCreateView
+from common.views.generic import NavigationCreateView, NavigationFormView, NavigationUpdateView
+from inventory.forms import SellerEditListForm
 from inventory.models import Seller
 from inventory.navigation import Navigation as InventoryNavigation
 
 # Inventory
 urlpatterns += patterns('',
     url(r'^shopowner/inventory/$', NavigationTemplateView.as_view(
-        navigation = Navigation("inventory"),
+        navigation = InventoryNavigation("inventory"),
         template_name = "inventory_home.html"
     )),
 
     url(r'^shopowner/seller/add/$', NavigationCreateView.as_view(
         action = "Add",
         model = Seller,
-        navigation = Navigation("add_seller"),
+        navigation = InventoryNavigation("add_seller"),
+        success_url = "../updated/",
+        template_name = "seller_form.html"
+    )),
+
+    url(r'^shopowner/seller/edit/$', NavigationFormView.as_view(
+        form_class = SellerEditListForm,
+        navigation = InventoryNavigation("edit_seller"),
+        template_name = "seller_edit_list.html"
+    )),
+
+    url(r'^shopowner/seller/edit/(?P<pk>[\d]+)$', NavigationUpdateView.as_view(
+        model = Seller,
+        navigation = InventoryNavigation("edit_seller"),
         success_url = "../updated/",
         template_name = "seller_form.html"
     )),
