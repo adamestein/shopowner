@@ -10,6 +10,13 @@ class NavigationCreateView(CreateView):
     def dispatch(self, *args, **kwargs):
         return super(NavigationCreateView, self).dispatch(*args, **kwargs)
 
+    def form_valid(self, form):
+        # Will not cause a problem if form.instance.user doesn't exist
+        # beforehand
+        form.instance.user = self.request.user
+
+        return super(NavigationCreateView, self).form_valid(form)
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(NavigationCreateView, self).get_context_data(**kwargs)

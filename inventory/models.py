@@ -40,24 +40,25 @@ class Item(models.Model):
         help_text = "Price discount at time of sale (in percentage)"
     )
 
-    sale_price = models.DecimalField(
-        decimal_places = 2,
-        max_digits = 10,
-        blank = True,
-        null = True,
-        help_text = "Price the item sold for",
-    )
+    # Move to a sales table
+    #sale_price = models.DecimalField(
+    #    decimal_places = 2,
+    #    max_digits = 10,
+    #    blank = True,
+    #    null = True,
+    #    help_text = "Price the item sold for",
+    #)
+#
+#    sale_date = models.DateField(
+#        db_index = True,
+#        blank = True,
+#        null = True,
+#        help_text = "Date on which the item sold",
+#    )
 
-    sale_date = models.DateField(
-        db_index = True,
-        blank = True,
-        null = True,
-        help_text = "Date on which the item sold",
-    )
-
-    removed = models.BooleanField(
+    remove = models.BooleanField(
         default = False,
-        help_text = "Set to indicate item was removed and not because it was sold",
+        help_text = "Set to remove this item from inventory (and not because it was sold)"
     )
 
     comments = models.TextField(
@@ -65,6 +66,7 @@ class Item(models.Model):
     )
 
     class Meta:
+        ordering = ("number",)
         unique_together = (("user", "number"),)
 
     def __unicode__(self):
@@ -78,6 +80,11 @@ class Seller(models.Model):
 
     last_name = models.CharField(
         max_length = 20,
+    )
+
+    remove = models.BooleanField(
+        default = False,
+        help_text = "Set to remove this seller",
     )
 
     class Meta:
