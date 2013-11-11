@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Inventory Applications: List Sellers
+{% endblock %}
+
+{% block header %}
+    List Sellers
+{% endblock %}
+
+{% block content %}
+    {% if object_list %}
+        <p>Sellers (sorted by last name):</p>
+
+        <ol>
+            {% for seller in object_list %}
+                <li>{{ seller }}</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>There are no sellers to list.</p>
+    {% endif %}
+{% endblock %}
+

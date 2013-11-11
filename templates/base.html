@@ -33,11 +33,13 @@ content="text/html; charset=windows-1252" />
 <div id="perm-links">
 <ul>
 <li><a href="/">Home</a></li>
-<li><a href="/admin/tools/">Admin</a></li>
+<li><a href="/shopowner/inventory/">Inventory</a></li>
+<li><a href="/shopowner/sales/">Sales</a></li>
+<li><a href="/shopowner/admin/tools/">Admin</a></li>
 <li>&nbsp;</li>
 <li>&nbsp;</li>
 {% if user.is_authenticated %}
-    <li><a href="/accounts/logout/" style="color:#880000;">Logout</a></li>
+    <li><a href="/shopowner/accounts/logout/" style="color:#880000;">Logout</a></li>
 {% else %}
     <li>Logout</li>
 {% endif %}
