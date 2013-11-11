@@ -31,7 +31,7 @@ urlpatterns += patterns('',
 
 from common.views.generic import NavigationCreateView, NavigationFormView, NavigationUpdateView
 from inventory.forms import SellerEditListForm
-from inventory.models import Seller
+from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
 
 # Inventory
@@ -39,6 +39,12 @@ urlpatterns += patterns('',
     url(r'^shopowner/inventory/$', NavigationTemplateView.as_view(
         navigation = InventoryNavigation("inventory"),
         template_name = "inventory_home.html"
+    )),
+
+    url(r'^shopowner/inventory/list/$', NavigationListView.as_view(
+        model = Item,
+        navigation = InventoryNavigation("list_items"),
+        template_name = "item_list.html"
     )),
 
     url(r'^shopowner/seller/add/$', NavigationCreateView.as_view(
