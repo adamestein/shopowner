@@ -2,7 +2,13 @@ from django import forms
 
 from inventory.models import Item, Seller
 
-class ItemForm(forms.ModelForm):
+class ItemEditListForm(forms.Form):
+    item = forms.ModelChoiceField(
+        queryset = Item.objects.all(),
+        empty_label = "<Choose an item>"
+    )
+
+class ItemAddForm(forms.ModelForm):
     # Only put active sellers in this choice
     owner = forms.ModelMultipleChoiceField(
         queryset = Seller.objects.filter(remove=False),
@@ -19,6 +25,10 @@ class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
         exclude = ("user", "remove")
+
+class ItemEditForm(ItemAddForm):
+    class Meta(ItemAddForm.Meta):
+        exclude = ("user",)
 
 class SellerEditListForm(forms.Form):
     seller = forms.ModelChoiceField(

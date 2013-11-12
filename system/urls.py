@@ -30,7 +30,7 @@ urlpatterns += patterns('',
 )
 
 from common.views.generic import NavigationCreateView, NavigationFormView, NavigationUpdateView
-from inventory.forms import ItemForm, SellerEditListForm, SellerForm
+from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm, SellerEditListForm, SellerForm
 from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
 
@@ -43,9 +43,23 @@ urlpatterns += patterns('',
 
     url(r'^shopowner/inventory/add/$', NavigationCreateView.as_view(
         action = "Add",
-        form_class = ItemForm,
+        form_class = ItemAddForm,
         model = Item,
         navigation = InventoryNavigation("add_item"),
+        success_url = "../updated/",
+        template_name = "item_form.html"
+    )),
+
+    url(r'^shopowner/inventory/edit/$', NavigationFormView.as_view(
+        form_class = ItemEditListForm,
+        navigation = InventoryNavigation("edit_item"),
+        template_name = "item_edit_list.html"
+    )),
+
+    url(r'^shopowner/inventory/edit/(?P<pk>[\d]+)$', NavigationUpdateView.as_view(
+        form_class = ItemEditForm,
+        model = Item,
+        navigation = InventoryNavigation("edit_item"),
         success_url = "../updated/",
         template_name = "item_form.html"
     )),

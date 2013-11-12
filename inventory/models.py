@@ -58,7 +58,7 @@ class Item(models.Model):
 
     remove = models.BooleanField(
         default = False,
-        help_text = "Set to remove this item from inventory (and not because it was sold)"
+        help_text = "Check to remove this item from inventory (and not because it was sold)"
     )
 
     comments = models.TextField(
@@ -84,7 +84,7 @@ class Seller(models.Model):
 
     remove = models.BooleanField(
         default = False,
-        help_text = "Set to remove this seller",
+        help_text = "Check to remove this seller",
     )
 
     class Meta:
