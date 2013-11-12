@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Inventory Applications: {{ action }} Seller
+    Inventory Applications: {{ action }} Item
 {% endblock %}
 
 {% block header %}
-    {{ action }} Seller
+    {{ action }} Item
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
             Change
         {% endifequal %}
 
-        the <em>first</em> and <em>last</em> names as required, then press
+        the details as required, then press
         
         {% ifequal action "Add" %}
             <strong>Add</strong>
@@ -30,7 +30,9 @@
     <form method="post">
         {% csrf_token %}
 
-        {{ form.as_p }}
+        <table>
+            {{ form.as_table }}
+        </table>
 
         {% ifequal action "Add" %}
             {% include "form_buttons.html" with submit_name="Add" %}

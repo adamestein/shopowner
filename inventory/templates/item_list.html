@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load format %}
+
+{% block title %}
+    Inventory Applications: List Items
+{% endblock %}
+
+{% block header %}
+    List Items
+{% endblock %}
+
+{% block content %}
+    {% if object_list %}
+        <p>Items (sorted by item number):</p>
+
+        {% for item in object_list %}
+            {{ item.number }}: <em>{{ item.desc }}</em>
+            (<strong>{{ item.price|currency_format}}</strong>)
+
+            <br />
+        {% endfor %}
+    {% else %}
+        <p>There are no items to list.</p>
+    {% endif %}
+{% endblock %}
+

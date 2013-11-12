@@ -30,8 +30,8 @@ urlpatterns += patterns('',
 )
 
 from common.views.generic import NavigationCreateView, NavigationFormView, NavigationUpdateView
-from inventory.forms import SellerEditListForm
-from inventory.models import Seller
+from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm, SellerEditListForm, SellerForm
+from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
 
 # Inventory
@@ -41,9 +41,43 @@ urlpatterns += patterns('',
         template_name = "inventory_home.html"
     )),
 
+    url(r'^shopowner/inventory/add/$', NavigationCreateView.as_view(
+        action = "Add",
+        form_class = ItemAddForm,
+        model = Item,
+        navigation = InventoryNavigation("add_item"),
+        success_url = "../updated/",
+        template_name = "item_form.html"
+    )),
+
+    url(r'^shopowner/inventory/edit/$', NavigationFormView.as_view(
+        form_class = ItemEditListForm,
+        navigation = InventoryNavigation("edit_item"),
+        template_name = "item_edit_list.html"
+    )),
+
+    url(r'^shopowner/inventory/edit/(?P<pk>[\d]+)$', NavigationUpdateView.as_view(
+        form_class = ItemEditForm,
+        model = Item,
+        navigation = InventoryNavigation("edit_item"),
+        success_url = "../updated/",
+        template_name = "item_form.html"
+    )),
+
+    url(r'^shopowner/inventory/list/$', NavigationListView.as_view(
+        model = Item,
+        navigation = InventoryNavigation("list_items"),
+        template_name = "item_list.html"
+    )),
+
+    url(r'^shopowner/inventory/updated/$', NavigationTemplateView.as_view(
+        navigation = InventoryNavigation(""),
+        template_name = "item_updated.html"
+    )),
+
     url(r'^shopowner/seller/add/$', NavigationCreateView.as_view(
         action = "Add",
-        model = Seller,
+        form_class = SellerForm,
         navigation = InventoryNavigation("add_seller"),
         success_url = "../updated/",
         template_name = "seller_form.html"
@@ -65,6 +99,7 @@ urlpatterns += patterns('',
     url(r'^shopowner/seller/list/$', NavigationListView.as_view(
         model = Seller,
         navigation = InventoryNavigation("list_sellers"),
+        queryset = Seller.objects.filter(remove=False),
         template_name = "seller_list.html"
     )),
 
