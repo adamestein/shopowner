@@ -56,13 +56,13 @@ class Item(models.Model):
 #        help_text = "Date on which the item sold",
 #    )
 
+    comments = models.TextField(
+        blank = True,
+    )
+
     remove = models.BooleanField(
         default = False,
         help_text = "Check to remove this item from inventory (and not because it was sold)"
-    )
-
-    comments = models.TextField(
-        blank = True,
     )
 
     class Meta:

@@ -8,7 +8,7 @@ class ItemEditListForm(forms.Form):
         empty_label = "<Choose an item>"
     )
 
-class ItemAddForm(forms.ModelForm):
+class ItemEditForm(forms.ModelForm):
     # Only put active sellers in this choice
     owner = forms.ModelMultipleChoiceField(
         queryset = Seller.objects.filter(remove=False),
@@ -24,11 +24,22 @@ class ItemAddForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        exclude = ("user", "remove")
-
-class ItemEditForm(ItemAddForm):
-    class Meta(ItemAddForm.Meta):
         exclude = ("user",)
+
+class ItemAddForm(ItemEditForm):
+    def __init__(self, *args, **kwargs):
+        try:
+            number = int(Item.objects.latest("id").number) + 1
+        except ValueError:
+            pass
+        else:
+            initial = kwargs.get("initial", {})
+            initial["number"] = number
+            kwargs["initial"] = initial
+
+        super(ItemAddForm, self).__init__(*args, **kwargs)
+    class Meta(ItemEditForm.Meta):
+        exclude = ("user", "remove")
 
 class SellerEditListForm(forms.Form):
     seller = forms.ModelChoiceField(
