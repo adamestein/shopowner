@@ -6,6 +6,7 @@ from common.views.generic import *
 from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm, SellerEditListForm, SellerForm
 from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
+from sales.navigation import Navigation as SalesNavigation
 
 from django.contrib import admin
 admin.autodiscover()
@@ -102,7 +103,13 @@ urlpatterns = patterns('',
     url(r'^shopowner/seller/updated/$', NavigationTemplateView.as_view(
         navigation = InventoryNavigation(""),
         template_name = "seller_updated.html"
-    ))
+    )),
+
+    # Inventory
+    url(r'^shopowner/sales/$', NavigationTemplateView.as_view(
+        navigation = SalesNavigation("sales"),
+        template_name = "sales_home.html"
+    )),
 )
 
 if settings.DEBUG:

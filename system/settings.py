@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'south',
     'common',
     'inventory',
+    'sales',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
