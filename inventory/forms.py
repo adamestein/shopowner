@@ -1,3 +1,4 @@
+from db_file_storage.form_widgets import DBClearableFileInput
 from django import forms
 
 from inventory.models import Item, Seller
@@ -15,16 +16,12 @@ class ItemEditForm(forms.ModelForm):
         help_text = "Seller(s) of this item",
     )
 
-    # Only as the user for the filename.  Behind the scenes, we'll upload and
-    # fill in the URLField field.
-    picture = forms.ImageField(
-        required = False,
-        help_text = "File containing this item's image"
-    )
-
     class Meta:
         model = Item
         exclude = ("user",)
+        widgets = {
+            "picture": DBClearableFileInput
+        }
 
 class ItemAddForm(ItemEditForm):
     def __init__(self, *args, **kwargs):

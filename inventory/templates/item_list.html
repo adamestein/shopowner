@@ -11,14 +11,35 @@
 
 {% block content %}
     {% if object_list %}
-        <p>Items (sorted by item number):</p>
+        <p>
+            Click on the image to get the full sized version.
+        </p>
 
-        {% for item in object_list %}
-            {{ item.number }}: <em>{{ item.desc }}</em>
-            (<strong>{{ item.price|currency_format}}</strong>)
+        <table border="1">
+            <caption><strong>Inventory</strong></caption>
 
-            <br />
-        {% endfor %}
+            <tr>
+                <th>Number</td>
+                <th>Description</td>
+                <th>Price</td>
+                <th>Image</td>
+            </tr>
+
+            {% for item in object_list %}
+                <tr>
+                    <td>{{ item.number }}</td>
+                    <td>{{ item.desc }}</td>
+                    <td>{{ item.price|currency_format }}</td>
+                    <td>
+                        {% if item.picture %}
+                            <a href="/files/get/?name={{ item.picture }}" target="_blank">
+                                <img height=64 width=64 src="/files/get/?name={{ item.picture }}">
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     {% else %}
         <p>There are no items to list.</p>
     {% endif %}
