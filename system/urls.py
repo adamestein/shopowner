@@ -1,41 +1,36 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 
-from django.contrib import admin
-admin.autodiscover()
-
-# Admin URL patterns
-urlpatterns = patterns('',
-    url(r'^shopowner/admin/tools/', include('admintools.urls')),
-    url(r'^shopowner/admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^shopowner/admin/', include(admin.site.urls)),
-)
-
-# Account URL patterns
-urlpatterns += patterns('',
-    url(r'^shopowner/accounts/login/$', 'django.contrib.auth.views.login',
-        {"extra_context": {"title": "User Login"}}),
-    url(r'^shopowner/accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
-)
-
-from common.views.generic import NavigationListView, NavigationTemplateView
 from common.navigation import Navigation
-
-# Top level shop owner page
-urlpatterns += patterns('',
-    url(r'^shopowner/$', NavigationTemplateView.as_view(
-        navigation = Navigation(""),
-        template_name = "home.html"
-    )),
-)
-
-from common.views.generic import NavigationCreateView, NavigationFormView, NavigationUpdateView
+from common.views.generic import *
 from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm, SellerEditListForm, SellerForm
 from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
 
-# Inventory
-urlpatterns += patterns('',
+from django.contrib import admin
+admin.autodiscover()
+
+urlpatterns = patterns('',
+    # Admin URL patterns
+    url(r'^shopowner/admin/tools/', include('admintools.urls')),
+    url(r'^shopowner/admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^shopowner/admin/', include(admin.site.urls)),
+
+    # Account URL patterns
+    url(r'^shopowner/accounts/login/$', 'django.contrib.auth.views.login',
+        {"extra_context": {"title": "User Login"}}),
+    url(r'^shopowner/accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
+
+    # Filesystem for images
+    url(r'^files/', include('db_file_storage.urls')),
+
+    # Top level shop owner page
+    url(r'^shopowner/$', NavigationTemplateView.as_view(
+        navigation = Navigation(""),
+        template_name = "home.html"
+    )),
+
+    # Inventory
     url(r'^shopowner/inventory/$', NavigationTemplateView.as_view(
         navigation = InventoryNavigation("inventory"),
         template_name = "inventory_home.html"
@@ -67,6 +62,7 @@ urlpatterns += patterns('',
     url(r'^shopowner/inventory/list/$', NavigationListView.as_view(
         model = Item,
         navigation = InventoryNavigation("list_items"),
+        queryset = Item.objects.filter(remove=False),
         template_name = "item_list.html"
     )),
 

@@ -1,3 +1,4 @@
+from db_file_storage.model_utils import delete_file_if_needed
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -29,18 +30,19 @@ class Item(models.Model):
         help_text = "Price of the item",
     )
 
-    picture = models.URLField(
-        blank = True,
-        null = True,
-        help_text = "URL to the full-sized image of the item",
-    )
-
-    discount = models.FloatField(
-        default = 0,
-        help_text = "Price discount at time of sale (in percentage)"
+    picture = models.ImageField(
+        upload_to="inventory.ItemImage/data/filename/mimetype",
+        blank=True,
+        null=True,
+        help_text = "Item image",
     )
 
     # Move to a sales table
+    #discount = models.FloatField(
+    #    default = 0,
+    #    help_text = "Price discount at time of sale (in percentage)"
+    #)
+
     #sale_price = models.DecimalField(
     #    decimal_places = 2,
     #    max_digits = 10,
@@ -69,8 +71,18 @@ class Item(models.Model):
         ordering = ("number",)
         unique_together = (("user", "number"),)
 
+    def save(self, *args, **kwargs):
+        delete_file_if_needed(self, "picture")
+        super(Item, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return self.number + ": " + self.desc + " (%s)" % currency(self.price)
+
+# Image of the item
+class ItemImage(models.Model):
+    data = models.TextField()
+    filename = models.CharField(max_length=255)
+    mimetype = models.CharField(max_length=50)
 
 # Owner selling the item
 class Seller(models.Model):

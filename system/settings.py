@@ -143,6 +143,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'db_file_storage',
     'south',
     'common',
     'inventory',
@@ -187,6 +188,9 @@ if REMOTE_SERVER == True:
 # Account URLs
 LOGIN_URL = "/shopowner/accounts/login/"
 LOGOUT_URL = "/shopowner/accounts/logout/"
+
+# To store images in database
+DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
 
 VERSION = "1.0"
 
