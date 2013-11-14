@@ -26,20 +26,18 @@
             </tr>
 
             {% for item in object_list %}
-                {% ifequal item.user user %}
-                    <tr>
-                        <td>{{ item.number }}</td>
-                        <td>{{ item.desc }}</td>
-                        <td>{{ item.price|currency_format }}</td>
-                        <td>
-                            {% if item.picture %}
-                                <a href="/files/get/?name={{ item.picture }}" target="_blank">
-                                    <img height=64 width=64 src="/files/get/?name={{ item.picture }}">
-                                </a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endifequal %}
+                <tr>
+                    <td>{{ item.number }}</td>
+                    <td>{{ item.desc }}</td>
+                    <td>{{ item.price|currency_format }}</td>
+                    <td>
+                        {% if item.picture %}
+                            <a href="/files/get/?name={{ item.picture }}" target="_blank">
+                                <img height=64 width=64 src="/files/get/?name={{ item.picture }}">
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
             {% endfor %}
         </table>
     {% else %}
