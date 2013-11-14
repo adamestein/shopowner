@@ -14,7 +14,9 @@
 
         <ol>
             {% for seller in object_list %}
-                <li>{{ seller }}</li>
+                {% ifequal seller.user user %}
+                    <li>{{ seller }}</li>
+                {% endifequal %}
             {% endfor %}
         </ol>
     {% else %}

@@ -45,6 +45,12 @@ class NavigationFormView(FormView):
 
         return context
 
+    def get_form_kwargs(self):
+        kwargs = super(NavigationFormView, self).get_form_kwargs()
+        kwargs.update({"user": self.request.user})  # Add user so form can use value to filter
+
+        return kwargs
+
 class NavigationUpdateView(UpdateView):
     action = "Update"
     navigation = None

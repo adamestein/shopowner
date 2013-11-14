@@ -3,7 +3,8 @@ from django.conf.urls import patterns, include, url
 
 from common.navigation import Navigation
 from common.views.generic import *
-from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm, SellerEditListForm, SellerForm
+from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm
+from inventory.forms import SellerEditListForm, SellerForm
 from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
 

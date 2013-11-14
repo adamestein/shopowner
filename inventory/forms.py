@@ -3,12 +3,6 @@ from django import forms
 
 from inventory.models import Item, Seller
 
-class ItemEditListForm(forms.Form):
-    item = forms.ModelChoiceField(
-        queryset = Item.objects.all(),
-        empty_label = "<Choose an item>"
-    )
-
 class ItemEditForm(forms.ModelForm):
     # Only put active sellers in this choice
     owner = forms.ModelMultipleChoiceField(
@@ -22,6 +16,18 @@ class ItemEditForm(forms.ModelForm):
         widgets = {
             "picture": DBClearableFileInput
         }
+
+class ItemEditListForm(forms.Form):
+    item = forms.ModelChoiceField(
+        queryset = Item.objects.all(),
+        empty_label = "<Choose an item>"
+    )
+
+    def __init__(self, user=None, **kwargs):
+        super(ItemEditListForm, self).__init__(**kwargs)
+
+        if user:
+            self.fields["item"].queryset = Item.objects.filter(user=user)
 
 class ItemAddForm(ItemEditForm):
     def __init__(self, *args, **kwargs):
@@ -43,6 +49,12 @@ class SellerEditListForm(forms.Form):
         queryset = Seller.objects.all(),
         empty_label = "<Choose a seller>"
     )
+
+    def __init__(self, user=None, **kwargs):
+        super(SellerEditListForm, self).__init__(**kwargs)
+
+        if user:
+            self.fields["seller"].queryset = Seller.objects.filter(user=user)
 
 class SellerForm(forms.ModelForm):
     class Meta:
