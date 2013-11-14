@@ -17,18 +17,6 @@ class ItemEditForm(forms.ModelForm):
             "picture": DBClearableFileInput
         }
 
-class ItemEditListForm(forms.Form):
-    item = forms.ModelChoiceField(
-        queryset = Item.objects.all(),
-        empty_label = "<Choose an item>"
-    )
-
-    def __init__(self, user=None, **kwargs):
-        super(ItemEditListForm, self).__init__(**kwargs)
-
-        if user:
-            self.fields["item"].queryset = Item.objects.filter(user=user)
-
 class ItemAddForm(ItemEditForm):
     def __init__(self, *args, **kwargs):
         try:
@@ -43,6 +31,18 @@ class ItemAddForm(ItemEditForm):
         super(ItemAddForm, self).__init__(*args, **kwargs)
     class Meta(ItemEditForm.Meta):
         exclude = ("user", "remove")
+
+class ItemEditListForm(forms.Form):
+    item = forms.ModelChoiceField(
+        queryset = Item.objects.all(),
+        empty_label = "<Choose an item>"
+    )
+
+    def __init__(self, user=None, **kwargs):
+        super(ItemEditListForm, self).__init__(**kwargs)
+
+        if user:
+            self.fields["item"].queryset = Item.objects.filter(user=user)
 
 class SellerEditListForm(forms.Form):
     seller = forms.ModelChoiceField(
@@ -59,5 +59,5 @@ class SellerEditListForm(forms.Form):
 class SellerForm(forms.ModelForm):
     class Meta:
         model = Seller
-        exclude = ("remove",)   # Don't need to see on an 'Add' form
+        exclude = ("remove", "user")   # Don't need to see on an 'Add' form
 
