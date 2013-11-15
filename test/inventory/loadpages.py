@@ -101,7 +101,6 @@ class LoadPages(TestCase):
         self.assertRedirects(
             response,
             "/shopowner/accounts/login/?next=" + url,
-            response.status_code,
             msg_prefix=prefix
         )
 
