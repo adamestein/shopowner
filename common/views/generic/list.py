@@ -1,26 +1,12 @@
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 
-class NavigationListView(ListView):
-    navigation = None
+from mixins import NavigationContextMixin
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(NavigationListView, self).dispatch(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(NavigationListView, self).get_context_data(**kwargs)
-
-        # Add web page navigation and version info
-        context["navigation"] = self.navigation
-
-        return context
-
+class NavigationListView(NavigationContextMixin, ListView):
     def get_queryset(self):
         queryset = super(NavigationListView, self).get_queryset()
 
         # Need to filter by user in addition to whatever the original queryset
         # is set to
         return queryset.filter(user=self.request.user)
+
