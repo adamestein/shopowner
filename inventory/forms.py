@@ -30,8 +30,10 @@ class ItemAddForm(ItemEditForm):
     def __init__(self, user=None, *args, **kwargs):
         try:
             number = int(Item.objects.latest("id").number) + 1
+        except Item.DoesNotExist:
+            pass    # No items in database, so no latest item to get number from
         except ValueError:
-            pass
+            pass    # Item number isn't an integer, so we can't increment value
         else:
             initial = kwargs.get("initial", {})
             initial["number"] = number

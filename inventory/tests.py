@@ -2,10 +2,15 @@ from django.utils import unittest
 
 from test.inventory.models import HumanReadableModelTestCase
 from test.inventory.navigation import NavigationTestCase
+from test.inventory.loadpages import LoadPages
 
 def suite():
-    suite_hr = unittest.TestLoader().loadTestsFromTestCase(HumanReadableModelTestCase)
-    suite_navigation = unittest.TestLoader().loadTestsFromTestCase(NavigationTestCase)
+    loader = unittest.TestLoader()
 
-    return unittest.TestSuite([suite_hr, suite_navigation])
+    hr = loader.loadTestsFromTestCase(HumanReadableModelTestCase)
+    navigation = loader.loadTestsFromTestCase(NavigationTestCase)
+
+    load_pages = loader.loadTestsFromTestCase(LoadPages)
+
+    return unittest.TestSuite([hr, navigation, load_pages])
 
