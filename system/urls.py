@@ -3,7 +3,8 @@ from django.conf.urls import patterns, include, url
 
 from common.navigation import Navigation
 from common.views.generic import *
-from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm, SellerEditListForm, SellerForm
+from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm
+from inventory.forms import SellerEditForm, SellerEditListForm, SellerForm
 from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
 from sales.navigation import Navigation as SalesNavigation
@@ -87,6 +88,7 @@ urlpatterns = patterns('',
     )),
 
     url(r'^shopowner/seller/edit/(?P<pk>[\d]+)$', NavigationUpdateView.as_view(
+        form_class = SellerEditForm,
         model = Seller,
         navigation = InventoryNavigation("edit_seller"),
         success_url = "../updated/",

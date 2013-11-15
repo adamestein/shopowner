@@ -86,6 +86,10 @@ class ItemImage(models.Model):
 
 # Owner selling the item
 class Seller(models.Model):
+    user = models.ForeignKey(User,
+        help_text = "User account this item belongs to",
+    )
+
     first_name = models.CharField(
         max_length = 20,
     )
