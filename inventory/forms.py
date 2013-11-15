@@ -31,10 +31,12 @@ class ItemAddForm(ItemEditForm):
         try:
             number = int(Item.objects.latest("id").number) + 1
         except Item.DoesNotExist:
-            pass    # No items in database, so no latest item to get number from
+            # No items in database, so no latest item to get number from, so start with 1
+            number = 1
         except ValueError:
-            pass    # Item number isn't an integer, so we can't increment value
-        else:
+            number = None # Item number isn't an integer, so we can't increment value
+
+        if number != None:
             initial = kwargs.get("initial", {})
             initial["number"] = number
             kwargs["initial"] = initial
