@@ -2,8 +2,6 @@ from django.contrib import admin
 
 from models import *
 
-class ConstantAdmin(admin.ModelAdmin):
-    list_filter = ("user",)
-
-admin.site.register(Constant, ConstantAdmin)
+admin.site.register(Sale)
+admin.site.register(Tax)
 
