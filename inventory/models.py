@@ -37,6 +37,11 @@ class Item(models.Model):
         help_text = "Item image",
     )
 
+    commission = models.FloatField(
+        default = 0,
+        help_text = "Commission on this item (in percentage)",
+    )
+
     comments = models.TextField(
         blank = True,
     )
