@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sales Applications: Record Sale
+{% endblock %}
+
+{% block header %}
+    Record Sale
+{% endblock %}
+
+{% block extrahead %}
+     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $( "#datepicker" ).datepicker();
+            $('#id_date').datepicker();
+            $('#id_date').keypress(function(e) {
+                alert("Which = [" + which + "]");
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <p>
+        Enter the details as required, then press <strong>Record</strong> to save
+        the information.  Clicking on the <em>Date</em> field will bring up a date picker.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <table>
+            {{ form.as_table }}
+        </table>
+
+        {% include "form_buttons.html" with submit_name="Record" %}
+    </form>
+{% endblock %}
+

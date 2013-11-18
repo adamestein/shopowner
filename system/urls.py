@@ -7,6 +7,7 @@ from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm
 from inventory.forms import SellerEditForm, SellerEditListForm, SellerForm
 from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
+from sales.forms import SalesForm
 from sales.navigation import Navigation as SalesNavigation
 
 from django.contrib import admin
@@ -107,10 +108,18 @@ urlpatterns = patterns('',
         template_name = "seller_updated.html"
     )),
 
-    # Inventory
+    # Sales
     url(r'^shopowner/sales/$', NavigationTemplateView.as_view(
         navigation = SalesNavigation("sales"),
         template_name = "sales_home.html"
+    )),
+
+    url(r'^shopowner/sales/record/$', NavigationCreateView.as_view(
+        action = "Record",
+        form_class = SalesForm,
+        navigation = SalesNavigation("record_sale"),
+        success_url = "../updated/",
+        template_name = "sales_form.html"
     )),
 )
 
