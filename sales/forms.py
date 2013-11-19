@@ -18,4 +18,9 @@ class SalesForm(forms.ModelForm):
         super(SalesForm, self).__init__(**kwargs)
 
         if user:
-            self.fields["item"].queryset = self.fields["item"].queryset.filter(user=user)
+            self.fields["item"].queryset = self.fields["item"].queryset.filter(
+                user=user
+            ).exclude(
+               sale__isnull = False
+            )
+

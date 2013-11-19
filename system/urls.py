@@ -9,6 +9,7 @@ from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
 from sales.forms import SalesForm
 from sales.navigation import Navigation as SalesNavigation
+from sales.views import SalePriceView
 
 from django.contrib import admin
 admin.autodiscover()
@@ -114,12 +115,19 @@ urlpatterns = patterns('',
         template_name = "sales_home.html"
     )),
 
+    url(r'^shopowner/sales/price/$', SalePriceView.as_view()),
+
     url(r'^shopowner/sales/record/$', NavigationCreateView.as_view(
         action = "Record",
         form_class = SalesForm,
         navigation = SalesNavigation("record_sale"),
         success_url = "../updated/",
         template_name = "sales_form.html"
+    )),
+
+    url(r'^shopowner/sales/updated/$', NavigationTemplateView.as_view(
+        navigation = SalesNavigation(""),
+        template_name = "sales_updated.html"
     )),
 )
 

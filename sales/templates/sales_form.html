@@ -11,15 +11,45 @@
 {% block extrahead %}
      <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
      <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}js/utils.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $( "#datepicker" ).datepicker();
-            $('#id_date').datepicker();
-            $('#id_date').keypress(function(e) {
-                alert("Which = [" + which + "]");
-            });
+            $("#id_date").datepicker();
+
+            // Update the calculated sales price when any of these
+            // related things change
+            $("#id_item").change(update_price);
+            $("#id_tax_rate").change(update_price);
+            $("#id_discount").change(update_price);
         });
+
+        // Update the price field as a convenience when something related changed
+        function update_price()
+        {
+            if ($("#id_item").val() != "")
+            {
+                $.get(
+                    "/shopowner/sales/price/",
+                    {
+                        "discount": $("#id_discount").val(),
+                        "item":     $("#id_item").val(),
+                        "tax_rate": $("#id_tax_rate").val()
+                    },
+                    function(data) {
+                        $("#id_price").val(data.price);
+                    }
+                )
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    // Show Django error page so we can easily see the error
+                    error_page(jqXHR, textStatus, errorThrown);
+                });
+            }
+            else
+            {
+                $("#id_price").val("");
+            }
+        }
     </script>
 {% endblock %}
 
