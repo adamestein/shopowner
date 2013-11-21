@@ -39,8 +39,7 @@ def deploy():
     ]
 
     # Only copy what's needed
-    rsync_project(destdir, "./", delete=True,
-            exclude=exclude, extra_opts="--delete-excluded -L")
+    rsync_project(destdir, "./", delete=True, exclude=exclude, extra_opts="--delete-excluded -L")
 
 # Install prerequisite packages if needed
 def prereq():
