@@ -10,7 +10,7 @@ appname = "ShopOwner_Apps"
 
 wwwdir = "/home/stein/www/"             # Top level directory
 destdir = wwwdir + appname              # Directory to install
-modulesdir = wwwdir + "modules"         # Directory for 3rd party modules
+modulesdir = "/home/stein/modules"      # Directory for 3rd party modules
 
 def collect_static_files():
     # Collect all the static files in one place
