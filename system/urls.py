@@ -14,33 +14,39 @@ from sales.views import SalePriceView
 from django.contrib import admin
 admin.autodiscover()
 
+# Use the prefix under the local Django development server
+if settings.REMOTE_SERVER == False:
+    prefix = "shopowner/"
+else:
+    prefix = ""
+
 urlpatterns = patterns('',
     # Admin URL patterns
-    url(r'^shopowner/admin/tools/', include('admintools.urls')),
-    url(r'^shopowner/admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^shopowner/admin/', include(admin.site.urls)),
+    url(r'^%sadmin/tools/' % prefix, include('admintools.urls')),
+    url(r'^%sadmin/doc/' % prefix, include('django.contrib.admindocs.urls')),
+    url(r'^%sadmin/' % prefix, include(admin.site.urls)),
 
     # Account URL patterns
-    url(r'^shopowner/accounts/login/$', 'django.contrib.auth.views.login',
+    url(r'^%saccounts/login/$' % prefix, 'django.contrib.auth.views.login',
         {"extra_context": {"title": "User Login"}}),
-    url(r'^shopowner/accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
+    url(r'^%saccounts/logout/$' % prefix, 'django.contrib.auth.views.logout_then_login'),
 
     # Filesystem for images
-    url(r'^files/', include('db_file_storage.urls')),
+    url(r'^%sfiles/' % prefix, include('db_file_storage.urls')),
 
     # Top level shop owner page
-    url(r'^shopowner/$', NavigationTemplateView.as_view(
+    url(r'^%s$' % prefix, NavigationTemplateView.as_view(
         navigation = Navigation(""),
         template_name = "home.html"
     )),
 
     # Inventory
-    url(r'^shopowner/inventory/$', NavigationTemplateView.as_view(
+    url(r'^%sinventory/$' % prefix, NavigationTemplateView.as_view(
         navigation = InventoryNavigation("inventory"),
         template_name = "inventory_home.html"
     )),
 
-    url(r'^shopowner/inventory/add/$', NavigationCreateView.as_view(
+    url(r'^%sinventory/add/$' % prefix, NavigationCreateView.as_view(
         action = "Add",
         form_class = ItemAddForm,
         model = Item,
@@ -49,13 +55,13 @@ urlpatterns = patterns('',
         template_name = "item_form.html"
     )),
 
-    url(r'^shopowner/inventory/edit/$', NavigationFormView.as_view(
+    url(r'^%sinventory/edit/$' % prefix, NavigationFormView.as_view(
         form_class = ItemEditListForm,
         navigation = InventoryNavigation("edit_item"),
         template_name = "item_edit_list.html"
     )),
 
-    url(r'^shopowner/inventory/edit/(?P<pk>[\d]+)$', NavigationUpdateView.as_view(
+    url(r'^%sinventory/edit/(?P<pk>[\d]+)$' % prefix, NavigationUpdateView.as_view(
         form_class = ItemEditForm,
         model = Item,
         navigation = InventoryNavigation("edit_item"),
@@ -63,19 +69,19 @@ urlpatterns = patterns('',
         template_name = "item_form.html"
     )),
 
-    url(r'^shopowner/inventory/list/$', NavigationListView.as_view(
+    url(r'^%sinventory/list/$' % prefix, NavigationListView.as_view(
         model = Item,
         navigation = InventoryNavigation("list_items"),
         queryset = Item.objects.filter(remove=False),
         template_name = "item_list.html"
     )),
 
-    url(r'^shopowner/inventory/updated/$', NavigationTemplateView.as_view(
+    url(r'^%sinventory/updated/$' % prefix, NavigationTemplateView.as_view(
         navigation = InventoryNavigation(""),
         template_name = "item_updated.html"
     )),
 
-    url(r'^shopowner/seller/add/$', NavigationCreateView.as_view(
+    url(r'^%sseller/add/$' % prefix, NavigationCreateView.as_view(
         action = "Add",
         form_class = SellerForm,
         navigation = InventoryNavigation("add_seller"),
@@ -83,13 +89,13 @@ urlpatterns = patterns('',
         template_name = "seller_form.html"
     )),
 
-    url(r'^shopowner/seller/edit/$', NavigationFormView.as_view(
+    url(r'^%sseller/edit/$' % prefix, NavigationFormView.as_view(
         form_class = SellerEditListForm,
         navigation = InventoryNavigation("edit_seller"),
         template_name = "seller_edit_list.html"
     )),
 
-    url(r'^shopowner/seller/edit/(?P<pk>[\d]+)$', NavigationUpdateView.as_view(
+    url(r'^%sseller/edit/(?P<pk>[\d]+)$' % prefix, NavigationUpdateView.as_view(
         form_class = SellerEditForm,
         model = Seller,
         navigation = InventoryNavigation("edit_seller"),
@@ -97,27 +103,27 @@ urlpatterns = patterns('',
         template_name = "seller_form.html"
     )),
 
-    url(r'^shopowner/seller/list/$', NavigationListView.as_view(
+    url(r'^%sseller/list/$' % prefix, NavigationListView.as_view(
         model = Seller,
         navigation = InventoryNavigation("list_sellers"),
         queryset = Seller.objects.filter(remove=False),
         template_name = "seller_list.html"
     )),
 
-    url(r'^shopowner/seller/updated/$', NavigationTemplateView.as_view(
+    url(r'^%sseller/updated/$' % prefix, NavigationTemplateView.as_view(
         navigation = InventoryNavigation(""),
         template_name = "seller_updated.html"
     )),
 
     # Sales
-    url(r'^shopowner/sales/$', NavigationTemplateView.as_view(
+    url(r'^%ssales/$' % prefix, NavigationTemplateView.as_view(
         navigation = SalesNavigation("sales"),
         template_name = "sales_home.html"
     )),
 
-    url(r'^shopowner/sales/price/$', SalePriceView.as_view()),
+    url(r'^%ssales/price/$' % prefix, SalePriceView.as_view()),
 
-    url(r'^shopowner/sales/record/$', NavigationCreateView.as_view(
+    url(r'^%ssales/record/$' % prefix, NavigationCreateView.as_view(
         action = "Record",
         form_class = SalesForm,
         navigation = SalesNavigation("record_sale"),
@@ -125,7 +131,7 @@ urlpatterns = patterns('',
         template_name = "sales_form.html"
     )),
 
-    url(r'^shopowner/sales/updated/$', NavigationTemplateView.as_view(
+    url(r'^%ssales/updated/$' % prefix, NavigationTemplateView.as_view(
         navigation = SalesNavigation(""),
         template_name = "sales_updated.html"
     )),

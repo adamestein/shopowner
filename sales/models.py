@@ -6,8 +6,13 @@ from localflavor.us.models import USStateField
 from common.format import currency
 from inventory.models import Item
 
-from south.modelsinspector import add_introspection_rules
-add_introspection_rules([], ["^localflavor\.us\.models\.USStateField"])
+try:
+    from south.modelsinspector import add_introspection_rules
+    add_introspection_rules([], ["^localflavor\.us\.models\.USStateField"])
+except ImportError:
+    # Only need this on development machine, so if it fails on production
+    # server, it's ok
+    pass
 
 class Sale(models.Model):
     user = models.ForeignKey(User,
