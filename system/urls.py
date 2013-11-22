@@ -7,6 +7,7 @@ from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm
 from inventory.forms import SellerEditForm, SellerEditListForm, SellerForm
 from inventory.models import Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
+from inventory.views import ItemView
 from sales.forms import SalesForm
 from sales.models import Sale
 from sales.navigation import Navigation as SalesNavigation
@@ -74,6 +75,12 @@ urlpatterns = patterns('',
         model = Item,
         navigation = InventoryNavigation("list_items"),
         queryset = Item.objects.filter(remove=False),
+        template_name = "item_list.html"
+    )),
+
+    url(r'^%sinventory/list/(?P<pk>[\d]+)$' % prefix, ItemView.as_view(
+        model = Item,
+        navigation = InventoryNavigation("list_items"),
         template_name = "item_list.html"
     )),
 

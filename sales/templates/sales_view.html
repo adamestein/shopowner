@@ -29,8 +29,16 @@
 
             {% for sale in object_list %}
                 <tr>
-                    <td style="text-align: center;">{{ sale.item.number }}</td>
-                    <td>{{ sale.item.desc }}</td>
+                    <td style="text-align: center;">
+                        <a href="/shopowner/inventory/list/{{ sale.item.pk }}">
+                            {{ sale.item.number }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/shopowner/inventory/list/{{ sale.item.pk }}">
+                            {{ sale.item.desc }}
+                        </a>
+                    </td>
                     <td style="text-align: right;">{{ sale.price|currency_format }}</td>
                     <td style="text-align: right;">{{ sale.commission }}</td>
                     <td style="text-align: right;">{{ sale.tax_rate }}%</td>
