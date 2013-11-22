@@ -25,7 +25,8 @@ class HumanReadableModelTestCase(TestCase):
             user = self.user,
             number = "1",
             desc = "Description",
-            price = 1.23
+            price = 1.23,
+            commission = 0
         )
 
         sale = Sale.objects.create(
@@ -34,6 +35,7 @@ class HumanReadableModelTestCase(TestCase):
             tax_rate = 8,
             discount = 0,
             price = 1.23,
+            commission = 0,
             date = datetime.datetime(2013, 11, 15)
         )
         self.assertEqual("'Description' sold for $1.23 on 11/15/2013", str(sale))

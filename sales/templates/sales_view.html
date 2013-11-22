@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load format %}
+
+{% block title %}
+    Sales Applications: Sale View
+{% endblock %}
+
+{% block header %}
+    Sale View
+{% endblock %}
+
+{% block content %}
+    {% if object_list %}
+        <p>
+            Click on the image to get the full sized version.
+        </p>
+
+        <table border="1">
+            <caption><strong>Sales</strong></caption>
+
+            <tr>
+                <th>&nbsp;#&nbsp;</th>
+                <th>Description</th>
+                <th>Sell Price</th>
+                <th>Comission</th>
+                <th>Sales Tax</th>
+                <th>Image</th>
+            </tr>
+
+            {% for sale in object_list %}
+                <tr>
+                    <td style="text-align: center;">{{ sale.item.number }}</td>
+                    <td>{{ sale.item.desc }}</td>
+                    <td style="text-align: right;">{{ sale.price|currency_format }}</td>
+                    <td style="text-align: right;">{{ sale.commission }}</td>
+                    <td style="text-align: right;">{{ sale.tax_rate }}%</td>
+                    <td>
+                        {% if sale.item.picture %}
+                            <a href="/shopowner/files/get/?name={{ sale.item.picture }}" target="_blank">
+                                <img height=64 width=64 src="/shopowner/files/get/?name={{ sale.item.picture }}">
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>You have not sold any items yet.</p>
+    {% endif %}
+{% endblock %}
+

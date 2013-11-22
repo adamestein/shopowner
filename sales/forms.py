@@ -24,3 +24,9 @@ class SalesForm(forms.ModelForm):
                sale__isnull = False
             )
 
+        # Only want to change the existing widgets to readonly, so it's easier
+        # to do it here than figure out the widget to set it to in the Meta
+        # section
+        self.fields["commission"].widget.attrs["readonly"] = "readonly"
+        self.fields["price"].widget.attrs["readonly"] = "readonly"
+

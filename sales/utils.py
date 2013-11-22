@@ -7,5 +7,9 @@ def calculate_sale_price(price, discount, tax_rate):
 
     # Make sure we round up (other rounding methods didn't work in all cases
     # for currency)
-    return float(int((price+tax_amt+0.005)*100.0)/100.0)
+    return round_currency(price + tax_amt)
+
+def round_currency(value):
+    # Round for currency's 2 digits
+    return float(int((value + 0.005)*100.0)/100.0)
 

@@ -35,7 +35,13 @@ class Sale(models.Model):
     price = models.DecimalField(
         decimal_places = 2,
         max_digits = 10,
-        help_text = "Price the item sold for",
+        help_text = "Price the item sold for (includes sales tax)",
+    )
+
+    commission = models.DecimalField(
+        decimal_places = 2,
+        max_digits = 10,
+        help_text = "Commission made on this item",
     )
 
     date = models.DateField(
