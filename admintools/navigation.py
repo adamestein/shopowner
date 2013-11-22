@@ -1,8 +1,8 @@
 def ATNavigation(on):
     navigation = (
-        ["Database Copy",   "/admin/tools/dbcopy/"],   # index 0
+        ["Database Copy",   "/shopowner/admin/tools/dbcopy/"],   # index 0
         ["", ""],
-        ["Django Admin",    "/admin/"],                # index 2
+        ["Django Admin",    "/shopowner/admin/"],                # index 2
     )
 
     if on == "dbcopy":

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sales Applications: Record Sale
+{% endblock %}
+
+{% block header %}
+    Record Sale
+{% endblock %}
+
+{% block extrahead %}
+     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}js/utils.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#id_date").datepicker();
+
+            // Update the calculated sales price when any of these
+            // related things change
+            $("#id_item").change(update_sales_values);
+            $("#id_tax_rate").change(update_sales_values);
+            $("#id_discount").change(update_sales_values);
+        });
+
+        // Update the fields as a convenience when something related changed
+        function update_sales_values()
+        {
+            if ($("#id_item").val() != "")
+            {
+                $.get(
+                    "/shopowner/sales/update_values/",
+                    {
+                        "discount": $("#id_discount").val(),
+                        "item":     $("#id_item").val(),
+                        "tax_rate": $("#id_tax_rate").val()
+                    },
+                    function(data) {
+                        $("#id_commission").val(data.commission);
+                        $("#id_price").val(data.price);
+                    }
+                )
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    // Show Django error page so we can easily see the error
+                    error_page(jqXHR, textStatus, errorThrown);
+                });
+            }
+            else
+            {
+                $("#id_commission").val("");
+                $("#id_price").val("");
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <p>
+        Enter the details as required, then press <strong>Record</strong> to save
+        the information.  Clicking on the <em>Date</em> field will bring up a date picker.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <table>
+            {{ form.as_table }}
+        </table>
+
+        {% include "form_buttons.html" with submit_name="Record" %}
+    </form>
+{% endblock %}
+

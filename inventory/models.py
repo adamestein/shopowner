@@ -37,26 +37,10 @@ class Item(models.Model):
         help_text = "Item image",
     )
 
-    # Move to a sales table
-    #discount = models.FloatField(
-    #    default = 0,
-    #    help_text = "Price discount at time of sale (in percentage)"
-    #)
-
-    #sale_price = models.DecimalField(
-    #    decimal_places = 2,
-    #    max_digits = 10,
-    #    blank = True,
-    #    null = True,
-    #    help_text = "Price the item sold for",
-    #)
-#
-#    sale_date = models.DateField(
-#        db_index = True,
-#        blank = True,
-#        null = True,
-#        help_text = "Date on which the item sold",
-#    )
+    commission = models.FloatField(
+        default = 0,
+        help_text = "Commission on this item (in percentage)",
+    )
 
     comments = models.TextField(
         blank = True,
@@ -105,7 +89,7 @@ class Seller(models.Model):
 
     class Meta:
         ordering = ("last_name", "first_name")
-        unique_together = (("first_name", "last_name"),)
+        unique_together = (("first_name", "last_name", "user"),)
 
     def __unicode__(self):
         return self.last_name + ", " + self.first_name

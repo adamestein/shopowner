@@ -29,7 +29,7 @@ class ItemAddForm(ItemEditForm):
 
     def __init__(self, user=None, *args, **kwargs):
         try:
-            number = int(Item.objects.latest("id").number) + 1
+            number = int(Item.objects.filter(user=user).latest("id").number) + 1
         except Item.DoesNotExist:
             # No items in database, so no latest item to get number from, so start with 1
             number = 1

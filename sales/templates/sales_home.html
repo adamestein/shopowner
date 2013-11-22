@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sales Applications
+{% endblock %}
+
+{% block header %}
+    Sales Applications
+{% endblock %}
+
+{% block content %}
+    <p>
+        Keep track of shop sales.
+    </p>
+
+    <ul>
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="/shopowner/sales/record/">Record Sale</a>
+            <span class="aligned_desc">
+                Record the selling of an item
+            </span>
+        </li>
+
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="/shopowner/sales/view/">View Sales</a>
+            <span class="aligned_desc">
+                View the history of sales made
+            </span>
+        </li>
+
+        <br />
+
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="/shopowner/sales/update/tax/">Update Sales Tax</a>
+            <span class="aligned_desc">
+                Update the sales tax rate
+            </span>
+        </li>
+    </ul>
+{% endblock %}
+

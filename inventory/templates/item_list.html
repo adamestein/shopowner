@@ -19,7 +19,7 @@
             <caption><strong>Inventory</strong></caption>
 
             <tr>
-                <th>Number</th>
+                <th>&nbsp;#&nbsp;</th>
                 <th>Description</th>
                 <th>Price</th>
                 <th>Image</th>
@@ -27,13 +27,13 @@
 
             {% for item in object_list %}
                 <tr>
-                    <td>{{ item.number }}</td>
+                    <td style="text-align: center;">{{ item.number }}</td>
                     <td>{{ item.desc }}</td>
-                    <td>{{ item.price|currency_format }}</td>
+                    <td style="text-align: right;">{{ item.price|currency_format }}</td>
                     <td>
                         {% if item.picture %}
-                            <a href="/files/get/?name={{ item.picture }}" target="_blank">
-                                <img height=64 width=64 src="/files/get/?name={{ item.picture }}">
+                            <a href="/shopowner/files/get/?name={{ item.picture }}" target="_blank">
+                                <img height=64 width=64 src="/shopowner/files/get/?name={{ item.picture }}">
                             </a>
                         {% endif %}
                     </td>
