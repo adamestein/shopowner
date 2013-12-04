@@ -1,7 +1,7 @@
 from django import forms
 from django.conf import settings
 
-DEFAULT_ALT = "Add Another %(field)s"
+DEFAULT_ALT = "Add another %(field)s"
 DEFAULT_ONCLICK = "return showAddAnotherPopup(this);"
 DEFAULT_URL = "/popup_add/%(field)s"
 
