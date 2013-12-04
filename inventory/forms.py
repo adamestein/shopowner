@@ -1,13 +1,14 @@
 from db_file_storage.form_widgets import DBClearableFileInput
 from django import forms
 
-from common.forms import SelectWithAdd
+from common.forms import MultipleSelectWithAdd
 from inventory.models import Item, Seller
 
 class ItemEditForm(forms.ModelForm):
     # Only put active sellers in this choice
     seller = forms.ModelMultipleChoiceField(
         queryset = Seller.objects.filter(remove=False),
+        widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
         help_text = 'Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
     )
 
@@ -25,9 +26,9 @@ class ItemEditForm(forms.ModelForm):
             self.fields["seller"].queryset = self.fields["seller"].queryset.filter(user=user)
 
 class ItemAddForm(ItemEditForm):
-    seller = forms.ModelChoiceField(
-        Seller.objects,
-        widget = SelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
+    seller = forms.ModelChoiceField(Seller.objects,
+        empty_label = None,
+        widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
         help_text = 'Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
     )
 
