@@ -6,9 +6,9 @@ from inventory.models import Item, Seller
 
 class ItemEditForm(forms.ModelForm):
     # Only put active sellers in this choice
-    owner = forms.ModelMultipleChoiceField(
+    seller = forms.ModelMultipleChoiceField(
         queryset = Seller.objects.filter(remove=False),
-        help_text = "Seller(s) of this item",
+        help_text = 'Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
     )
 
     class Meta:
@@ -22,12 +22,13 @@ class ItemEditForm(forms.ModelForm):
         super(ItemEditForm, self).__init__(*args, **kwargs)
 
         if user:
-            self.fields["owner"].queryset = self.fields["owner"].queryset.filter(user=user)
+            self.fields["seller"].queryset = self.fields["seller"].queryset.filter(user=user)
 
 class ItemAddForm(ItemEditForm):
-    owner = forms.ModelChoiceField(
+    seller = forms.ModelChoiceField(
         Seller.objects,
-        widget=SelectWithAdd(attrs={"url": "/shopowner/seller/add/"})
+        widget = SelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
+        help_text = 'Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
     )
 
     class Meta(ItemEditForm.Meta):
@@ -50,7 +51,7 @@ class ItemAddForm(ItemEditForm):
         super(ItemAddForm, self).__init__(*args, **kwargs)
 
         if user:
-            self.fields["owner"].queryset = self.fields["owner"].queryset.filter(user=user)
+            self.fields["seller"].queryset = self.fields["seller"].queryset.filter(user=user)
 
 class ItemEditListForm(forms.Form):
     item = forms.ModelChoiceField(

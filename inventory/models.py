@@ -20,7 +20,7 @@ class Item(models.Model):
         help_text = "Description of the item",
     )
 
-    owner = models.ManyToManyField("Seller",
+    seller = models.ManyToManyField("Seller",
         help_text = "Seller(s) of this item",
     )
 
@@ -68,7 +68,7 @@ class ItemImage(models.Model):
     filename = models.CharField(max_length=255)
     mimetype = models.CharField(max_length=50)
 
-# Owner selling the item
+# Person selling the item
 class Seller(models.Model):
     user = models.ForeignKey(User,
         help_text = "User account this item belongs to",
