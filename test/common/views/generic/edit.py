@@ -1,3 +1,6 @@
+import os
+
+from django.core.handlers.wsgi import WSGIRequest
 from django.test import TestCase
 
 from common.views.generic import NavigationCreateView, NavigationFormView, NavigationUpdateView
@@ -7,6 +10,12 @@ class EditViewsTestCase(TestCase):
         # No navigation view
         view = NavigationCreateView()
         view.object = "blah"
+        environ = os.environ
+        environ.update({
+            "REQUEST_METHOD": "get",
+            "wsgi.input": "input"
+        })
+        view.request = WSGIRequest(environ)
         context = view.get_context_data()
 
         self.assertEqual("Create", context["action"])

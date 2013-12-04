@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 
-from common.navigation import Navigation
 from common.views.generic import *
 from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm
 from inventory.forms import SellerEditForm, SellerEditListForm, SellerForm
@@ -38,7 +37,6 @@ urlpatterns = patterns('',
 
     # Top level shop owner page
     url(r'^%s$' % prefix, NavigationTemplateView.as_view(
-        navigation = Navigation(""),
         template_name = "home.html"
     )),
 

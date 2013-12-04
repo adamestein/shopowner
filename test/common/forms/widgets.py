@@ -9,7 +9,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add Another foo"/> </a>'
+            u'<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
         )
 
         # Change alt
@@ -17,7 +17,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="my alt"/> </a>'
+            u'<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="my alt"/> </a>'
         )
 
         # Change onclick
@@ -25,7 +25,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="my onclick"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add Another foo"/> </a>'
+            u'<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="my onclick"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
         )
 
         # Change URL
@@ -33,5 +33,5 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select name="foo">\n</select><a href="my url" class="add-another" id="add_id_foo" onclick="return showAddPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add Another foo"/> </a>'
+            u'<select name="foo">\n</select><a href="my url" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
         )
