@@ -5,5 +5,9 @@
         <input type="submit" id="submit_button" value="Submit" />
     {% endif %}
 
-    <input type="reset" id="reset_button" value="Cancel" />
+    {% if close %}
+        <button type="button" onclick="javascript:window.close();">Cancel</button>
+    {% else %}
+        <input type="reset" id="reset_button" value="Cancel" />
+    {% endif %}
 </div>

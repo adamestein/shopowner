@@ -1,0 +1,42 @@
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=windows-1252" />
+<meta name="author" content="J.Reiser" />
+<meta name="author" content="Adam Stein" />
+<meta name="description" content="Shop Owner Apps" />
+
+<title>{% block title %}{% endblock %}</title>
+
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/layout.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/color.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.alerts.css" media="screen" />
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.alerts.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+
+{% block extrahead %}{% endblock %}
+
+{% if ajax %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/utils.js"></script>
+
+    {{ ajax.generate_js|safe }}
+{% endif %}
+</head>
+
+<body>
+<h1>{% block header %}{% endblock %}</h1>
+
+<div>
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>
+
+

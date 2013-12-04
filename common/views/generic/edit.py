@@ -1,8 +1,8 @@
 from django.views.generic import CreateView, FormView, UpdateView
 
-from mixins import NavigationContextMixin, NavigationEditMixin
+from mixins import PopupAddMixin, NavigationContextMixin, NavigationEditMixin
 
-class NavigationCreateView(NavigationEditMixin, CreateView):
+class NavigationCreateView(PopupAddMixin, NavigationEditMixin, CreateView):
     action = "Create"
 
     def form_valid(self, form):

@@ -1,6 +1,7 @@
 from db_file_storage.form_widgets import DBClearableFileInput
 from django import forms
 
+from common.forms import SelectWithAdd
 from inventory.models import Item, Seller
 
 class ItemEditForm(forms.ModelForm):
@@ -24,6 +25,11 @@ class ItemEditForm(forms.ModelForm):
             self.fields["owner"].queryset = self.fields["owner"].queryset.filter(user=user)
 
 class ItemAddForm(ItemEditForm):
+    owner = forms.ModelChoiceField(
+        Seller.objects,
+        widget=SelectWithAdd(attrs={"url": "/shopowner/seller/add/"})
+    )
+
     class Meta(ItemEditForm.Meta):
         exclude = ("user", "remove")
 

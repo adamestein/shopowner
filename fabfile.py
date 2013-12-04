@@ -36,6 +36,7 @@ def deploy():
         "*.swp",
         "*.bak",
         "tests*",
+        "datadumper.js"
     ]
 
     # Only copy what's needed

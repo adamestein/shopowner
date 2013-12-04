@@ -153,8 +153,9 @@ urlpatterns = patterns('',
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-        url(r'^(?P<path>(css|js)/.*)$', 'django.views.static.serve', {
-            'document_root': settings.MEDIA_ROOT,
+        url(r'^' + settings.STATIC_URL[1:] + '(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': 'public/static',
+            'show_indexes': True
         }),
     )
 

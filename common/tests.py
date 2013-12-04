@@ -4,6 +4,7 @@ from test.common.cp import CPTestCase
 from test.common.format import FormatTestCase
 from test.common.navigation import NavigationTestCase
 from test.common.views.generic import BaseViewsTestCase, EditViewsTestCase, ListViewsTestCase
+from test.common.forms import WidgetsTestCase
 
 def suite():
     loader = unittest.TestLoader()
@@ -14,8 +15,9 @@ def suite():
     fmt = loader.loadTestsFromTestCase(FormatTestCase)
     list_views = loader.loadTestsFromTestCase(ListViewsTestCase)
     navigation = loader.loadTestsFromTestCase(NavigationTestCase)
+    widgets = loader.loadTestsFromTestCase(WidgetsTestCase)
 
     return unittest.TestSuite([
-        cp, base_views, edit_views, fmt, list_views, navigation
+        cp, base_views, edit_views, fmt, list_views, navigation, widgets
     ])
 
