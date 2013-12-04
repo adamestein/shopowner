@@ -42,7 +42,6 @@ urlpatterns = patterns('',
 
     # Inventory
     url(r'^%sinventory/$' % prefix, NavigationTemplateView.as_view(
-        navigation = InventoryNavigation("inventory"),
         template_name = "inventory_home.html"
     )),
 
@@ -123,7 +122,6 @@ urlpatterns = patterns('',
 
     # Sales
     url(r'^%ssales/$' % prefix, NavigationTemplateView.as_view(
-        navigation = SalesNavigation("sales"),
         template_name = "sales_home.html"
     )),
 

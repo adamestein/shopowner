@@ -7,7 +7,6 @@ from dbcopy import DBCopy
 urlpatterns = patterns('admintools',
     url(r'^$', NavigationTemplateView.as_view(
         template_name="at_base.html",
-        navigation=ATNavigation("base")
     )),
 
     url(R'^dbcopy/$', NavigationTemplateView.as_view(

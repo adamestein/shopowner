@@ -48,8 +48,8 @@ content="text/html; charset=windows-1252" />
 
 <h1>{% block header %}{% endblock %}</h1>
 
+<div id="main-menu">
 {% if navigation %}
-    <div id="main-menu">
         <h3>Navigation</h3>
         <ul>
             {% for label,link in navigation %}
@@ -64,12 +64,12 @@ content="text/html; charset=windows-1252" />
                 {% endif %}
             {% endfor %}
         </ul>
-
-        {% if user.is_authenticated %}
-            <p style="text-align: center;">You are logged in as <em>{{ user }}</em></p>
-        {% endif %}
-    </div>
 {% endif %}
+
+{% if user.is_authenticated %}
+    <p style="text-align: center;">You are logged in as <em>{{ user }}</em></p>
+{% endif %}
+</div>
 
 <div id="content">
     {% block content %}{% endblock %}
