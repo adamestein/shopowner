@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Run through all unit tests
+
+TESTS="common inventory sales"
+
+dir="`dirname $0`"
+
+cd $dir
+
+for test in $TESTS
+do
+    ./manage.py test $test
+done
+
+exit 0
+

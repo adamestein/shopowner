@@ -50,9 +50,18 @@ class ItemAddForm(ItemEditForm):
             kwargs["initial"] = initial
 
         super(ItemAddForm, self).__init__(*args, **kwargs)
+        self.user = user
 
         if user:
             self.fields["seller"].queryset = self.fields["seller"].queryset.filter(user=user)
+
+    def clean(self):
+        number = self.cleaned_data["number"]
+
+        if Item.objects.filter(number=number, user=self.user):
+            raise forms.ValidationError("You have already added an item with this number")
+        else:
+            return self.cleaned_data
 
 class ItemEditListForm(forms.Form):
     item = forms.ModelChoiceField(
@@ -96,4 +105,14 @@ class SellerForm(forms.ModelForm):
     # Override so we can remove the "user" value
     def __init__(self, user=None, **kwargs):
         super(SellerForm, self).__init__(**kwargs)
+        self.user = user
+
+    def clean(self):
+        first_name = self.cleaned_data["first_name"]
+        last_name = self.cleaned_data["last_name"]
+
+        if Seller.objects.filter(first_name=first_name, last_name=last_name, user=self.user):
+            raise forms.ValidationError("You have already added this name")
+        else:
+            return self.cleaned_data
 

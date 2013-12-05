@@ -36,6 +36,7 @@ def deploy():
         "*.swp",
         "*.bak",
         "tests*",
+        "testall",
         "datadumper.js"
     ]
 
