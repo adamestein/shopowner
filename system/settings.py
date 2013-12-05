@@ -193,5 +193,5 @@ LOGOUT_URL = "/shopowner/accounts/logout/"
 # To store images in database
 DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
 
-VERSION = "1.3"
+VERSION = "1.4"
 
