@@ -1,5 +1,6 @@
 from db_file_storage.form_widgets import DBClearableFileInput
 from django import forms
+from django.http import QueryDict
 
 from common.forms import MultipleSelectWithAdd
 from inventory.models import Item, Seller
@@ -20,6 +21,15 @@ class ItemEditForm(forms.ModelForm):
         }
 
     def __init__(self, user=None, *args, **kwargs):
+        # We set up the admin to use this form.  As a result, it doesn't send
+        # the user like our own views do.  In this case, user contains the form
+        # values instead of args.  If user has the form values, just move them
+        # into args and set user to None so that everything down the line works
+        # normally.
+        if (isinstance(user, QueryDict)):
+            args = (user,) + args
+            user = None
+
         super(ItemEditForm, self).__init__(*args, **kwargs)
 
         if user:

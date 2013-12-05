@@ -22,6 +22,7 @@
                 <th>&nbsp;#&nbsp;</th>
                 <th>Description</th>
                 <th>Price</th>
+                <th>Worth</th>
                 <th>Status</th>
                 <th>Image</th>
             </tr>
@@ -31,6 +32,11 @@
                     <td style="text-align: center;">{{ item.number }}</td>
                     <td>{{ item.desc }}</td>
                     <td style="text-align: right;">{{ item.price|currency_format }}</td>
+                    <td style="text-align: right;">
+                        {% if item.worth %}
+                            {{ item.worth|currency_format }}
+                        {% endif %}
+                    </td>
                     <td style="text-align: center;">
                         {% if item.sale_set.all %}
                             Sold

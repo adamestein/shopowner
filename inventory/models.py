@@ -30,6 +30,14 @@ class Item(models.Model):
         help_text = "Price of the item",
     )
 
+    worth = models.DecimalField(
+        decimal_places = 2,
+        max_digits = 10,
+        blank=True,
+        null=True,
+        help_text = "How much is the item actually worth"
+    )
+
     picture = models.ImageField(
         upload_to="inventory.ItemImage/data/filename/mimetype",
         blank=True,
