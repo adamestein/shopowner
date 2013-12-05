@@ -124,11 +124,14 @@ class SellerForm(forms.ModelForm):
         self.user = user
 
     def clean(self):
-        first_name = self.cleaned_data["first_name"]
-        last_name = self.cleaned_data["last_name"]
+        # Only need to check uniqueness if we have data to check, otherwise let
+        # Django do it's normal form checking thing
+        if "first_name" in self.cleaned_data and "last_name" in self.cleaned_data:
+            first_name = self.cleaned_data["first_name"]
+            last_name = self.cleaned_data["last_name"]
 
-        if Seller.objects.filter(first_name=first_name, last_name=last_name, user=self.user):
-            raise forms.ValidationError("You have already added this name")
-        else:
-            return self.cleaned_data
+            if Seller.objects.filter(first_name=first_name, last_name=last_name, user=self.user):
+                raise forms.ValidationError("You have already added this name")
+
+        return self.cleaned_data
 
