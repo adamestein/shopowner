@@ -1,5 +1,6 @@
 from django import forms
 from django.conf import settings
+from django.utils.safestring import mark_safe
 
 DEFAULT_ALT = "Add another %(field)s"
 DEFAULT_ONCLICK = "return showAddAnotherPopup(this);"
@@ -42,7 +43,7 @@ class SelectWithAdd(forms.Select):
     def render(self, name, value, attrs=None, choices=()):
         html = super(SelectWithAdd, self).render(name, value, attrs, choices)
 
-        return html+self.popup_add % {"field": name, "static_url": settings.STATIC_URL}
+        return mark_safe(html+self.popup_add % {"field": name, "static_url": settings.STATIC_URL})
 
 class MultipleSelectWithAdd(forms.SelectMultiple):
     def __init__(self, attrs=None, choices=()):
@@ -55,5 +56,5 @@ class MultipleSelectWithAdd(forms.SelectMultiple):
     def render(self, name, value, attrs=None, choices=()):
         html = super(MultipleSelectWithAdd, self).render(name, value, attrs, choices)
 
-        return html+self.popup_add % {"field": name, "static_url": settings.STATIC_URL}
+        return mark_safe(html+self.popup_add % {"field": name, "static_url": settings.STATIC_URL})
 
