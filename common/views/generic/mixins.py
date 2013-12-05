@@ -1,11 +1,12 @@
 import os
 
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.views.generic.base import ContextMixin
-from django.views.generic.edit import ModelFormMixin, ProcessFormView
+from django.views.generic.edit import FormMixin, ModelFormMixin
 
 class NavigationContextMixin(ContextMixin):
     navigation = None
@@ -41,24 +42,26 @@ class NavigationEditMixin(NavigationContextMixin, ModelFormMixin):
 
         return kwargs
 
-class PopupAddMixin(ProcessFormView):
+class PopupAddMixin(FormMixin):
     def form_valid(self, form):
         try:
             newObject = form.save();
-        except form.ValidationError: 
+        except IntegrityError: 
             newObject = None
 
         # Need to return the JavaScript that will close the popup window
-        if newObject:
+        if newObject and "_popup" in self.request.GET:
             return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
                 (escape(newObject._get_pk_val()), escape(newObject)))
 
+        return super(PopupAddMixin, self).form_valid(form)
+
     def form_invalid(self, form):
-        # Add the _popup field to POST so that we continue using the correct
-        # template
-        post_values = self.request.POST.copy()
-        post_values["_popup"] = True
-        self.request.POST = post_values
+        if "_popup" in self.request.GET:
+            # Add the _popup field to POST so that we continue using the correct template
+            post_values = self.request.POST.copy()
+            post_values["_popup"] = True
+            self.request.POST = post_values
 
         return super(PopupAddMixin, self).form_invalid(form)
 

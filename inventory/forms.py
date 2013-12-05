@@ -26,9 +26,8 @@ class ItemEditForm(forms.ModelForm):
             self.fields["seller"].queryset = self.fields["seller"].queryset.filter(user=user)
 
 class ItemAddForm(ItemEditForm):
-    seller = forms.ModelChoiceField(
+    seller = forms.ModelMultipleChoiceField(
         queryset = Seller.objects.filter(remove=False),
-        empty_label = None,
         widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
         help_text = 'Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
     )
