@@ -5,6 +5,9 @@ from models import *
 class ItemAdmin(admin.ModelAdmin):
     list_filter = ("user",)
 
+class SellerAdmin(admin.ModelAdmin):
+    list_filter = ("user",)
+
 admin.site.register(Item, ItemAdmin)
-admin.site.register(Seller)
+admin.site.register(Seller, SellerAdmin)
 
