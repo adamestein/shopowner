@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from common.forms import MultipleSelectWithAdd, SelectWithAdd
+from common.forms import *
 
 class WidgetsTestCase(TestCase):
     def test_SelectWithAdd(self):
@@ -67,4 +67,11 @@ class WidgetsTestCase(TestCase):
         self.assertEqual(
             widget.render("foo", None),
             u'<select multiple="multiple" name="foo">\n</select><a href="my url" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
+        )
+    def test_TextInputWithTextSpan(self):
+        widget = TextInputWithTextSpan()
+
+        self.assertEqual(
+            widget.render("foo", None),
+            u'<input name="foo" type="text" /><span id="id_text_span_foo" style="margin-left: .4em;"></span>'
         )

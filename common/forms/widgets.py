@@ -16,7 +16,7 @@ def create_popup_anchor(values):
 
     return anchor
 
-def set_defaults(attrs):
+def set_popup_defaults(attrs):
     if attrs:
         defaults = {
             "alt":      attrs.pop("alt", DEFAULT_ALT),
@@ -34,7 +34,7 @@ def set_defaults(attrs):
 
 class SelectWithAdd(forms.Select):
     def __init__(self, attrs=None, choices=()):
-        defaults = set_defaults(attrs)
+        defaults = set_popup_defaults(attrs)
 
         super(SelectWithAdd, self).__init__(attrs)
 
@@ -47,7 +47,7 @@ class SelectWithAdd(forms.Select):
 
 class MultipleSelectWithAdd(forms.SelectMultiple):
     def __init__(self, attrs=None, choices=()):
-        defaults = set_defaults(attrs)
+        defaults = set_popup_defaults(attrs)
 
         super(MultipleSelectWithAdd, self).__init__(attrs)
 
@@ -57,4 +57,12 @@ class MultipleSelectWithAdd(forms.SelectMultiple):
         html = super(MultipleSelectWithAdd, self).render(name, value, attrs, choices)
 
         return mark_safe(html+self.popup_add % {"field": name, "static_url": settings.STATIC_URL})
+
+class TextInputWithTextSpan(forms.TextInput):
+    def render(self, name, value, attrs=None):
+        html = super(TextInputWithTextSpan, self).render(name, value, attrs)
+
+        span = '<span id="id_text_span_' + name + '" style="margin-left: .4em;"></span>'
+
+        return mark_safe(html+span)
 

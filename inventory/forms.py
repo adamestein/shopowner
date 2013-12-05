@@ -2,10 +2,16 @@ from db_file_storage.form_widgets import DBClearableFileInput
 from django import forms
 from django.http import QueryDict
 
-from common.forms import MultipleSelectWithAdd
+from common.forms import MultipleSelectWithAdd, TextInputWithTextSpan
 from inventory.models import Item, Seller
 
 class ItemEditForm(forms.ModelForm):
+    # Set up commission with a widget that includes a text span
+    commission = forms.FloatField(
+        widget = TextInputWithTextSpan(),
+        help_text = "Commission on this item (in percentage)"
+    )
+
     # Only put active sellers in this choice
     seller = forms.ModelMultipleChoiceField(
         queryset = Seller.objects.filter(remove=False),
@@ -36,11 +42,11 @@ class ItemEditForm(forms.ModelForm):
             self.fields["seller"].queryset = self.fields["seller"].queryset.filter(user=user)
 
 class ItemAddForm(ItemEditForm):
-    seller = forms.ModelMultipleChoiceField(
-        queryset = Seller.objects.filter(remove=False),
-        widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
-        help_text = 'Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
-    )
+    #seller = forms.ModelMultipleChoiceField(
+    #    queryset = Seller.objects.filter(remove=False),
+    #    widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
+    #    help_text = 'Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
+    #)
 
     class Meta(ItemEditForm.Meta):
         exclude = ("user", "remove")
