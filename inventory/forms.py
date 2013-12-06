@@ -1,3 +1,5 @@
+import re
+
 from db_file_storage.form_widgets import DBClearableFileInput
 from django import forms
 from django.http import QueryDict
@@ -7,9 +9,9 @@ from inventory.models import Item, Seller
 
 class ItemEditForm(forms.ModelForm):
     # Set up commission with a widget that includes a text span
-    commission = forms.FloatField(
+    commission = forms.CharField(
         widget = TextInputWithTextSpan(),
-        help_text = "Commission on this item (in percentage)"
+        help_text = "Commission on this item (use % to indicate percentage)"
     )
 
     # Only put active sellers in this choice
@@ -40,6 +42,17 @@ class ItemEditForm(forms.ModelForm):
 
         if user:
             self.fields["seller"].queryset = self.fields["seller"].queryset.filter(user=user)
+
+    def clean_commission(self):
+        data = self.cleaned_data["commission"]
+
+        # Make sure value matches a floating point value with optional ending
+        # percent sign
+        pattern = re.compile("^[0-9]*\.?[0-9]+%?$")
+        if pattern.match(data) == None:
+            raise forms.ValidationError("Commission must be a number with an optional ending percent sign")
+
+        return data
 
 class ItemAddForm(ItemEditForm):
     class Meta(ItemEditForm.Meta):
