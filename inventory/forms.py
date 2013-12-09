@@ -5,9 +5,60 @@ from django import forms
 from django.http import QueryDict
 
 from common.forms import MultipleSelectWithAdd, TextInputWithTextSpan
-from inventory.models import Item, Seller
+from inventory.models import Category, Item, Seller
+
+class CategoryEditForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        exclude = ("user",)
+
+    # Override so we can remove the "user" value
+    def __init__(self, user=None, **kwargs):
+        super(CategoryEditForm, self).__init__(**kwargs)
+
+class CategoryEditListForm(forms.Form):
+    category = forms.ModelChoiceField(
+        queryset = Category.objects.all(),
+        empty_label = "<Choose a category>"
+    )
+
+    def __init__(self, user=None, **kwargs):
+        super(CategoryEditListForm, self).__init__(**kwargs)
+
+        if user:
+            self.fields["category"].queryset = Category.objects.filter(user=user)
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        exclude = ("remove", "user")   # Don't need to see on an 'Add' form
+
+    # Override so we can remove the "user" value
+    def __init__(self, user=None, **kwargs):
+        super(CategoryForm, self).__init__(**kwargs)
+        self.user = user
+
+    def clean(self):
+        # Only need to check uniqueness if we have data to check, otherwise let
+        # Django do it's normal form checking thing.  We need to manually check
+        # since we exclude "user" from the form and so Django can't check
+        # automatically.
+        if "name" in self.cleaned_data:
+            name = self.cleaned_data["name"]
+
+            if Category.objects.filter(name=name, user=self.user):
+                raise forms.ValidationError("You have already added this category")
+
+        return self.cleaned_data
 
 class ItemEditForm(forms.ModelForm):
+    # Only put active categories in this choice
+    category = forms.ModelMultipleChoiceField(
+        queryset = Category.objects.filter(remove=False),
+        widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/category/add/"}),
+        help_text = 'Categories this item is in Hold down "Control", or "Command" on a Mac, to select more than one.',
+    )
+
     # Set up commission with a widget that includes a text span
     commission = forms.CharField(
         widget = TextInputWithTextSpan(),
@@ -107,7 +158,6 @@ class SellerEditForm(forms.ModelForm):
     def __init__(self, user=None, **kwargs):
         super(SellerEditForm, self).__init__(**kwargs)
 
-
 class SellerEditListForm(forms.Form):
     seller = forms.ModelChoiceField(
         queryset = Seller.objects.all(),
@@ -132,7 +182,9 @@ class SellerForm(forms.ModelForm):
 
     def clean(self):
         # Only need to check uniqueness if we have data to check, otherwise let
-        # Django do it's normal form checking thing
+        # Django do it's normal form checking thing.  We need to manually check
+        # since we exclude "user" from the form and so Django can't check
+        # automatically.
         if "first_name" in self.cleaned_data and "last_name" in self.cleaned_data:
             first_name = self.cleaned_data["first_name"]
             last_name = self.cleaned_data["last_name"]

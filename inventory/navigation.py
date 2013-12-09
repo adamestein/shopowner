@@ -4,9 +4,13 @@ def Navigation(on):
         ["Edit Item",       "/shopowner/inventory/edit/"],      # index 1
         ["List Items",      "/shopowner/inventory/list/"],      # index 2
         ["",                ""],                                # index 3
-        ["Add Seller",      "/shopowner/seller/add/"],          # index 4
-        ["Edit Seller",     "/shopowner/seller/edit/"],         # index 5
-        ["List Sellers",    "/shopowner/seller/list/"],         # index 6
+        ["Add Category",    "/shopowner/category/add/"],        # index 4
+        ["Edit Category",   "/shopowner/category/edit/"],       # index 5
+        ["List Categories", "/shopowner/category/list/"],       # index 6
+        ["",                ""],                                # index 7
+        ["Add Seller",      "/shopowner/seller/add/"],          # index 8
+        ["Edit Seller",     "/shopowner/seller/edit/"],         # index 9
+        ["List Sellers",    "/shopowner/seller/list/"],         # index 10
     )
 
     if on == "add_item":
@@ -15,12 +19,18 @@ def Navigation(on):
         navigation[1][1] = ""
     elif on == "list_items":
         navigation[2][1] = ""
-    elif on == "add_seller":
+    elif on == "add_category":
         navigation[4][1] = ""
-    elif on == "edit_seller":
+    elif on == "edit_category":
         navigation[5][1] = ""
-    elif on == "list_sellers":
+    elif on == "list_categories":
         navigation[6][1] = ""
+    elif on == "add_seller":
+        navigation[8][1] = ""
+    elif on == "edit_seller":
+        navigation[9][1] = ""
+    elif on == "list_sellers":
+        navigation[10][1] = ""
 
     return navigation
 

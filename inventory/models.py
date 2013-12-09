@@ -4,6 +4,37 @@ from django.db import models
 
 from common.format import currency
 
+# Categories an item can be in
+class Category(models.Model):
+    user = models.ForeignKey(User,
+        help_text = "User account this category belongs to",
+    )
+
+    name = models.CharField(
+        max_length = 50,
+        help_text = "Name of the category",
+    )
+
+    desc = models.CharField(
+        max_length = 100,
+        blank=True,
+        null=True,
+        help_text = "Category description",
+    )
+
+    remove = models.BooleanField(
+        default = False,
+        help_text = "Check to remove this item from the category list",
+    )
+
+    class Meta:
+        ordering = ("name",)
+        unique_together = (("user", "name"),)
+        verbose_name_plural = "Categories"
+
+    def __unicode__(self):
+        return self.name
+
 # Item being kept track off
 class Item(models.Model):
     user = models.ForeignKey(User,
@@ -18,6 +49,10 @@ class Item(models.Model):
     desc = models.CharField(
         max_length = 100,
         help_text = "Description of the item",
+    )
+
+    category = models.ManyToManyField(Category,
+        help_text = "Categories this item is in",
     )
 
     seller = models.ManyToManyField("Seller",

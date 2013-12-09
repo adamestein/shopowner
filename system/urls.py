@@ -2,9 +2,10 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 
 from common.views.generic import *
+from inventory.forms import CategoryForm, CategoryEditForm, CategoryEditListForm
 from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm
 from inventory.forms import SellerEditForm, SellerEditListForm, SellerForm
-from inventory.models import Item, Seller
+from inventory.models import Category, Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
 from inventory.views import ItemView
 from sales.forms import SalesForm
@@ -84,6 +85,40 @@ urlpatterns = patterns('',
     url(r'^%sinventory/updated/$' % prefix, NavigationTemplateView.as_view(
         navigation = InventoryNavigation(""),
         template_name = "item_updated.html"
+    )),
+
+    url(r'^%scategory/add/$' % prefix, NavigationCreateView.as_view(
+        action = "Add",
+        form_class = CategoryForm,
+        navigation = InventoryNavigation("add_category"),
+        success_url = "../updated/",
+        template_name = "category_form.html"
+    )),
+
+    url(r'^%scategory/edit/$' % prefix, NavigationFormView.as_view(
+        form_class = CategoryEditListForm,
+        navigation = InventoryNavigation("edit_category"),
+        template_name = "category_edit_list.html"
+    )),
+
+    url(r'^%scategory/edit/(?P<pk>[\d]+)$' % prefix, NavigationUpdateView.as_view(
+        form_class = CategoryEditForm,
+        model = Category,
+        navigation = InventoryNavigation("edit_category"),
+        success_url = "../updated/",
+        template_name = "category_form.html"
+    )),
+
+    url(r'^%scategory/list/$' % prefix, NavigationListView.as_view(
+        model = Category,
+        navigation = InventoryNavigation("list_categories"),
+        queryset = Category.objects.filter(remove=False),
+        template_name = "category_list.html"
+    )),
+
+    url(r'^%scategory/updated/$' % prefix, NavigationTemplateView.as_view(
+        navigation = InventoryNavigation(""),
+        template_name = "category_updated.html"
     )),
 
     url(r'^%sseller/add/$' % prefix, NavigationCreateView.as_view(

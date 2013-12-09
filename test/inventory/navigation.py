@@ -9,6 +9,10 @@ class NavigationTestCase(TestCase):
             ["Edit Item",       "/shopowner/inventory/edit/"],
             ["List Items",      "/shopowner/inventory/list/"],
             ["",                ""],
+            ["Add Category",    "/shopowner/category/add/"],
+            ["Edit Category",   "/shopowner/category/edit/"],
+            ["List Categories", "/shopowner/category/list/"],
+            ["",                ""],
             ["Add Seller",      "/shopowner/seller/add/"],
             ["Edit Seller",     "/shopowner/seller/edit/"],
             ["List Sellers",    "/shopowner/seller/list/"],
@@ -21,6 +25,10 @@ class NavigationTestCase(TestCase):
             ["Add Item",        ""],
             ["Edit Item",       "/shopowner/inventory/edit/"],
             ["List Items",      "/shopowner/inventory/list/"],
+            ["",                ""],
+            ["Add Category",    "/shopowner/category/add/"],
+            ["Edit Category",   "/shopowner/category/edit/"],
+            ["List Categories", "/shopowner/category/list/"],
             ["",                ""],
             ["Add Seller",      "/shopowner/seller/add/"],
             ["Edit Seller",     "/shopowner/seller/edit/"],
@@ -35,6 +43,10 @@ class NavigationTestCase(TestCase):
             ["Edit Item",       ""],
             ["List Items",      "/shopowner/inventory/list/"],
             ["",                ""],
+            ["Add Category",    "/shopowner/category/add/"],
+            ["Edit Category",   "/shopowner/category/edit/"],
+            ["List Categories", "/shopowner/category/list/"],
+            ["",                ""],
             ["Add Seller",      "/shopowner/seller/add/"],
             ["Edit Seller",     "/shopowner/seller/edit/"],
             ["List Sellers",    "/shopowner/seller/list/"],
@@ -48,6 +60,10 @@ class NavigationTestCase(TestCase):
             ["Edit Item",       "/shopowner/inventory/edit/"],
             ["List Items",      ""],
             ["",                ""],
+            ["Add Category",    "/shopowner/category/add/"],
+            ["Edit Category",   "/shopowner/category/edit/"],
+            ["List Categories", "/shopowner/category/list/"],
+            ["",                ""],
             ["Add Seller",      "/shopowner/seller/add/"],
             ["Edit Seller",     "/shopowner/seller/edit/"],
             ["List Sellers",    "/shopowner/seller/list/"],
@@ -55,11 +71,66 @@ class NavigationTestCase(TestCase):
 
         self.assertEqual(Navigation("list_items"), ans)
 
+    def test_add_category(self):
+        ans = (
+            ["Add Item",        "/shopowner/inventory/add/"],
+            ["Edit Item",       "/shopowner/inventory/edit/"],
+            ["List Items",      "/shopowner/inventory/list/"],
+            ["",                ""],
+            ["Add Category",    ""],
+            ["Edit Category",   "/shopowner/category/edit/"],
+            ["List Categories", "/shopowner/category/list/"],
+            ["",                ""],
+            ["Add Seller",      "/shopowner/seller/add/"],
+            ["Edit Seller",     "/shopowner/seller/edit/"],
+            ["List Sellers",    "/shopowner/seller/list/"],
+        )
+
+        self.assertEqual(Navigation("add_category"), ans)
+
+    def test_edit_category(self):
+        ans = (
+            ["Add Item",        "/shopowner/inventory/add/"],
+            ["Edit Item",       "/shopowner/inventory/edit/"],
+            ["List Items",      "/shopowner/inventory/list/"],
+            ["",                ""],
+            ["Add Category",    "/shopowner/category/add/"],
+            ["Edit Category",   ""],
+            ["List Categories", "/shopowner/category/list/"],
+            ["",                ""],
+            ["Add Seller",      "/shopowner/seller/add/"],
+            ["Edit Seller",     "/shopowner/seller/edit/"],
+            ["List Sellers",    "/shopowner/seller/list/"],
+        )
+
+        self.assertEqual(Navigation("edit_category"), ans)
+
+    def test_list_categories(self):
+        ans = (
+            ["Add Item",        "/shopowner/inventory/add/"],
+            ["Edit Item",       "/shopowner/inventory/edit/"],
+            ["List Items",      "/shopowner/inventory/list/"],
+            ["",                ""],
+            ["Add Category",    "/shopowner/category/add/"],
+            ["Edit Category",   "/shopowner/category/edit/"],
+            ["List Categories", ""],
+            ["",                ""],
+            ["Add Seller",      "/shopowner/seller/add/"],
+            ["Edit Seller",     "/shopowner/seller/edit/"],
+            ["List Sellers",    "/shopowner/seller/list/"],
+        )
+
+        self.assertEqual(Navigation("list_categories"), ans)
+
     def test_add_seller(self):
         ans = (
             ["Add Item",        "/shopowner/inventory/add/"],
             ["Edit Item",       "/shopowner/inventory/edit/"],
             ["List Items",      "/shopowner/inventory/list/"],
+            ["",                ""],
+            ["Add Category",    "/shopowner/category/add/"],
+            ["Edit Category",   "/shopowner/category/edit/"],
+            ["List Categories", "/shopowner/category/list/"],
             ["",                ""],
             ["Add Seller",      ""],
             ["Edit Seller",     "/shopowner/seller/edit/"],
@@ -74,6 +145,10 @@ class NavigationTestCase(TestCase):
             ["Edit Item",       "/shopowner/inventory/edit/"],
             ["List Items",      "/shopowner/inventory/list/"],
             ["",                ""],
+            ["Add Category",    "/shopowner/category/add/"],
+            ["Edit Category",   "/shopowner/category/edit/"],
+            ["List Categories", "/shopowner/category/list/"],
+            ["",                ""],
             ["Add Seller",      "/shopowner/seller/add/"],
             ["Edit Seller",     ""],
             ["List Sellers",    "/shopowner/seller/list/"],
@@ -86,6 +161,10 @@ class NavigationTestCase(TestCase):
             ["Add Item",        "/shopowner/inventory/add/"],
             ["Edit Item",       "/shopowner/inventory/edit/"],
             ["List Items",      "/shopowner/inventory/list/"],
+            ["",                ""],
+            ["Add Category",    "/shopowner/category/add/"],
+            ["Edit Category",   "/shopowner/category/edit/"],
+            ["List Categories", "/shopowner/category/list/"],
             ["",                ""],
             ["Add Seller",      "/shopowner/seller/add/"],
             ["Edit Seller",     "/shopowner/seller/edit/"],
