@@ -13,7 +13,12 @@ class SalesForm(forms.ModelForm):
         # Store the current tax rate (obviously, in a real application, getting
         # the tax would need to get the county and state from somwhere instead
         # of being hardcoded here
-        initial["tax_rate"] = Tax.objects.get(county="Monroe", state="NY").sales_tax
+        try:
+            initial["tax_rate"] = Tax.objects.get(county="Monroe", state="NY").sales_tax
+        except Tax.DoesNotExist:
+            # Can't get the tax rate automatically, so the user will have to
+            # fill it in
+            pass
 
         super(SalesForm, self).__init__(**kwargs)
 
