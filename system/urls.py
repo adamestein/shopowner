@@ -31,7 +31,8 @@ urlpatterns = patterns('',
     # Account URL patterns
     url(r'^%saccounts/login/$' % prefix, 'django.contrib.auth.views.login',
         {"extra_context": {"title": "User Login"}}),
-    url(r'^%saccounts/logout/$' % prefix, 'django.contrib.auth.views.logout_then_login'),
+    url(r'^%saccounts/logout/$' % prefix, 'django.contrib.auth.views.logout',
+        {"next_page": "/shopowner/"}),
 
     # Filesystem for images
     url(r'^%sfiles/' % prefix, include('db_file_storage.urls')),
