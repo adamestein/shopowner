@@ -35,7 +35,9 @@ content="text/html; charset=windows-1252" />
 <li><a href="/shopowner/">Home</a></li>
 <li><a href="/shopowner/inventory/">Inventory</a></li>
 <li><a href="/shopowner/sales/">Sales</a></li>
-<li><a href="/shopowner/admin/tools/">Admin</a></li>
+{% if user.is_superuser %}
+    <li><a href="/shopowner/admin/tools/">Admin</a></li>
+{% endif %}
 <li>&nbsp;</li>
 <li>&nbsp;</li>
 {% if user.is_authenticated %}
