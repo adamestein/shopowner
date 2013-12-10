@@ -24,6 +24,6 @@ p {text-align: justify;}
 h5 {margin: 0;}
 
 .aligned_bullet {margin-bottom: 1em;}
-.aligned_link {float: left; width: 15em;}
-.aligned_desc {float: left; width: 60%;}
+.aligned_link {width: 15em;}
+.aligned_desc {float: right; width: 75%;}
 
