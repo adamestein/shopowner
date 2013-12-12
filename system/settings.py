@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'db_file_storage',
     'south',
+    'django_behave',
     'common',
     'inventory',
     'sales',
@@ -190,8 +191,11 @@ if REMOTE_SERVER == True:
 LOGIN_URL = "/shopowner/accounts/login/"
 LOGOUT_URL = "/shopowner/accounts/logout/"
 
+# Use the Django Behave test runner so that we can run our normal unit tests in
+# addition to BDD tests
+TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
+
 # To store images in database
 DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
 
 VERSION = "1.7"
-
