@@ -10,7 +10,9 @@ def impl(context, page):
     if page == "Add Item":
         context.browser.visit(context.config.server_url + "/shopowner/inventory/add/")
     elif page == "Edit Item":
-        context.browser.visit(context.config.server_url + "/shopowner/inventory/edit")
+        context.browser.visit(context.config.server_url + "/shopowner/inventory/edit/")
+    elif page == "List Items":
+        context.browser.visit(context.config.server_url + "/shopowner/inventory/list/")
     else:
         # Unknown page
         assert False
@@ -49,3 +51,14 @@ def impl(context, object, action):
     else:
         # Unknown action
         assert False
+
+@then('I see the {object} list')
+def impl(context, object):
+    if object == "item":
+        assert context.browser.is_text_present("new description")
+        assert context.browser.is_text_present("$5.40")
+        assert context.browser.is_text_present("Unsold")
+    else:
+        # Unknown object
+        assert False
+

@@ -1,4 +1,4 @@
-Feature: Inventory App
+Feature: Inventory App - Items
 
     Scenario: Add Item
         Given the "Add Item" page
@@ -20,4 +20,8 @@ Feature: Inventory App
         And I click Update
         Then I see the item update page
         And the item has been updated
+
+    Scenario: List Items
+        Given the "List Items" page
+        Then I see the item list
 
