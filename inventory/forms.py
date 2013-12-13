@@ -17,7 +17,7 @@ class CategoryEditForm(forms.ModelForm):
         super(CategoryEditForm, self).__init__(**kwargs)
 
 class CategoryEditListForm(forms.Form):
-    category = forms.ModelChoiceField(
+    categories = forms.ModelChoiceField(
         queryset = Category.objects.all(),
         empty_label = "<Choose a category>"
     )
@@ -26,7 +26,7 @@ class CategoryEditListForm(forms.Form):
         super(CategoryEditListForm, self).__init__(**kwargs)
 
         if user:
-            self.fields["category"].queryset = Category.objects.filter(user=user)
+            self.fields["categories"].queryset = Category.objects.filter(user=user)
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -53,7 +53,7 @@ class CategoryForm(forms.ModelForm):
 
 class ItemEditForm(forms.ModelForm):
     # Only put active categories in this choice
-    category = forms.ModelMultipleChoiceField(
+    categories = forms.ModelMultipleChoiceField(
         queryset = Category.objects.filter(remove=False),
         widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/category/add/"}),
         help_text = 'Categories this item is in Hold down "Control", or "Command" on a Mac, to select more than one.',
@@ -66,7 +66,7 @@ class ItemEditForm(forms.ModelForm):
     )
 
     # Only put active sellers in this choice
-    seller = forms.ModelMultipleChoiceField(
+    sellers = forms.ModelMultipleChoiceField(
         queryset = Seller.objects.filter(remove=False),
         widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
         help_text = 'Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
@@ -92,7 +92,7 @@ class ItemEditForm(forms.ModelForm):
         super(ItemEditForm, self).__init__(*args, **kwargs)
 
         if user:
-            self.fields["seller"].queryset = self.fields["seller"].queryset.filter(user=user)
+            self.fields["sellers"].queryset = self.fields["sellers"].queryset.filter(user=user)
 
     def clean_commission(self):
         data = self.cleaned_data["commission"]
@@ -127,7 +127,7 @@ class ItemAddForm(ItemEditForm):
         self.user = user
 
         if user:
-            self.fields["seller"].queryset = self.fields["seller"].queryset.filter(user=user)
+            self.fields["sellers"].queryset = self.fields["sellers"].queryset.filter(user=user)
 
     def clean(self):
         number = self.cleaned_data["number"]
@@ -159,7 +159,7 @@ class SellerEditForm(forms.ModelForm):
         super(SellerEditForm, self).__init__(**kwargs)
 
 class SellerEditListForm(forms.Form):
-    seller = forms.ModelChoiceField(
+    sellers = forms.ModelChoiceField(
         queryset = Seller.objects.all(),
         empty_label = "<Choose a seller>"
     )
@@ -168,7 +168,7 @@ class SellerEditListForm(forms.Form):
         super(SellerEditListForm, self).__init__(**kwargs)
 
         if user:
-            self.fields["seller"].queryset = Seller.objects.filter(user=user)
+            self.fields["sellers"].queryset = Seller.objects.filter(user=user)
 
 class SellerForm(forms.ModelForm):
     class Meta:

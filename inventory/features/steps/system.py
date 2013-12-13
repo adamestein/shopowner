@@ -26,9 +26,9 @@ def impl(context, object, action):
             item = Item.objects.get(pk=1)
 
             assert item.desc == "my desc"
-            assert item.category.get(pk=1).name == "Test Category"
-            assert item.seller.get(pk=1).first_name == "Test" and \
-                    item.seller.get(pk=1).last_name == "User"
+            assert item.categories.get(pk=1).name == "Test Category"
+            assert item.sellers.get(pk=1).first_name == "Test" and \
+                    item.sellers.get(pk=1).last_name == "User"
             assert almost_equal(item.price, decimal.Decimal(1.23), 0.000001)
             assert item.commission == "10%"
         else:

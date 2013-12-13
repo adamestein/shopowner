@@ -73,6 +73,7 @@ def  update_settings(isprod=True):
     comment(destdir + "/system/settings.py", r"^.*django_extensions")
     comment(destdir + "/system/settings.py", r"^.*south")
     comment(destdir + "/system/settings.py", r"^.*localflavor")
+    comment(destdir + "/system/settings.py", r"^.*django_behave")
 
     # Set up for remote
     comment(destdir + "/system/settings.py", r"^.*Local Setting")

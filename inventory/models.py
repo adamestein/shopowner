@@ -51,11 +51,11 @@ class Item(models.Model):
         help_text = "Description of the item",
     )
 
-    category = models.ManyToManyField(Category,
+    categories = models.ManyToManyField(Category,
         help_text = "Categories this item is in",
     )
 
-    seller = models.ManyToManyField("Seller",
+    sellers = models.ManyToManyField("Seller",
         help_text = "Seller(s) of this item",
     )
 

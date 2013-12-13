@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-    {% ifequal form|num_choices:"category" 0 %}
+    {% ifequal form|num_choices:"categories" 0 %}
         <p>There are no categories to edit.</p>
     {% else %}
         <p>
