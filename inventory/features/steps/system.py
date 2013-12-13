@@ -2,7 +2,7 @@ import decimal
 
 from behave import given, then, when
 
-from inventory.models import Item
+from inventory.models import Category, Item
 from test.utils import almost_equal
 
 @given('the "{page}" page')
@@ -13,6 +13,12 @@ def impl(context, page):
         context.browser.visit(context.config.server_url + "/shopowner/inventory/edit/")
     elif page == "List Items":
         context.browser.visit(context.config.server_url + "/shopowner/inventory/list/")
+    elif page == "Add Category":
+        context.browser.visit(context.config.server_url + "/shopowner/category/add/")
+    elif page == "Edit Category":
+        context.browser.visit(context.config.server_url + "/shopowner/category/edit/")
+    elif page == "List Categories":
+        context.browser.visit(context.config.server_url + "/shopowner/category/list/")
     else:
         # Unknown page
         assert False
@@ -26,7 +32,12 @@ def impl(context):
 @then('the {object} has been {action}')
 def impl(context, object, action):
     if action == "added":
-        if object == "item":
+        if object == "category":
+            category = Category.objects.get(pk=2)
+
+            assert category.name == "my category", "category name = [" + category.name + "]"
+            assert category.desc == "my desc", "category description = [" + category.desc + "]"
+        elif object == "item":
             item = Item.objects.get(pk=1)
 
             assert item.desc == "my desc"
@@ -54,7 +65,11 @@ def impl(context, object, action):
 
 @then('I see the {object} list')
 def impl(context, object):
-    if object == "item":
+    if object == "category":
+        assert context.browser.is_text_present("Categories (sorted by name):")
+        assert context.browser.is_text_present("Test Category")
+        assert context.browser.is_text_present("new name (new desc)")
+    elif object == "item":
         assert context.browser.is_text_present("new description")
         assert context.browser.is_text_present("$5.40")
         assert context.browser.is_text_present("Unsold")

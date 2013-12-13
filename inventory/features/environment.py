@@ -34,6 +34,16 @@ def before_all(context):
     )
 
 def after_all(context):
-    context.browser.quit()
-    context.browser = None
+    # Quit the browser if there were no errors
+    if not context.failed:
+        context.browser.quit()
+        context.browser = None
+
+def after_feature(context, feature):
+    # Cause each feature to log in within the first scenario, so log out after
+    # feature is done.  No need to log out if there was a failure AND the
+    # 'stop' flag is used.  In that case, we want to leave the browser up at
+    # the point where the failure was.
+    if not context.failed or not context.config.stop:
+        context.browser.visit(context.config.server_url + "/shopowner/accounts/logout/")
 

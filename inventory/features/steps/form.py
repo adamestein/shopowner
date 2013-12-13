@@ -20,7 +20,9 @@ def impl(context, button):
 
 @then('I see the {what} update page')
 def impl(context, what):
-    if what == "item":
+    if what == "category":
+        text = "The Category List has been updated."
+    elif what == "item":
         text = "The Inventory has been updated."
     else:
         # Unknown update page

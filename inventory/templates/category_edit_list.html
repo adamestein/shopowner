@@ -12,7 +12,7 @@
 {% block extrahead %}
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#id_category").change(function() {
+            $("#id_categories").change(function() {
                 window.location.replace($("select option:selected").val());
             });
         });
