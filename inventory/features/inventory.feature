@@ -12,3 +12,12 @@ Feature: Inventory App
         Then I see the item update page
         And the item has been added
 
+    Scenario: Edit Item
+        Given the "Edit Item" page
+        When I set the item to list item 1
+        And I set the description to "new description"
+        And I set the price to "5.40"
+        And I click Update
+        Then I see the item update page
+        And the item has been updated
+
