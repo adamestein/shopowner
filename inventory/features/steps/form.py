@@ -24,6 +24,8 @@ def impl(context, what):
         text = "The Category List has been updated."
     elif what == "item":
         text = "The Inventory has been updated."
+    elif what == "seller":
+        text = "The Sellers List has been updated."
     else:
         # Unknown update page
         assert False
