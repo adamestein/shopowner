@@ -1,6 +1,6 @@
 import decimal
 
-from behave import given, then, when
+from behave import given, then
 
 from inventory.models import Category, Item, Seller
 from test.utils import almost_equal
@@ -29,15 +29,9 @@ def impl(context, page):
         # Unknown page
         assert False
 
-@when('I log in')
-def impl(context):
-    context.browser.fill("username", "test")
-    context.browser.fill("password", "password")
-    context.browser.find_by_value("login").first.click()
-
-@then('the {object} has been {action}')
-def impl(context, object, action):
-    if object == "category":
+@then('the {thing} has been {action}')
+def impl(context, thing, action):
+    if thing == "category":
         category = Category.objects.get(pk=2)
 
         if action == "added":
@@ -49,7 +43,7 @@ def impl(context, object, action):
         else:
             # Unknown action
             assert False
-    elif object == "item":
+    elif thing == "item":
         item = Item.objects.get(pk=1)
 
         if action == "added":
@@ -69,7 +63,7 @@ def impl(context, object, action):
         else:
             # Unknown action
             assert False
-    elif object == "seller":
+    elif thing == "seller":
         seller = Seller.objects.get(pk=2)
 
         if action == "added":
@@ -82,21 +76,35 @@ def impl(context, object, action):
             # Unknown action
             assert False
 
-@then('I see the {object} list')
-def impl(context, object):
-    if object == "category":
+@then('I see the {thing} list')
+def impl(context, thing):
+    if thing == "category":
         assert context.browser.is_text_present("Categories (sorted by name):")
         assert context.browser.is_text_present("Test Category")
         assert context.browser.is_text_present("new name (new desc)")
-    elif object == "item":
+    elif thing == "item":
         assert context.browser.is_text_present("new description")
         assert context.browser.is_text_present("$5.40")
         assert context.browser.is_text_present("Unsold")
-    elif object == "seller":
+    elif thing == "seller":
         assert context.browser.is_text_present("Sellers (sorted by last name):")
         assert context.browser.is_text_present("Blow, Joe")
         assert context.browser.is_text_present("User, Test")
     else:
-        # Unknown object
+        # Unknown thing
         assert False
+
+@then('I see the {what} update page')
+def impl(context, what):
+    if what == "category":
+        text = "The Category List has been updated."
+    elif what == "item":
+        text = "The Inventory has been updated."
+    elif what == "seller":
+        text = "The Sellers List has been updated."
+    else:
+        # Unknown update page
+        assert False
+
+    assert context.browser.is_text_present(text)
 
