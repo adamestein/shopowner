@@ -195,3 +195,21 @@ function validateDate(value) {
     return true;
 }
 
+// Throw up a jquery-ui dialog to issue a warning
+function warning(message, title)
+{
+    if (!title)
+    {
+        title = "Warning";
+    }
+
+    $("<div></div>").html(message).dialog({
+        title: title,
+        resizable: false,
+        modal: true,
+        buttons: {
+            "Ok": function() { $(this).dialog("close"); }
+        }
+    });
+}
+

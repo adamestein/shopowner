@@ -29,22 +29,29 @@
         {
             if ($("#id_item").val() != "")
             {
-                $.get(
-                    "/shopowner/sales/update_values/",
-                    {
-                        "discount": $("#id_discount").val(),
-                        "item":     $("#id_item").val(),
-                        "tax_rate": $("#id_tax_rate").val()
-                    },
-                    function(data) {
-                        $("#id_commission").val(data.commission);
-                        $("#id_price").val(data.price);
-                    }
-                )
-                .fail(function(jqXHR, textStatus, errorThrown) {
-                    // Show Django error page so we can easily see the error
-                    error_page(jqXHR, textStatus, errorThrown);
-                });
+                if ($("#id_tax_rate").val() != "")
+                {
+                    $.get(
+                        "/shopowner/sales/update_values/",
+                        {
+                            "discount": $("#id_discount").val(),
+                            "item":     $("#id_item").val(),
+                            "tax_rate": $("#id_tax_rate").val()
+                        },
+                        function(data) {
+                            $("#id_commission").val(data.commission);
+                            $("#id_price").val(data.price);
+                        }
+                    )
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+                        // Show Django error page so we can easily see the error
+                        error_page(jqXHR, textStatus, errorThrown);
+                    });
+                }
+                else
+                {
+                    warning("Can't automatically calculate price or commission without the tax rate.");
+                }
             }
             else
             {

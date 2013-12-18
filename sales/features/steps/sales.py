@@ -1,9 +1,8 @@
 import decimal
 
-from behave import given
+from behave import given, then
 
-from sales.models import Sale
-from test.bdd.system import login   # Common step, so might as well import it here
+from sales.models import Sale, Tax
 from test.utils import almost_equal
 
 @given('the "{page}" page')
@@ -19,7 +18,7 @@ def impl(context, thing, action):
     if thing == "sale":
         sale = Sale.objects.get(pk=1)
 
-        assert sale.item == context.item
+        assert sale.item == context.item1
         assert sale.tax_rate == 8.0
         assert sale.discount == 0.0
         assert almost_equal(sale.price, decimal.Decimal(1.33), 0.000001)
@@ -38,4 +37,24 @@ def impl(context, what):
         assert False
 
     assert context.browser.is_text_present(text)
+
+@then('I see the "{what}" warning popup')
+def impl(context, what):
+    if what == "tax rate":
+        assert context.browser.is_text_present("Can't automatically calculate price or commission without the tax rate.") 
+    else:
+        # Unknown what
+        assert False
+
+@given('the default tax rate')
+def impl(context):
+    Tax.objects.create(
+        county = "Monroe",
+        state = "NY",
+        sales_tax = 8.0
+    )
+
+@given('no tax rate')
+def impl(context):
+    Tax.objects.get(pk=1).delete()
 
