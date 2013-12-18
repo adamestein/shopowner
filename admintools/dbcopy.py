@@ -3,8 +3,8 @@ from common.views.generic import NavigationTemplateView
 
 class DBCopy(NavigationTemplateView):
     dbnames = {
-        "release":  "hhincwe_finance",
-        "sandbox":  "hhincwe_finance_sandbox",
+        "release":  settings.DATABASES["default"]["NAME"],
+        "sandbox":  settings.DATABASES["default"]["NAME"] + "_sandbox"
     }
 
     def copy(self, from_db, to_db):
