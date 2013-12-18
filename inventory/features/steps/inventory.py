@@ -78,18 +78,20 @@ def impl(context, thing, action):
 
 @then('I see the {thing} list')
 def impl(context, thing):
+    find_text = context.browser.is_text_present
+
     if thing == "category":
-        assert context.browser.is_text_present("Categories (sorted by name):")
-        assert context.browser.is_text_present("Test Category")
-        assert context.browser.is_text_present("new name (new desc)")
+        assert find_text("Categories (sorted by name):")
+        assert find_text("Test Category")
+        assert find_text("new name (new desc)")
     elif thing == "item":
-        assert context.browser.is_text_present("new description")
-        assert context.browser.is_text_present("$5.40")
-        assert context.browser.is_text_present("Unsold")
+        assert find_text("new description")
+        assert find_text("$5.40")
+        assert find_text("Unsold")
     elif thing == "seller":
-        assert context.browser.is_text_present("Sellers (sorted by last name):")
-        assert context.browser.is_text_present("Blow, Joe")
-        assert context.browser.is_text_present("User, Test")
+        assert find_text("Sellers (sorted by last name):")
+        assert find_text("Blow, Joe")
+        assert find_text("User, Test")
     else:
         # Unknown thing
         assert False
