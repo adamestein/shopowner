@@ -12,7 +12,7 @@ def currency(amount):
 
         return locale.currency(amount, grouping=True)
 
-# Forman number with commas depending on Python version (v2.7 and greater is
+# Format number with commas depending on Python version (v2.7 and greater is
 # one way, v2.6 and less is another way)
 def with_commas(amount, prec=6):
     import sys
