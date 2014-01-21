@@ -46,6 +46,8 @@ class Sale(models.Model):
 
     date = models.DateField(
         db_index = True,
+        blank = True,   #Temporary until Gina get's her "sold" data in, then we can go back to date is required
+        null=True,
         help_text = "Date on which the item sold",
     )
 

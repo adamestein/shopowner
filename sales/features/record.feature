@@ -10,9 +10,16 @@ Feature: Sales App - Record Sale
         Then I see the record update page
         And the sale has been recorded
 
+    Scenario: Record Sale with no date
+        Given the "Record Sale" page
+        When I set the item to list item 2
+        And I click Record
+        Then I see the record update page
+        And the sale has been recorded
+
     Scenario: No tax rate
         Given no tax rate
         And the "Record Sale" page
-        When I set the item to list item 2
+        When I set the item to list item 3
         Then I see the "tax rate" warning popup
 
