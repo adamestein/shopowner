@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block extrahead %}
-    <script type="text/javascript" src="{{ STATIC_URL }}admin/js/admin/RelatedObjectLookups.js"></script> 
+    <script type="text/javascript" src="{{ STATIC_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/accounting.min.js"></script> 
 
     <script type="text/javascript">
@@ -48,6 +48,14 @@
 
         to save the information.
     </p>
+
+    {% if form.errors %}
+        <p class="errornote">
+            Please correct the errors below.
+        </p>
+
+        <br />
+    {% endif %}
 
     <form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
         {% csrf_token %}

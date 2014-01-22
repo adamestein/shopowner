@@ -79,6 +79,14 @@
         the item sold and the tax rate.
     </p>
 
+    {% if form.errors %}
+        <p class="errornote">
+            Please correct the errors below.
+        </p>
+
+        <br />
+    {% endif %}
+
     <form method="post" onsubmit="return cleanForm();">
         {% csrf_token %}
 

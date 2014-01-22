@@ -4,6 +4,8 @@ from sales.models import Sale, Tax
 
 
 class SalesForm(forms.ModelForm):
+    error_css_class = "errors"
+
     class Meta:
         model = Sale
         exclude = ("user",)

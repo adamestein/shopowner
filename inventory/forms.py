@@ -9,6 +9,8 @@ from inventory.models import Category, Item, Seller
 
 
 class CategoryEditForm(forms.ModelForm):
+    error_css_class = "errors"
+
     class Meta:
         model = Category
         exclude = ("user",)
@@ -33,6 +35,8 @@ class CategoryEditListForm(forms.Form):
 
 
 class CategoryForm(forms.ModelForm):
+    error_css_class = "errors"
+
     class Meta:
         model = Category
         exclude = ("remove", "user")   # Don't need to see on an 'Add' form
@@ -57,6 +61,8 @@ class CategoryForm(forms.ModelForm):
 
 
 class ItemEditForm(forms.ModelForm):
+    error_css_class = "errors"
+
     # Only put active categories in this choice
     categories = forms.ModelMultipleChoiceField(
         queryset=Category.objects.filter(remove=False),
@@ -160,6 +166,8 @@ class ItemEditListForm(forms.Form):
 
 
 class SellerEditForm(forms.ModelForm):
+    error_css_class = "errors"
+
     class Meta:
         model = Seller
         exclude = ("user",)
@@ -184,6 +192,8 @@ class SellerEditListForm(forms.Form):
 
 
 class SellerForm(forms.ModelForm):
+    error_css_class = "errors"
+
     class Meta:
         model = Seller
         exclude = ("remove", "user")   # Don't need to see on an 'Add' form
