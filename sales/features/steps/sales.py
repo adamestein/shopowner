@@ -88,16 +88,44 @@ def impl(context):
         date = datetime.datetime(2013, 11, 15)
     )
 
+    Sale.objects.create(
+        user = User.objects.get(username="test"),
+        item = context.item4,
+        tax_rate = 4,
+        discount = 5,
+        price = 1.23,
+        date = datetime.datetime(2013, 11, 15)
+    )
+
+    Sale.objects.create(
+        user = User.objects.get(username="test"),
+        item = context.item5,
+        tax_rate = 4,
+        discount = 5,
+        price = 1.23,
+        commission=0,
+        date = datetime.datetime(2013, 11, 15)
+    )
+
 @then('I see the table view')
 def impl(context):
-    find_text = context.browser.is_text_present
+    present = context.browser.is_text_present
+    not_present = context.browser.is_text_not_present
 
-    assert find_text("my desc 1")
-    assert find_text("my desc 2")
-    assert find_text("6.67")
-    assert find_text("1.23")
-    assert find_text("0.25")
-    assert find_text("0.75")
-    assert find_text("8.0%")
-    assert find_text("4.0%")
+    assert present("my desc 1")
+    assert present("6.67")
+    assert present("0.25")
+    assert present("8.0%")
+
+    assert present("my desc 2")
+    assert present("1.23")
+    assert present("0.75")
+    assert present("4.0%")
+
+    assert present("my desc 4")
+    assert not_present("None")
+
+    assert present("my desc 5")
+    assert present("N/A")
+
 

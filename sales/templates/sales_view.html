@@ -40,7 +40,13 @@
                         </a>
                     </td>
                     <td style="text-align: right;">{{ sale.price|currency_format }}</td>
-                    <td style="text-align: right;">{{ sale.commission }}</td>
+
+                    {% if sale.item.commission %}
+                        <td style="text-align: right;">{{sale.commission }}</td>
+                    {% else %}
+                        <td style="text-align: center;">N/A</td>
+                    {% endif %}
+
                     <td style="text-align: right;">{{ sale.tax_rate }}%</td>
                     <td>
                         {% if sale.item.picture %}

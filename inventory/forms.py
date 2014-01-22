@@ -7,19 +7,22 @@ from django.http import QueryDict
 from common.forms import MultipleSelectWithAdd, TextInputWithTextSpan
 from inventory.models import Category, Item, Seller
 
+
 class CategoryEditForm(forms.ModelForm):
     class Meta:
         model = Category
         exclude = ("user",)
 
     # Override so we can remove the "user" value
+    # noinspection PyUnusedLocal
     def __init__(self, user=None, **kwargs):
         super(CategoryEditForm, self).__init__(**kwargs)
 
+
 class CategoryEditListForm(forms.Form):
     categories = forms.ModelChoiceField(
-        queryset = Category.objects.all(),
-        empty_label = "<Choose a category>"
+        queryset=Category.objects.all(),
+        empty_label="<Choose a category>"
     )
 
     def __init__(self, user=None, **kwargs):
@@ -27,6 +30,7 @@ class CategoryEditListForm(forms.Form):
 
         if user:
             self.fields["categories"].queryset = Category.objects.filter(user=user)
+
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -51,25 +55,27 @@ class CategoryForm(forms.ModelForm):
 
         return self.cleaned_data
 
+
 class ItemEditForm(forms.ModelForm):
     # Only put active categories in this choice
     categories = forms.ModelMultipleChoiceField(
-        queryset = Category.objects.filter(remove=False),
-        widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/category/add/"}),
-        help_text = 'Categories this item is in Hold down "Control", or "Command" on a Mac, to select more than one.',
+        queryset=Category.objects.filter(remove=False),
+        widget=MultipleSelectWithAdd(attrs={"url": "/shopowner/category/add/"}),
+        help_text='Categories this item is in Hold down "Control", or "Command" on a Mac, to select more than one.',
     )
 
     # Set up commission with a widget that includes a text span
     commission = forms.CharField(
-        widget = TextInputWithTextSpan(),
-        help_text = "Commission on this item (use % to indicate percentage)"
+        widget=TextInputWithTextSpan(),
+        required=False,
+        help_text="Commission on this item (use % to indicate percentage)"
     )
 
     # Only put active sellers in this choice
     sellers = forms.ModelMultipleChoiceField(
-        queryset = Seller.objects.filter(remove=False),
-        widget = MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
-        help_text = 'Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
+        queryset=Seller.objects.filter(remove=False),
+        widget=MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
+        help_text='Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
     )
 
     class Meta:
@@ -85,7 +91,7 @@ class ItemEditForm(forms.ModelForm):
         # values instead of args.  If user has the form values, just move them
         # into args and set user to None so that everything down the line works
         # normally.
-        if (isinstance(user, QueryDict)):
+        if isinstance(user, QueryDict):
             args = (user,) + args
             user = None
 
@@ -97,13 +103,15 @@ class ItemEditForm(forms.ModelForm):
     def clean_commission(self):
         data = self.cleaned_data["commission"]
 
-        # Make sure value matches a floating point value with optional ending
-        # percent sign
-        pattern = re.compile("^[0-9]*\.?[0-9]+%?$")
-        if pattern.match(data) == None:
-            raise forms.ValidationError("Commission must be a number with an optional ending percent sign")
+        if len(data):
+            # Make sure value matches a floating point value with optional ending
+            # percent sign
+            pattern = re.compile("^[0-9]*\.?[0-9]+%?$")
+            if pattern.match(data) is None:
+                raise forms.ValidationError("Commission must be a number with an optional ending percent sign")
 
         return data
+
 
 class ItemAddForm(ItemEditForm):
     class Meta(ItemEditForm.Meta):
@@ -116,9 +124,9 @@ class ItemAddForm(ItemEditForm):
             # No items in database, so no latest item to get number from, so start with 1
             number = 1
         except ValueError:
-            number = None # Item number isn't an integer, so we can't increment value
+            number = None   # Item number isn't an integer, so we can't increment value
 
-        if number != None:
+        if number is not None:
             initial = kwargs.get("initial", {})
             initial["number"] = number
             kwargs["initial"] = initial
@@ -137,10 +145,11 @@ class ItemAddForm(ItemEditForm):
         else:
             return self.cleaned_data
 
+
 class ItemEditListForm(forms.Form):
     item = forms.ModelChoiceField(
-        queryset = Item.objects.all(),
-        empty_label = "<Choose an item>"
+        queryset=Item.objects.all(),
+        empty_label="<Choose an item>"
     )
 
     def __init__(self, user=None, **kwargs):
@@ -149,19 +158,22 @@ class ItemEditListForm(forms.Form):
         if user:
             self.fields["item"].queryset = Item.objects.filter(user=user)
 
+
 class SellerEditForm(forms.ModelForm):
     class Meta:
         model = Seller
         exclude = ("user",)
 
     # Override so we can remove the "user" value
+    # noinspection PyUnusedLocal
     def __init__(self, user=None, **kwargs):
         super(SellerEditForm, self).__init__(**kwargs)
 
+
 class SellerEditListForm(forms.Form):
     sellers = forms.ModelChoiceField(
-        queryset = Seller.objects.all(),
-        empty_label = "<Choose a seller>"
+        queryset=Seller.objects.all(),
+        empty_label="<Choose a seller>"
     )
 
     def __init__(self, user=None, **kwargs):
@@ -169,6 +181,7 @@ class SellerEditListForm(forms.Form):
 
         if user:
             self.fields["sellers"].queryset = Seller.objects.filter(user=user)
+
 
 class SellerForm(forms.ModelForm):
     class Meta:

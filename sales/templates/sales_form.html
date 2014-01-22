@@ -24,6 +24,15 @@
             $("#id_discount").change(update_sales_values);
         });
 
+        // Clean up the form to make it ready for submission
+        function cleanForm()
+        {
+            // If 'commission' is set to "N/A", change to an empty string so Django validation works
+            if ($("#id_commission").val() == "N/A") $("#id_commission").val("");
+
+            return true;
+        }
+
         // Update the fields as a convenience when something related changed
         function update_sales_values()
         {
@@ -70,7 +79,7 @@
         the item sold and the tax rate.
     </p>
 
-    <form method="post">
+    <form method="post" onsubmit="return cleanForm();">
         {% csrf_token %}
 
         <table>

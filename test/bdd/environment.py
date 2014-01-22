@@ -2,12 +2,15 @@ import logging
 
 from splinter.browser import Browser
 
+
 def after_all(context):
     # Quit the browser if there were no errors
     if not context.failed:
         context.browser.quit()
         context.browser = None
 
+
+# noinspection PyUnusedLocal
 def after_feature(context, feature):
     # Cause each feature to log in within the first scenario, so log out after
     # feature is done.  No need to log out if there was a failure AND the
@@ -16,9 +19,11 @@ def after_feature(context, feature):
     if not context.failed or not context.config.stop:
         context.browser.visit(context.config.server_url + "/shopowner/accounts/logout/")
 
+
 def after_tag(context, tag):
     if tag == "pause":
         context.pause = False
+
 
 def before_all(context):
     # In case logging is not captured
@@ -30,9 +35,12 @@ def before_all(context):
 
     context.browser = Browser(browser)
 
+
+# noinspection PyUnusedLocal
 def before_step(context, step):
     if "pause" in context and context.pause:
         raw_input("Press Enter to execute this step ...")
+
 
 def before_tag(context, tag):
     if tag == "pause":

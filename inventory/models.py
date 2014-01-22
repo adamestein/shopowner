@@ -82,7 +82,7 @@ class Item(models.Model):
 
     commission = models.CharField(
         max_length = 5,
-        default = "0",
+        blank=True,
         help_text = "Commission on this item (use % to indicate percentage)",
     )
 

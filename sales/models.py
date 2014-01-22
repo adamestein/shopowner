@@ -41,6 +41,8 @@ class Sale(models.Model):
     commission = models.DecimalField(
         decimal_places = 2,
         max_digits = 10,
+        blank=True,
+        null=True,
         help_text = "Commission made on this item",
     )
 
@@ -56,8 +58,12 @@ class Sale(models.Model):
         unique_together = ("item", "user")
 
     def __unicode__(self):
-        return "'%s' sold for %s on %s" % \
-                (self.item.desc, currency(self.price), DateFormat(self.date).format("m/d/Y"))
+        formatted_text = "'%s' sold for %s" % (self.item.desc, currency(self.price))
+
+        if self.date:
+            formatted_text += " on %s" % DateFormat(self.date).format("m/d/Y")
+
+        return formatted_text
 
 class Tax(models.Model):
     county = models.CharField(

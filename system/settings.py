@@ -10,9 +10,9 @@ TEMPLATE_DEBUG = DEBUG      # Dev Setting
 # TEMPLATE_DEBUG = False    # Prod Setting
 
 # Override if necessary to migrate release databases
-if bool(os.environ.get("RELEASE", False)) == True:
-    DEBUG=False
-    TEMPLATE_DEBUG=False
+if bool(os.environ.get("RELEASE", False)):
+    DEBUG = False
+    TEMPLATE_DEBUG = False
 
 REMOTE_SERVER = False       # Local Setting
 # REMOTE_SERVER = True      # Remote Setting
@@ -34,7 +34,7 @@ DATABASES = {
     }
 }
 
-if DEBUG == True:
+if DEBUG:
     DATABASES["default"]["NAME"] += "_sandbox"
 
 if "test" in sys.argv:
@@ -43,7 +43,7 @@ if "test" in sys.argv:
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["stein.alwaysdata.net",]
+ALLOWED_HOSTS = ["stein.alwaysdata.net", ]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -89,7 +89,7 @@ STATIC_URL = '/shopowner_static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(__file__), '../public/static').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), '../public/static').replace('\\', '/'),
 )
 
 # List of finder classes that know how to find static files in
@@ -120,7 +120,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'system.urls'
@@ -129,9 +129,9 @@ ROOT_URLCONF = 'system.urls'
 WSGI_APPLICATION = 'system.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), '../templates').replace('\\','/'),
-    os.path.join(os.path.dirname(__file__), '../admintools/templates').replace('\\','/'),
-    os.path.join(os.path.dirname(__file__), '../inventory/templates').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), '../templates').replace('\\', '/'),
+    os.path.join(os.path.dirname(__file__), '../admintools/templates').replace('\\', '/'),
+    os.path.join(os.path.dirname(__file__), '../inventory/templates').replace('\\', '/'),
 )
 
 INSTALLED_APPS = (
@@ -182,10 +182,10 @@ LOGGING = {
     }
 }
 
-if REMOTE_SERVER == True:
+if REMOTE_SERVER:
     # Needed to do formating for Python v2.6
     import locale
-    locale.setlocale( locale.LC_ALL, '' )
+    locale.setlocale(locale.LC_ALL, '')
 
 # Account URLs
 LOGIN_URL = "/shopowner/accounts/login/"
@@ -198,4 +198,4 @@ TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
 # To store images in database
 DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
 
-VERSION = "1.7.2"
+VERSION = "1.8"
