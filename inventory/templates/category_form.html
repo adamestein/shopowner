@@ -9,6 +9,8 @@
 {% endblock %}
 
 {% block content %}
+    {% include "messages.html" %}
+
     <p>
         {% ifequal action "Add" %}
             Enter

@@ -1,0 +1,13 @@
+{% if messages %}
+    <div class="mega" style="font-size: 150%;">
+        <p style="text-align: center;">
+            {% for message in messages %}
+                {{ message|safe }}
+
+                {% if not forloop.last %}
+                    <br />
+                {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+{% endif %}

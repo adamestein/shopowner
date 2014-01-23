@@ -4,13 +4,14 @@ from mixins import PopupAddMixin, NavigationContextMixin, NavigationEditMixin
 
 class NavigationCreateView(PopupAddMixin, NavigationEditMixin, CreateView):
     action = "Create"
+    message = None
 
     def form_valid(self, form):
-        # Will not cause a problem if form.instance.user doesn't exist
-        # beforehand
+        # Will not cause a problem if form.instance.user doesn't exist beforehand
         form.instance.user = self.request.user
 
         return super(NavigationCreateView, self).form_valid(form)
+
 
 class NavigationFormView(NavigationContextMixin, FormView):
     def get_form_kwargs(self):
@@ -21,4 +22,4 @@ class NavigationFormView(NavigationContextMixin, FormView):
 
 class NavigationUpdateView(NavigationEditMixin, UpdateView):
     action = "Update"
-
+    message = None

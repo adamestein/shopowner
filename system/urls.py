@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 from django.conf.urls import patterns, include, url
 
 from common.views.generic import *
@@ -52,9 +53,10 @@ urlpatterns = patterns('',
         form_class = ItemAddForm,
         model = Item,
         navigation = InventoryNavigation("add_item"),
-        success_url = "../updated/",
-        template_name = "item_form.html"
-    )),
+        success_url = reverse_lazy("item_add"),
+        template_name = "item_form.html",
+        message="<em>Inventory</em> has been updated"
+    ), name="item_add"),
 
     url(r'^%sinventory/edit/$' % prefix, NavigationFormView.as_view(
         form_class = ItemEditListForm,
@@ -92,9 +94,10 @@ urlpatterns = patterns('',
         action = "Add",
         form_class = CategoryForm,
         navigation = InventoryNavigation("add_category"),
-        success_url = "../updated/",
-        template_name = "category_form.html"
-    )),
+        success_url = reverse_lazy("category_add"),
+        template_name = "category_form.html",
+        message="<em>Category List</em> has been updated"
+    ), name="category_add"),
 
     url(r'^%scategory/edit/$' % prefix, NavigationFormView.as_view(
         form_class = CategoryEditListForm,
@@ -126,9 +129,10 @@ urlpatterns = patterns('',
         action = "Add",
         form_class = SellerForm,
         navigation = InventoryNavigation("add_seller"),
-        success_url = "../updated/",
-        template_name = "seller_form.html"
-    )),
+        success_url = reverse_lazy("seller_add"),
+        template_name = "seller_form.html",
+        message="<em>Sellers List</em> has been updated"
+    ), name="seller_add"),
 
     url(r'^%sseller/edit/$' % prefix, NavigationFormView.as_view(
         form_class = SellerEditListForm,
@@ -165,9 +169,10 @@ urlpatterns = patterns('',
         action = "Record",
         form_class = SalesForm,
         navigation = SalesNavigation("record_sale"),
-        success_url = "../updated/",
-        template_name = "sales_form.html"
-    )),
+        success_url = reverse_lazy("record_sale"),
+        template_name = "sales_form.html",
+        message="Sale has been recorded"
+    ), name="record_sale"),
 
     url(r'^%ssales/update_values/$' % prefix, UpdateSaleValues.as_view()),
 

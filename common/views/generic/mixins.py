@@ -1,5 +1,6 @@
 import os
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse
@@ -7,6 +8,7 @@ from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.views.generic.base import ContextMixin
 from django.views.generic.edit import FormMixin, ModelFormMixin
+
 
 class NavigationContextMixin(ContextMixin):
     navigation = None
@@ -24,8 +26,17 @@ class NavigationContextMixin(ContextMixin):
 
         return context
 
+
 class NavigationEditMixin(NavigationContextMixin, ModelFormMixin):
     action = None
+
+    def form_valid(self, form):
+        if hasattr(self, "message"):
+            # Only add a message if the class has it defined (even if defined to None)
+            message = self.message if self.message else "Form Processed"
+            messages.add_message(self.request, messages.INFO, message)
+
+        return super(NavigationEditMixin, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
