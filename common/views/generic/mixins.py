@@ -13,6 +13,7 @@ from django.views.generic.edit import FormMixin, ModelFormMixin
 class NavigationContextMixin(ContextMixin):
     navigation = None
 
+    # noinspection PyUnresolvedReferences
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(NavigationContextMixin, self).dispatch(*args, **kwargs)
@@ -27,6 +28,7 @@ class NavigationContextMixin(ContextMixin):
         return context
 
 
+# noinspection PyUnresolvedReferences
 class NavigationEditMixin(NavigationContextMixin, ModelFormMixin):
     action = None
 
@@ -53,20 +55,25 @@ class NavigationEditMixin(NavigationContextMixin, ModelFormMixin):
 
         return kwargs
 
+
+# noinspection PyUnresolvedReferences
 class PopupAddMixin(FormMixin):
+    # noinspection PyProtectedMember
     def form_valid(self, form):
         try:
-            newObject = form.save();
-        except IntegrityError: 
-            newObject = None
+            saved_object = form.save()
+        except IntegrityError:
+            saved_object = None
 
         # Need to return the JavaScript that will close the popup window
-        if newObject and "_popup" in self.request.GET:
-            return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
-                (escape(newObject._get_pk_val()), escape(newObject)))
+        if saved_object and "_popup" in self.request.GET:
+            return HttpResponse(
+                '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %
+                (escape(saved_object._get_pk_val()), escape(saved_object)))
 
         return super(PopupAddMixin, self).form_valid(form)
 
+    # noinspection PyPep8Naming
     def form_invalid(self, form):
         if "_popup" in self.request.GET:
             # Add the _popup field to POST so that we continue using the correct template
@@ -76,6 +83,7 @@ class PopupAddMixin(FormMixin):
 
         return super(PopupAddMixin, self).form_invalid(form)
 
+    # noinspection PyAttributeOutsideInit
     def get_context_data(self, **kwargs):
         # Both GET and POST requests pass through here, so we are using this
         # focal point to determine if we need to switch templates to the
