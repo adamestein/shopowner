@@ -6,7 +6,7 @@ Feature: Inventory App - Categories
         And I set the name to "my category"
         And I set the description to "my desc"
         And I click Add
-        Then I see the category update page
+        Then I see the category form again
         And the category has been added
 
     Scenario: Edit Category

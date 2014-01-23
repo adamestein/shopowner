@@ -110,3 +110,16 @@ def impl(context, what):
 
     assert context.browser.is_text_present(text)
 
+@then('I see the {what} form again')
+def impl(context, what):
+    if what == "category":
+        text = "Category List has been updated"
+    elif what == "item":
+        text = "Inventory has been updated"
+    elif what == "seller":
+        text = "Sellers List has been updated"
+    else:
+        # Unknown update page
+        assert False
+
+    assert context.browser.is_text_present(text)

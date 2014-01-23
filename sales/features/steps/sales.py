@@ -42,6 +42,16 @@ def impl(context, what):
 
     assert context.browser.is_text_present(text)
 
+@then('I see the {what} form again')
+def impl(context, what):
+    if what == "record":
+        text = "Sale has been recorded"
+    else:
+        # Unknown update page
+        assert False
+
+    assert context.browser.is_text_present(text)
+
 @then('I see the "{what}" warning popup')
 def impl(context, what):
     if what == "tax rate":

@@ -9,7 +9,7 @@ Feature: Inventory App - Items
         And I set the price to "1.23"
         And I set the commission to "10%"
         And I click Add
-        Then I see the item update page
+        Then I see the item form again
         And the item has been added
 
     Scenario: Edit Item

@@ -6,7 +6,7 @@ Feature: Inventory App - Sellers
         And I set the first_name to "foo"
         And I set the last_name to "bar"
         And I click Add
-        Then I see the seller update page
+        Then I see the seller form again
         And the seller has been added
 
     Scenario: Edit Seller
