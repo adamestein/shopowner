@@ -1,5 +1,6 @@
 from django import forms
 
+from common.forms.widgets import DateWidget
 from sales.models import Sale, Tax
 
 
@@ -9,6 +10,9 @@ class SalesForm(forms.ModelForm):
     class Meta:
         model = Sale
         exclude = ("user",)
+        widgets = {
+            "date": DateWidget()
+        }
 
     def __init__(self, user=None, **kwargs):
         initial = kwargs.get("initial", {})
