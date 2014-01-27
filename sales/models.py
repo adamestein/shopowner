@@ -54,7 +54,7 @@ class Sale(models.Model):
     )
 
     class Meta:
-        ordering = ("date", "item__desc")
+        ordering = ("item__number", "date", "item__desc")
         unique_together = ("item", "user")
 
     def __unicode__(self):

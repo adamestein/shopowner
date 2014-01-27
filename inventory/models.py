@@ -41,8 +41,7 @@ class Item(models.Model):
         help_text = "User account this item belongs to",
     )
 
-    number = models.CharField(
-        max_length = 5,
+    number = models.PositiveIntegerField(
         help_text = "Item number",
     )
 
@@ -104,7 +103,7 @@ class Item(models.Model):
         super(Item, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.number + ": " + self.desc + " (%s)" % currency(self.price)
+        return str(self.number) + ": " + self.desc + " (%s)" % currency(self.price)
 
 # Image of the item
 class ItemImage(models.Model):
