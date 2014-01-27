@@ -3,6 +3,7 @@ from django.test import TestCase
 
 from inventory.models import Item, Seller
 
+
 class HumanReadableModelTestCase(TestCase):
     def setUp(self):
         super(HumanReadableModelTestCase, self).setUp()
@@ -11,10 +12,10 @@ class HumanReadableModelTestCase(TestCase):
 
     def test_Item(self):
         item = Item.objects.create(
-            user = self.user,
-            number = 101,
-            desc = "This is a description",
-            price = 123456.78
+            user=self.user,
+            number=101,
+            desc="This is a description",
+            price=123456.78
         )
         self.assertEqual("101: This is a description ($123,456.78)", str(item))
 
@@ -22,6 +23,6 @@ class HumanReadableModelTestCase(TestCase):
         seller = Seller.objects.create(
             first_name="Adam",
             last_name="Stein",
-            user = self.user
+            user=self.user
         )
         self.assertEqual("Stein, Adam", str(seller))
