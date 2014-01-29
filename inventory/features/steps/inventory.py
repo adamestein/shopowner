@@ -1,11 +1,12 @@
 import decimal
 
+# noinspection PyUnresolvedReferences
 from behave import given, then
 
 from inventory.models import Category, Item, Seller
 from test.utils import almost_equal
 
-@given('the "{page}" page')
+@given('the {page} page')
 def impl(context, page):
     if page == "Add Item":
         context.browser.visit(context.config.server_url + "/shopowner/inventory/add/")

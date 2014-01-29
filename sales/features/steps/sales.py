@@ -72,7 +72,7 @@ def impl(context, what):
     assert context.browser.is_text_present(text)
 
 
-@then('I see the "{what}" warning popup')
+@then('I see the {what} warning popup')
 def impl(context, what):
     if what == "tax rate":
         assert context.browser.is_text_present(
