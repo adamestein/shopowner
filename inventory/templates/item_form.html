@@ -34,21 +34,7 @@
     {% include "messages.html" %}
 
     <p>
-        {% ifequal action "Add" %}
-            Enter
-        {% else %}
-            Change
-        {% endifequal %}
-
-        the details as required, then press
-        
-        {% ifequal action "Add" %}
-            <strong>Add</strong>
-        {% else %}
-            <strong>Update</strong>
-        {% endifequal %}
-
-        to save the information.
+        {{ action }} the details as required, then press <strong>{{ action }}</strong> to save the information.
     </p>
 
     {% if form.errors %}
@@ -62,21 +48,13 @@
     <form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
         {% csrf_token %}
 
-        {% ifequal action "Add" %}
-            {% include "form_buttons.html" with submit_name="Add" %}
-        {% else %}
-            {% include "form_buttons.html" with submit_name="Update" %}
-        {% endifequal %}
+        {% include "form_buttons.html" with submit_name=action %}
 
         <table>
             {{ form.as_table }}
         </table>
 
-        {% ifequal action "Add" %}
-            {% include "form_buttons.html" with submit_name="Add" %}
-        {% else %}
-            {% include "form_buttons.html" with submit_name="Update" %}
-        {% endifequal %}
+        {% include "form_buttons.html" with submit_name=action %}
     </form>
 {% endblock %}
 

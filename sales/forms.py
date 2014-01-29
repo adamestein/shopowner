@@ -4,6 +4,32 @@ from common.forms.widgets import DateWidget, TextInputWithImage
 from sales.models import Sale, Tax
 
 
+class SalesEditForm(forms.ModelForm):
+    error_css_class = "errors"
+
+    class Meta:
+        model = Sale
+        exclude = ("user",)
+
+    # Override so we can remove the "user" value
+    # noinspection PyUnusedLocal
+    def __init__(self, user=None, **kwargs):
+        super(SalesEditForm, self).__init__(**kwargs)
+
+
+class SaleEditListForm(forms.Form):
+    sales = forms.ModelChoiceField(
+        queryset=Sale.objects.all(),
+        empty_label="<Choose a sale>"
+    )
+
+    def __init__(self, user=None, **kwargs):
+        super(SaleEditListForm, self).__init__(**kwargs)
+
+        if user:
+            self.fields["sales"].queryset = Sale.objects.filter(user=user)
+
+
 class SalesForm(forms.ModelForm):
     error_css_class = "errors"
 

@@ -42,11 +42,7 @@
 
         {{ form.as_p }}
 
-        {% ifequal action "Add" %}
-            {% include "form_buttons.html" with submit_name="Add" %}
-        {% else %}
-            {% include "form_buttons.html" with submit_name="Update" %}
-        {% endifequal %}
+        {% include "form_buttons.html" with submit_name=action %}
     </form>
 {% endblock %}
 

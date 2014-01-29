@@ -3,7 +3,12 @@ import time
 from behave import when
 
 
-@when('I set the {element} to "{value}"')
+@when('I set the {element} to list item {value}')
+def set_list_element(context, element, value):
+    context.browser.select(element, value)
+
+
+@when('I set the {element} to {value}')
 def set_element(context, element, value):
     if element == "description":
         # Easier to read if test says "description" instead of "desc"
@@ -17,11 +22,6 @@ def set_element(context, element, value):
         # Click somewhere else to remove the calendar popup
         context.browser.find_by_tag("h1").click()
         time.sleep(2)   # Time for popup to disappear
-
-
-@when('I set the {element} to list item {value}')
-def set_list_element(context, element, value):
-    context.browser.select(element, value)
 
 
 @when('I see the {element} set to {value}')

@@ -3,13 +3,15 @@ from django.core.urlresolvers import reverse_lazy
 from django.conf.urls import patterns, include, url
 
 from common.views.generic import *
+
 from inventory.forms import CategoryForm, CategoryEditForm, CategoryEditListForm
 from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm
 from inventory.forms import SellerEditForm, SellerEditListForm, SellerForm
 from inventory.models import Category, Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
 from inventory.views import ItemView
-from sales.forms import SalesForm
+
+from sales.forms import SalesEditForm, SaleEditListForm, SalesForm
 from sales.models import Sale
 from sales.navigation import Navigation as SalesNavigation
 from sales.views import UpdateSaleValues
@@ -238,6 +240,26 @@ urlpatterns = patterns(
             message="Sale has been recorded"
         ),
         name="record_sale"
+    ),
+
+    url(
+        r'^%ssales/edit/$' % prefix,
+        NavigationFormView.as_view(
+            form_class=SaleEditListForm,
+            navigation=SalesNavigation("edit_sale"),
+            template_name="sale_edit_list.html"
+        )
+    ),
+
+    url(
+        r'^%ssales/edit/(?P<pk>[\d]+)$' % prefix,
+        NavigationUpdateView.as_view(
+            form_class=SalesEditForm,
+            model=Sale,
+            navigation=SalesNavigation("edit_sale"),
+            success_url="../updated/",
+            template_name="sales_form.html"
+        )
     ),
 
     url(r'^%ssales/update_values/$' % prefix, UpdateSaleValues.as_view()),
