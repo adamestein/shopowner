@@ -34,6 +34,7 @@ def set_popup_defaults(attrs):
 
     return defaults
 
+
 # To be used with jQuery datepicker
 class DateWidget(forms.TextInput):
     def render(self, name, value, attrs=None):
@@ -68,11 +69,17 @@ class MultipleSelectWithAdd(forms.SelectMultiple):
         return mark_safe(html + self.popup_add % {"field": name, "static_url": settings.STATIC_URL})
 
 
+class TextInputWithImage(forms.TextInput):
+    def render(self, name, value, attrs=None):
+        html = super(TextInputWithImage, self).render(name, value, attrs)
+
+        return mark_safe(html + '<img style="vertical-align: middle;" src="' + settings.STATIC_URL +
+                         'img/calculator.png" alt="Auto calculate discount %" id="calculator">')
+
+
 class TextInputWithTextSpan(forms.TextInput):
     def render(self, name, value, attrs=None):
         html = super(TextInputWithTextSpan, self).render(name, value, attrs)
 
-        span = '<span id="id_text_span_' + name + '" style="margin-left: .4em;"></span>'
-
-        return mark_safe(html + span)
+        return mark_safe(html + '<span id="id_text_span_' + name + '" style="margin-left: .4em;"></span>')
 

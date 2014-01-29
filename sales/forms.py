@@ -1,6 +1,6 @@
 from django import forms
 
-from common.forms.widgets import DateWidget
+from common.forms.widgets import DateWidget, TextInputWithImage
 from sales.models import Sale, Tax
 
 
@@ -11,7 +11,8 @@ class SalesForm(forms.ModelForm):
         model = Sale
         exclude = ("user",)
         widgets = {
-            "date": DateWidget()
+            "date": DateWidget(),
+            "discount": TextInputWithImage()
         }
 
     def __init__(self, user=None, **kwargs):

@@ -12,10 +12,25 @@
      <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
      <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/calendar.css" />
      <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}js/accounting.min.js"></script>
      <script type="text/javascript" src="{{ STATIC_URL }}js/utils.js"></script>
 
      <script type="text/javascript">
         $(document).ready(function() {
+            // Set up the calculator icon
+            $("#calculator").click(function() {
+                if ($("#id_item").val() == "")
+                {
+                    warning("An item must be chosen before auto calculating the discount");
+                }
+                else
+                {
+                    $("#id_sale_price").val("");   // Remove any previous value
+                    popup("#discount-form", "Auto Calculate Discount", "Auto Calculate",
+                        calculate_discount, calculator_validation);
+                }
+            });
+
             // Set up the jQuery datepicker with the calendar icon
             $("#datepicker").datepicker({
                 buttonImage: '{{ STATIC_URL }}admin/img/icon_calendar.gif',
@@ -35,6 +50,37 @@
             $("#id_discount").change(update_sales_values);
         });
 
+        // Calculate the discount based on what the item originally was selling for compared to the actual selling price
+        function calculate_discount()
+        {
+            // #item_price will always have the original price, #id_price get's updated so we can't use that
+            var price = accounting.unformat($("#item_price").text());
+            var discount = (price - $("#id_sale_price").val())/price * 100.0;
+            discount = accounting.toFixed(discount, 2);     // Round to 2 significant digits
+
+            $("#id_discount").val(discount);
+            $("#id_price").val($("#id_sale_price").val());
+        }
+
+        // Validate that the sale price entered when clicking the calculator icon is a valid positive number
+        function calculator_validation()
+        {
+            if ($("#id_sale_price").val() == "")
+            {
+                warning("No sale price given");
+                return false;
+            }
+            else if (validatePositiveDecimal($("#id_sale_price").val()) == false)
+            {
+                warning("Sale price is an illegal value");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         // Clean up the form to make it ready for submission
         function cleanForm()
         {
@@ -51,6 +97,12 @@
             {
                 if ($("#id_tax_rate").val() != "")
                 {
+                    if ($("#id_discount").val() == "")
+                    {
+                        // Change discount to 0 if not set
+                        $("#id_discount").val(0);
+                    }
+
                     $.get(
                         "/shopowner/sales/update_values/",
                         {
@@ -61,6 +113,7 @@
                         function(data) {
                             $("#id_commission").val(data.commission);
                             $("#id_price").val(data.price);
+                            $("#item_price").text(accounting.formatMoney(data.price));
                         }
                     )
                     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -77,6 +130,7 @@
             {
                 $("#id_commission").val("");
                 $("#id_price").val("");
+                $("#item_price").text("");
             }
         }
     </script>
@@ -109,5 +163,14 @@
 
         {% include "form_buttons.html" with submit_name="Record" %}
     </form>
+
+    <div id="discount-form" style="display: none;">
+        <p>
+            The currently selected item is listed to sell for <span id="item_price"></span> (includes sales tax).
+            Please enter the actual sale price (including sales tax) below.
+        </p>
+
+        $<input id="id_sale_price" type="text" />
+    </div>
 {% endblock %}
 

@@ -151,11 +151,49 @@ function ordinal( n ) {
     return n + ( s[ (v-20) % 10 ] || s[ v ] || s[ 0 ] );
 }
 
-function validateDecimal(value) {
+function popup(id, title, submit_button_text, callback, validation) {
+    if ($(id).hasClass("ui-dialog-content"))
+    {
+        // Dialog already exists
+        $(id).dialog("open");
+    }
+    else
+    {
+        // Create dialog
+        $(id).dialog({
+            autoOpen: true,
+            title: title,
+            modal: true,
+            buttons: [
+                {
+                    text: submit_button_text, click: function() {
+                        if (!validation || validation())
+                        {
+                            $( this ).dialog( "close" );
+                            callback();
+                        }
+                    }
+                },
+                {text: "Cancel", click: function() { $( this ).dialog( "close" ); } }
+            ]
+        });
+
+        // Allow the user to press enter for any text input field
+        $(id + " > input").keyup(function(e) {
+            if (e.keyCode == 13) {
+                if (!validation || validation())
+                {
+                    $(id).dialog( "close" );
+                    callback();
+                }
+            }
+        });
+    }
+}
+
+function validatePositiveDecimal(value) {
     var RE = /^\d*\.?\d*$/;
 
-    alert("Value = [" + value + "]");
-    alert("RE Test = [" + RE.test(value) + "]");
     if(RE.test(value)) {
         return true;
     } else {
