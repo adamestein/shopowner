@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load format %}
 
 {% block title %}
     Sales Applications: Record Sale
@@ -27,7 +28,7 @@
                 {
                     $("#id_sale_price").val("");   // Remove any previous value
                     popup("#discount-form", "Auto Calculate Discount", "Auto Calculate",
-                        calculate_discount, calculator_validation);
+                        overrideSalePrice, calculatorValidation);
                 }
             });
 
@@ -45,25 +46,28 @@
 
             // Update the calculated sales price when any of these
             // related things change
-            $("#id_item").change(update_sales_values);
-            $("#id_tax_rate").change(update_sales_values);
-            $("#id_discount").change(update_sales_values);
+            $("#id_item").change(updateSalesValues);
+            $("#id_tax_rate").change(updateSalesValues);
+            $("#id_discount").change(updateSalesValues);
         });
 
-        // Calculate the discount based on what the item originally was selling for compared to the actual selling price
-        function calculate_discount()
+        // User manually entered a sale price overriding what the item is listed to sell at.  Need to update
+        // associated values.
+        function overrideSalePrice()
         {
-            // #item_price will always have the original price, #id_price get's updated so we can't use that
+            // #item_price will always have the original price, #id_price is updated so we can't use that
             var price = accounting.unformat($("#item_price").text());
-            var discount = (price - $("#id_sale_price").val())/price * 100.0;
-            discount = accounting.toFixed(discount, 2);     // Round to 2 significant digits
+            var discount = accounting.toFixed((price - $("#id_sale_price").val())/price * 100.0, 2);
 
             $("#id_discount").val(discount);
-            $("#id_price").val($("#id_sale_price").val());
+
+            // Need to (possibly) recalculate the commission with the overriding sale price.  This has the
+            // side effect of updating the price field for us.
+            updateSalesValues(null, $("#id_sale_price").val());
         }
 
         // Validate that the sale price entered when clicking the calculator icon is a valid positive number
-        function calculator_validation()
+        function calculatorValidation()
         {
             if ($("#id_sale_price").val() == "")
             {
@@ -91,7 +95,7 @@
         }
 
         // Update the fields as a convenience when something related changed
-        function update_sales_values()
+        function updateSalesValues(event, salePrice)
         {
             if ($("#id_item").val() != "")
             {
@@ -106,9 +110,10 @@
                     $.get(
                         "/shopowner/sales/update_values/",
                         {
-                            "discount": $("#id_discount").val(),
-                            "item":     $("#id_item").val(),
-                            "tax_rate": $("#id_tax_rate").val()
+                            "discount":     $("#id_discount").val(),
+                            "item":         $("#id_item").val(),
+                            "tax_rate":     $("#id_tax_rate").val(),
+                            "sale_price":   salePrice
                         },
                         function(data) {
                             $("#id_commission").val(data.commission);
@@ -166,7 +171,12 @@
 
     <div id="discount-form" style="display: none;">
         <p>
-            The currently selected item is listed to sell for <span id="item_price"></span> (includes sales tax).
+            The currently selected item is listed to sell for
+            <span id="item_price">
+                {% if sale.price %}
+                    {{ sale.price|currency_format }}
+                {% endif %}
+            </span> (includes sales tax).
             Please enter the actual sale price (including sales tax) below.
         </p>
 

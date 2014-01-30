@@ -12,6 +12,15 @@ class UpdateSaleValues(AJAXView):
         item_price = float(item.price)
         tax_rate = float(self.request.GET["tax_rate"])
 
+        if "sale_price" in self.request.GET:
+            # Handle the case where the item price is overriden. In this case, we're given the
+            # final sale price.  In order for the rest of this function work, we need the
+            # list price of the item.  To do that, we need to remove the sales tax (which gets
+            # us the taxable price) and then add any discount to that to get what would have been
+            # the list price.
+            item_price = float(self.request.GET["sale_price"]) / (1.0 + tax_rate / 100.0)
+            item_price /= 1.0 - discount / 100.0
+
         if item.commission:
             percent_loc = item.commission.find("%")
             if percent_loc == -1:

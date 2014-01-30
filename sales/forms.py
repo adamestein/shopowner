@@ -10,6 +10,10 @@ class SalesEditForm(forms.ModelForm):
     class Meta:
         model = Sale
         exclude = ("user",)
+        widgets = {
+            "date": DateWidget(),
+            "discount": TextInputWithImage()
+        }
 
     # Override so we can remove the "user" value
     # noinspection PyUnusedLocal
