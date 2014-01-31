@@ -20,6 +20,12 @@ class SalesEditForm(forms.ModelForm):
     def __init__(self, user=None, **kwargs):
         super(SalesEditForm, self).__init__(**kwargs)
 
+        # Only want to change the existing widgets to readonly, so it's easier
+        # to do it here than figure out the widget to set it to in the Meta
+        # section
+        self.fields["commission"].widget.attrs["readonly"] = "readonly"
+        self.fields["price"].widget.attrs["readonly"] = "readonly"
+
 
 class SaleEditListForm(forms.Form):
     sales = forms.ModelChoiceField(
@@ -34,17 +40,7 @@ class SaleEditListForm(forms.Form):
             self.fields["sales"].queryset = Sale.objects.filter(user=user)
 
 
-class SalesForm(forms.ModelForm):
-    error_css_class = "errors"
-
-    class Meta:
-        model = Sale
-        exclude = ("user",)
-        widgets = {
-            "date": DateWidget(),
-            "discount": TextInputWithImage()
-        }
-
+class SalesForm(SalesEditForm):
     def __init__(self, user=None, **kwargs):
         initial = kwargs.get("initial", {})
 
@@ -66,12 +62,6 @@ class SalesForm(forms.ModelForm):
             ).exclude(
                 sale__isnull=False
             )
-
-        # Only want to change the existing widgets to readonly, so it's easier
-        # to do it here than figure out the widget to set it to in the Meta
-        # section
-        self.fields["commission"].widget.attrs["readonly"] = "readonly"
-        self.fields["price"].widget.attrs["readonly"] = "readonly"
 
     def clean_commission(self):
         data = self.cleaned_data["commission"]
