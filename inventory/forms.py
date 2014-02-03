@@ -4,7 +4,7 @@ from db_file_storage.form_widgets import DBClearableFileInput
 from django import forms
 from django.http import QueryDict
 
-from common.forms import MultipleSelectWithAdd, TextInputWithTextSpan
+from common.forms import MultipleSelectWithAdd, SelectWithAdd, TextInputWithTextSpan
 from inventory.models import Category, Item, Seller
 
 
@@ -64,10 +64,11 @@ class ItemEditForm(forms.ModelForm):
     error_css_class = "errors"
 
     # Only put active categories in this choice
-    categories = forms.ModelMultipleChoiceField(
+    category = forms.ModelChoiceField(
         queryset=Category.objects.filter(remove=False),
-        widget=MultipleSelectWithAdd(attrs={"url": "/shopowner/category/add/"}),
-        help_text='Categories this item is in Hold down "Control", or "Command" on a Mac, to select more than one.',
+        required=False,
+        widget=SelectWithAdd(attrs={"url": "/shopowner/category/add/"}),
+        help_text='Category this item is in.',
     )
 
     # Set up commission with a widget that includes a text span
@@ -81,7 +82,7 @@ class ItemEditForm(forms.ModelForm):
     sellers = forms.ModelMultipleChoiceField(
         queryset=Seller.objects.filter(remove=False),
         widget=MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
-        help_text='Seller(s) of this item Hold down "Control", or "Command" on a Mac, to select more than one.',
+        help_text='Seller(s) of this item (hold down "Control", or "Command" on a Mac, to select more than one).',
     )
 
     class Meta:
@@ -144,10 +145,11 @@ class ItemAddForm(ItemEditForm):
             self.fields["sellers"].queryset = self.fields["sellers"].queryset.filter(user=user)
 
     def clean(self):
+        category = self.cleaned_data["category"]
         number = self.cleaned_data["number"]
 
-        if Item.objects.filter(number=number, user=self.user):
-            raise forms.ValidationError("You have already added an item with this number")
+        if Item.objects.filter(category=category, number=number, user=self.user):
+            raise forms.ValidationError("You have already added this item")
         else:
             return self.cleaned_data
 

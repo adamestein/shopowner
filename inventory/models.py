@@ -54,9 +54,11 @@ class Item(models.Model):
         help_text="Description of the item",
     )
 
-    categories = models.ManyToManyField(
+    category = models.ForeignKey(
         Category,
-        help_text="Categories this item is in",
+        blank=True,
+        null=True,
+        help_text="Category this item is in",
     )
 
     sellers = models.ManyToManyField(
@@ -102,7 +104,7 @@ class Item(models.Model):
 
     class Meta:
         ordering = ("number",)
-        unique_together = (("user", "number"),)
+        unique_together = (("user", "number", "category"),)
 
     def save(self, *args, **kwargs):
         delete_file_if_needed(self, "picture")

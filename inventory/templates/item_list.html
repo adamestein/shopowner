@@ -23,8 +23,9 @@
                 <th>Description</th>
                 <th>Price</th>
                 <th>Worth</th>
-                <th>Status</th>
+                <th>Category</th>
                 <th>Image</th>
+                <th>Status</th>
             </tr>
 
             {% for item in object_list %}
@@ -39,18 +40,19 @@
                             {{ item.worth|currency_format }}
                         {% endif %}
                     </td>
-                    <td style="text-align: center;">
-                        {% if item.sale_set.all %}
-                            Sold
-                        {% else %}
-                            Unsold
-                        {% endif %}
-                    </td>
+                    <td style="text-align: center;">{{ item.category }}</td>
                     <td>
                         {% if item.picture %}
                             <a href="/shopowner/files/get/?name={{ item.picture }}" target="_blank">
                                 <img height=64 width=64 src="/shopowner/files/get/?name={{ item.picture }}">
                             </a>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">
+                        {% if item.sale_set.all %}
+                            Sold
+                        {% else %}
+                            Unsold
                         {% endif %}
                     </td>
                 </tr>
