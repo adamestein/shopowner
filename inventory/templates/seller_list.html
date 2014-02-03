@@ -14,7 +14,9 @@
 
         <ol>
             {% for seller in object_list %}
-                <li>{{ seller }}</li>
+                <li>
+                    <a href="{% url 'edit_specific_seller' seller.id %}">{{ seller }}</a>
+                </li>
             {% endfor %}
         </ol>
     {% else %}

@@ -15,7 +15,7 @@
         <ol>
             {% for category in object_list %}
                 <li>
-                    {{ category }}
+                    <a href="{% url 'edit_specific_category' category.id %}">{{ category }}</a>
 
                     {% if category.desc %}
                         ({{ category.desc }})

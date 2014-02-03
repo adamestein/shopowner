@@ -89,7 +89,8 @@ urlpatterns = patterns(
             navigation=InventoryNavigation("edit_item"),
             success_url="../updated/",
             template_name="item_form.html"
-        )
+        ),
+        name="edit_specific_item"
     ),
 
     url(
@@ -149,7 +150,8 @@ urlpatterns = patterns(
             navigation=InventoryNavigation("edit_category"),
             success_url="../updated/",
             template_name="category_form.html"
-        )
+        ),
+        name="edit_specific_category"
     ),
 
     url(
@@ -200,7 +202,8 @@ urlpatterns = patterns(
             navigation=InventoryNavigation("edit_seller"),
             success_url="../updated/",
             template_name="seller_form.html"
-        )
+        ),
+        name="edit_specific_seller"
     ),
 
     url(
