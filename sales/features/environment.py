@@ -32,9 +32,9 @@ def before_all(context):
         number="1",
         desc="my desc 1",
         price="1.23",
+        category=category,
         commission="5%"
     )
-    context.item1.categories.add(category)
     context.item1.sellers.add(seller)
 
     context.item2 = Item.objects.create(
@@ -42,9 +42,9 @@ def before_all(context):
         number="2",
         desc="my desc 2",
         price="1.23",
+        category=category,
         commission="10%"
     )
-    context.item2.categories.add(category)
     context.item2.sellers.add(seller)
 
     context.item3 = Item.objects.create(
@@ -52,9 +52,9 @@ def before_all(context):
         number="3",
         desc="my desc 3",
         price="1.23",
+        category=category,
         commission="0"
     )
-    context.item3.categories.add(category)
     context.item3.sellers.add(seller)
 
     context.item4 = Item.objects.create(
@@ -62,8 +62,8 @@ def before_all(context):
         number="4",
         desc="my desc 4",
         price="1.23",
+        category=category
     )
-    context.item4.categories.add(category)
     context.item4.sellers.add(seller)
 
     context.item5 = Item.objects.create(
@@ -71,6 +71,6 @@ def before_all(context):
         number="5",
         desc="my desc 5",
         price="1.23",
+        category=category
     )
-    context.item5.categories.add(category)
     context.item5.sellers.add(seller)

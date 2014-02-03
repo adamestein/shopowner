@@ -4,7 +4,7 @@ Feature: Inventory App - Items
         Given the Add Item page
         When I log in
         And I set the description to my desc
-        And I set the categories to list item 1
+        And I set the category to list item 1
         And I set the sellers to list item 1
         And I set the price to 1.23
         And I set the commission to 10%

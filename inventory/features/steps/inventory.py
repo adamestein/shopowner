@@ -49,16 +49,16 @@ def impl(context, thing, action):
 
         if action == "added":
             assert item.desc == "my desc"
-            assert item.categories.get(pk=1).name == "Test Category"
+            assert item.category.name == "Test Category"
             assert item.sellers.get(pk=1).first_name == "Test" and \
-                    item.sellers.get(pk=1).last_name == "User"
+                item.sellers.get(pk=1).last_name == "User"
             assert almost_equal(item.price, decimal.Decimal(1.23), 0.000001)
             assert item.commission == "10%"
         elif action == "updated":
             assert item.desc == "new description"
-            assert item.categories.get(pk=1).name == "Test Category"
+            assert item.category.name == "Test Category"
             assert item.sellers.get(pk=1).first_name == "Test" and \
-                    item.sellers.get(pk=1).last_name == "User"
+                item.sellers.get(pk=1).last_name == "User"
             assert almost_equal(item.price, decimal.Decimal(5.40), 0.000001)
             assert item.commission == "10%"
         else:
