@@ -108,7 +108,7 @@
                     }
 
                     $.get(
-                        "/shopowner/sales/update_values/",
+                        "{% url 'update_sale_values' %}",
                         {
                             "discount":     $("#id_discount").val(),
                             "item":         $("#id_item").val(),

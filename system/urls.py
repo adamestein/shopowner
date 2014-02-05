@@ -9,7 +9,7 @@ from inventory.forms import ItemEditListForm, ItemAddForm, ItemEditForm
 from inventory.forms import SellerEditForm, SellerEditListForm, SellerForm
 from inventory.models import Category, Item, Seller
 from inventory.navigation import Navigation as InventoryNavigation
-from inventory.views import ItemView
+from inventory.views import ItemListView, ItemView, SearchView
 
 from sales.forms import SalesEditForm, SaleEditListForm, SalesForm
 from sales.models import Sale
@@ -95,7 +95,7 @@ urlpatterns = patterns(
 
     url(
         r'^%sinventory/list/$' % prefix,
-        NavigationListView.as_view(
+        ItemListView.as_view(
             model=Item,
             navigation=InventoryNavigation("list_items"),
             queryset=Item.objects.filter(remove=False),
@@ -111,6 +111,8 @@ urlpatterns = patterns(
             template_name="item_list.html"
         )
     ),
+
+    url(r'^%sinventory/search/$' % prefix, SearchView.as_view(), name="search"),
 
     url(
         r'^%sinventory/updated/$' % prefix,
@@ -265,7 +267,7 @@ urlpatterns = patterns(
         )
     ),
 
-    url(r'^%ssales/update_values/$' % prefix, UpdateSaleValues.as_view()),
+    url(r'^%ssales/update_values/$' % prefix, UpdateSaleValues.as_view(), name="update_sale_values"),
 
     url(
         r'^%ssales/updated/$' % prefix,
