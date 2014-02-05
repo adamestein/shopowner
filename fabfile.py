@@ -1,5 +1,5 @@
 from fabric.api import env
-from fabric.contrib.files import comment, exists, run, uncomment
+from fabric.contrib.files import comment, exists, local, run, uncomment
 from fabric.contrib.project import rsync_project
 
 env.hosts = ["ssh.alwaysdata.com",]
@@ -66,6 +66,10 @@ def prod():
     deploy()
     update_settings()
     collect_static_files()
+
+    # Migrate the DB (no problem is nothing needs to be done
+    local("RELEASE=1 ./manage.py migrate inventory")
+    local("RELEASE=1 ./manage.py migrate sales")
 
 # Update the Django settings file as appropriate for this deployment
 def  update_settings(isprod=True):

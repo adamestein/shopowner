@@ -6,7 +6,7 @@ from common.context_processors import version
 class CPTestCase(TestCase):
     def test_version(self):
         ans = {
-            "version": "Shop Owner Apps v1.15"
+            "version": "Shop Owner Apps v1.16"
         }
 
         self.assertEqual(version(None), ans)
