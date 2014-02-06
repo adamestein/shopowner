@@ -72,7 +72,7 @@ def prod():
     update_settings()
     collect_static_files()
 
-    # Migrate the DB (no problem is nothing needs to be done
+    # Migrate the DB (no problem if nothing needs to be done
     local("RELEASE=1 ./manage.py migrate inventory")
     local("RELEASE=1 ./manage.py migrate sales")
 
