@@ -32,6 +32,8 @@ def deploy():
     exclude = [
         ".git",
         ".gitignore",
+        ".idea",
+        "requirements.txt",
         "fabfile.py*",
         "migrations",
         "*.pyc",
