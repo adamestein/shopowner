@@ -2,7 +2,7 @@ from fabric.api import env
 from fabric.contrib.files import comment, exists, local, run, uncomment
 from fabric.contrib.project import rsync_project
 
-env.hosts = ["ssh.alwaysdata.com", ]
+env.hosts = ["ssh-stein.alwaysdata.net", ]
 env.password = "5Px07y9h"
 env.user = "stein"
 
