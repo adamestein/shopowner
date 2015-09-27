@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+{% load format %}
+
+{% block title %}
+    Inventory Applications: List Items
+{% endblock %}
+
+{% block header %}
+    List Items
+{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
+    <style>
+        #overlay {
+            background-color: black;
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            opacity: 0.8; /* also -moz-opacity, etc. */
+            z-index: 100;
+        }
+
+        .ui-progressbar {
+            position: relative;
+            top: 50%;
+        }
+
+        .ui-progressbar-value {
+            background: #7f9760;
+        }
+
+        .progress-label {
+            position: absolute;
+            left: 50%;
+            top: 4px;
+            font-weight: bold;
+        }
+    </style>
+
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/accounting.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/utils.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#accordion").accordion({     // Set up search form area
+                active: false,
+                collapsible: true,
+                heightStyle: "content"
+            });
+            $("#id_search").button().click(search);     // Set up search button
+
+            // Set up the progress bar
+            $("#progressbar").progressbar({
+                value: false
+            });
+        });
+
+        function search()
+        {
+            // Show progress bar
+            $("#overlay").show();
+
+            $.get(
+                "{% url 'search' %}",
+                {
+                    "number":       $("#id_number").val(),
+                    "desc":         $("#id_desc").val(),
+                    "categories":   $("#id_categories").val(),
+                    "sellers":      $("#id_sellers").val()
+                },
+                function(data) {
+                    // Remove all the data rows (leaving the header row intact)
+                    $("#list_table tr:not(:first)").remove();
+
+                    var html = "";
+                    var editLinkTmpl = "{% url 'edit_specific_item' 0 %}";
+                    var imageLinkTmpl = "{% url 'db_file_storage.get_file' %}?name=";
+
+                    $.each(JSON.parse(data.list), function(index, value) {
+                        var category;
+                        var fields = value.fields;
+                        var image;
+                        var editLink = editLinkTmpl.replace("0", value.pk);
+                        var imageLink;
+                        var status = $.inArray(value.pk, data.sold) == -1 ? "Unsold" : "Sold";
+                        var worth = fields.worth ? accounting.formatMoney(fields.worth) : "";
+
+                        if (fields.category)
+                        {
+                            // Can get the category name from the form menu
+                            category = $("#id_categories option[value='" + fields.category + "']").text();
+                        }
+                        else
+                        {
+                            category = "None";
+                        }
+
+                        if (fields.picture)
+                        {
+                            imageLink = imageLinkTmpl + fields.picture;
+                            image = "<a href='" + imageLink + "' target='_blank'>" +
+                                    "    <img height=64 width=64 src='" + imageLink + "'>" +
+                                    "</a>";
+                        }
+                        else
+                        {
+                            image = "";
+                        }
+
+                        // Need to match what we would normally get below in the HTML code
+                        html += "<tr>" +
+                                "    <td style='text-align: center;'>" + fields.number + "</td>" +
+                                "    <td>" +
+                                "        <a href='" + editLink + "'>" + fields.desc + "</a>" +
+                                "    </td>" +
+                                "    <td style='text-align: right;'>" + accounting.formatMoney(fields.price) + "</td>" +
+                                "    <td style='text-align: right;'>" + worth + "</td>" +
+                                "    <td style='text-align: center;'>" + category + "</td>" +
+                                "    <td>" + image + "</td>" +
+                                "    <td style='text-align: center;'>" + status + "</td>" +
+                                "</tr>";
+                    });
+
+                    $("#list_table").append(html);
+
+                    // Hide progress bar
+                    $("#overlay").hide();
+                }
+            )
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                // Hide progress bar
+                $("#overlay").hide();
+
+                // Show Django error page so we can easily see the error
+                error_page(jqXHR, textStatus, errorThrown);
+            });
+        }
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    {% if object_list %}
+        <div id="overlay" style="display: none;">
+            <div id="progressbar"><div class="progress-label">Searching...</div></div>
+        </div>
+
+        <p>
+            Click on the image to get the full sized version.
+        </p>
+
+        <div id="accordion">
+            <h3>Search Parameters</h3>
+            <div>
+                <p>
+                    Fill in the parameters to match.  An empty parameter will match all values.  A
+                    <strong>number</strong> will match exactly.  The phrase (one or more words) given
+                    in the <strong>desc</strong> field will match any items containing that phrase. Any
+                    selection made in <strong>category</strong> or <strong>seller</strong>  counts as a match.
+                </p>
+
+                <table>
+                    <tr>
+                        <th>
+                            <label for="id_number">Number:</label>
+                        </th>
+                        <td>
+                            <input id="id_number" name="number" type="text" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            <label for="id_desc">Desc:</label>
+                        </th>
+                        <td>
+                            <input id="id_desc" maxlength="100" name="desc" type="text" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            <label for="id_categories">Category:</label>
+                        </th>
+                        <td>
+                            <select multiple="multiple" id="id_categories" name="categories">
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            <label for="id_sellers">Sellers:</label>
+                        </th>
+                        <td>
+                            <select multiple="multiple" id="id_sellers" name="sellers">
+                                {% for seller in sellers %}
+                                    <option value="{{ seller.id }}">{{ seller }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+
+                <br />
+                <button id="id_search">Search</button>
+            </div>
+        </div>
+
+        <br />
+
+        <table id="list_table" border="1">
+            <caption><strong>Inventory</strong></caption>
+
+            <tr>
+                <th>&nbsp;#&nbsp;</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Worth</th>
+                <th>Category</th>
+                <th>Image</th>
+                <th>Status</th>
+            </tr>
+
+            {% for item in object_list %}
+                <tr>
+                    <td style="text-align: center;">{{ item.number }}</td>
+                    <td>
+                        <a href="{% url 'edit_specific_item' item.id %}">{{ item.desc }}</a>
+                    </td>
+                    <td style="text-align: right;">{{ item.price|currency_format }}</td>
+                    <td style="text-align: right;">
+                        {% if item.worth %}
+                            {{ item.worth|currency_format }}
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">{{ item.category }}</td>
+                    <td>
+                        {% if item.picture %}
+                            <a href="{% url 'db_file_storage.get_file' %}?name={{ item.picture }}" target="_blank">
+                                <img height=64 width=64 src="{% url 'db_file_storage.get_file' %}?name={{ item.picture }}">
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">
+                        {% if item.sale_set.all %}
+                            Sold
+                        {% else %}
+                            Unsold
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>There are no items to list.</p>
+    {% endif %}
+{% endblock %}
+
