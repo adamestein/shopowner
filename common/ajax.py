@@ -1,7 +1,8 @@
 """Create the JavaScript needed to use AJAX
 """
 
-class ajax(object):
+
+class Ajax(object):
     def __init__(self):
         self.params = {}
 
@@ -11,10 +12,10 @@ class ajax(object):
         def_init = "alert('TBD Default Init');"
 
         self.params[name] = {
-            "init":             def_init,
-            "name":             name,
+            "init": def_init,
+            "name": name,
             "submit_button_id": submit_button,
-            "success":          "",
+            "success": "",
         }
 
     def generate_js(self):
@@ -111,4 +112,3 @@ class ajax(object):
         """ JavaScript function to run when AJAX call is successful """
 
         self.params[name]["success"] = script
-

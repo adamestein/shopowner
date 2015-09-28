@@ -72,6 +72,16 @@ urlpatterns = patterns(
         )
     ),
 
+    url(
+        r'^image_sheet',
+        ItemListView.as_view(
+            model=Item,
+            navigation=navigation("image_sheet"),
+            queryset=Item.objects.filter(remove=False).exclude(picture=""),
+            template_name="image_sheet.html"
+        )
+    ),
+
     url(r'^search/$', SearchView.as_view(), name="search"),
 
     url(

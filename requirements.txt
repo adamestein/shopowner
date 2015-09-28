@@ -1,7 +1,7 @@
 Django==1.5.5
 Fabric==1.8.0
 MySQL-python==1.2.3
-South==0.8.2
+South==0.8.4
 behave==1.2.3
 django-behave==0.0.12
 django-db-file-storage==0.2.0

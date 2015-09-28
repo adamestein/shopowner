@@ -5,23 +5,17 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="16">
-            <item index="0" class="java.lang.String" itemvalue="pyPdf" />
-            <item index="1" class="java.lang.String" itemvalue="couchdbkit" />
-            <item index="2" class="java.lang.String" itemvalue="couchdb" />
-            <item index="3" class="java.lang.String" itemvalue="Django" />
-            <item index="4" class="java.lang.String" itemvalue="beautifulsoup" />
-            <item index="5" class="java.lang.String" itemvalue="South" />
-            <item index="6" class="java.lang.String" itemvalue="yolk" />
-            <item index="7" class="java.lang.String" itemvalue="python-memcached" />
-            <item index="8" class="java.lang.String" itemvalue="flexmock" />
-            <item index="9" class="java.lang.String" itemvalue="coverage" />
-            <item index="10" class="java.lang.String" itemvalue="django-sentry" />
-            <item index="11" class="java.lang.String" itemvalue="django-devserver" />
-            <item index="12" class="java.lang.String" itemvalue="django_compressor" />
-            <item index="13" class="java.lang.String" itemvalue="python-dateutil" />
-            <item index="14" class="java.lang.String" itemvalue="PIL" />
-            <item index="15" class="java.lang.String" itemvalue="master.tar.gz" />
+          <list size="10">
+            <item index="0" class="java.lang.String" itemvalue="html5lib" />
+            <item index="1" class="java.lang.String" itemvalue="mysql-connector-python" />
+            <item index="2" class="java.lang.String" itemvalue="django-localflavor-us" />
+            <item index="3" class="java.lang.String" itemvalue="django-db-file-storage" />
+            <item index="4" class="java.lang.String" itemvalue="selenium" />
+            <item index="5" class="java.lang.String" itemvalue="Fabric" />
+            <item index="6" class="java.lang.String" itemvalue="MySQL-python" />
+            <item index="7" class="java.lang.String" itemvalue="splinter" />
+            <item index="8" class="java.lang.String" itemvalue="behave" />
+            <item index="9" class="java.lang.String" itemvalue="django-behave" />
           </list>
         </value>
       </option>
@@ -31,15 +25,6 @@
         <list>
           <option value="W391" />
         </list>
-      </option>
-    </inspection_tool>
-    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ignoredIdentifiers">
-        <value>
-          <list size="1">
-            <item index="0" class="java.lang.String" itemvalue="behave.when" />
-          </list>
-        </value>
       </option>
     </inspection_tool>
     <inspection_tool class="SpellCheckingInspection" enabled="true" level="TYPO" enabled_by_default="true">
