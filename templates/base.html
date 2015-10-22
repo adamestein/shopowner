@@ -13,9 +13,10 @@
 
         <title>{% block title %}{% endblock %}</title>
 
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/layout.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/layout.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/color.css" />
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/error.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/print.css" media="print" />
 
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 
@@ -29,56 +30,56 @@
     </head>
 
     <body>
-        <div id="perm-links">
-        <ul>
-        <li><a href="/shopowner/">Home</a></li>
-        <li><a href="/shopowner/inventory/">Inventory</a></li>
-        <li><a href="/shopowner/sales/">Sales</a></li>
-        {% if user.is_superuser %}
-            <li><a href="/shopowner/admin/tools/">Admin</a></li>
-        {% endif %}
-        <li>&nbsp;</li>
-        <li>&nbsp;</li>
-        {% if user.is_authenticated %}
-            <li><a href="/shopowner/accounts/logout/" style="color:#880000;">Logout</a></li>
-        {% else %}
-            <li>Logout</li>
-        {% endif %}
-        </ul>
+        <div id="perm-links" class="no_print">
+            <ul>
+                <li><a href="/shopowner/">Home</a></li>
+                <li><a href="/shopowner/inventory/">Inventory</a></li>
+                <li><a href="/shopowner/sales/">Sales</a></li>
+                {% if user.is_superuser %}
+                    <li><a href="/shopowner/admin/tools/">Admin</a></li>
+                {% endif %}
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                {% if user.is_authenticated %}
+                    <li><a href="/shopowner/accounts/logout/" style="color:#880000;">Logout</a></li>
+                {% else %}
+                    <li>Logout</li>
+                {% endif %}
+            </ul>
         </div>
 
-        <h1>{% block header %}{% endblock %}</h1>
+        <h1 class="no_print">{% block header %}{% endblock %}</h1>
 
-        <div id="main-menu">
-        {% if navigation %}
-                <h3>Navigation</h3>
-                <ul>
-                    {% for label,link in navigation %}
-                        {% if not label %}
-                            <li>&nbsp;</li>
-                        {% else %}
-                            {% if not link %}
-                                <li style="text-align: center; border: solid 1px #666666;">{{ label }}</li>
+        <div id="main-menu" class="no_print">
+            {% if navigation %}
+                    <h3>Navigation</h3>
+                    <ul>
+                        {% for label,link in navigation %}
+                            {% if not label %}
+                                <li>&nbsp;</li>
                             {% else %}
-                                <li><a href="{{ link }}">{{ label }}</a></li>
+                                {% if not link %}
+                                    <li style="text-align: center; border: solid 1px #666666;">{{ label }}</li>
+                                {% else %}
+                                    <li><a href="{{ link }}">{{ label }}</a></li>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-        {% endif %}
+                        {% endfor %}
+                    </ul>
+            {% endif %}
 
-        {% if user.is_authenticated %}
-            <p style="text-align: center;">You are logged in as <em>{{ user }}</em></p>
-        {% endif %}
+            {% if user.is_authenticated %}
+                <p style="text-align: center;">You are logged in as <em>{{ user }}</em></p>
+            {% endif %}
         </div>
 
         <div id="content">
             {% block content %}{% endblock %}
         </div>
 
-        <div style="margin-bottom: 1em;"></div>
+        <div style="margin-bottom: 1em;" class="no_print"></div>
 
-        <div id="footer">
+        <div id="footer" class="no_print">
             <h5 style="float: left;">{{ version }}</h5>
             <h5>&copy; <a href="mailto:adam@csh.rit.edu">Adam Stein</a>.  All rights reserved. </h5>
         </div>

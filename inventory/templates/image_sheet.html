@@ -30,7 +30,7 @@
 
 {% block content %}
     {% if object_list %}
-        <button style="margin-bottom: 2em;">Print</button>
+        <button onclick="javascript: window.print();" style="margin-bottom: 2em;" class="no_print">Print</button>
 
         <div class="wrapper">
         {% for item in object_list %}
