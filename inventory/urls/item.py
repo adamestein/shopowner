@@ -1,5 +1,5 @@
+from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
-from django.conf.urls import patterns, url
 
 from common.views.generic import *
 
@@ -8,9 +8,8 @@ from ..models import Item
 from ..navigation import navigation
 from ..views import ItemListView, ItemView, SearchView
 
-urlpatterns = patterns(
-    'inventory',
-    
+app_name = 'inventory'
+urlpatterns = [
     url(
         r'^$',
         NavigationTemplateView.as_view(
@@ -90,5 +89,5 @@ urlpatterns = patterns(
             navigation=navigation(""),
             template_name="item_updated.html"
         )
-    ),
-)
+    )
+]

@@ -63,7 +63,7 @@
             $("#overlay").show();
 
             $.get(
-                "{% url 'search' %}",
+                "{% url 'inventory:search' %}",
                 {
                     "number":       $("#id_number").val(),
                     "desc":         $("#id_desc").val(),
@@ -74,18 +74,18 @@
                     // Remove all the data rows (leaving the header row intact)
                     $("#list_table tr:not(:first)").remove();
 
-                    var html = "";
-                    var editLinkTmpl = "{% url 'edit_specific_item' 0 %}";
-                    var imageLinkTmpl = "{% url 'db_file_storage.get_file' %}?name=";
+                    let html = "";
+                    let editLinkTmpl = "{% url 'inventory:edit_specific_item' 0 %}";
+                    let imageLinkTmpl = "{% url 'db_file_storage.get_file' %}?name=";
 
                     $.each(JSON.parse(data.list), function(index, value) {
-                        var category;
-                        var fields = value.fields;
-                        var image;
-                        var editLink = editLinkTmpl.replace("0", value.pk);
-                        var imageLink;
-                        var status = $.inArray(value.pk, data.sold) == -1 ? "Unsold" : "Sold";
-                        var worth = fields.worth ? accounting.formatMoney(fields.worth) : "";
+                        let category;
+                        let fields = value.fields;
+                        let image;
+                        let editLink = editLinkTmpl.replace("0", value.pk);
+                        let imageLink;
+                        let status = $.inArray(value.pk, data.sold) === -1 ? "Unsold" : "Sold";
+                        let worth = fields.worth ? accounting.formatMoney(fields.worth) : "";
 
                         if (fields.category)
                         {

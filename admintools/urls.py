@@ -1,12 +1,12 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+
 
 from admintools.navigation import ATNavigation
 from common.views.generic import NavigationTemplateView
 from dbcopy import DBCopy
 
-urlpatterns = patterns(
-    'admintools',
-
+app_name = 'admintools'
+urlpatterns = [
     url(
         r'^$',
         NavigationTemplateView.as_view(
@@ -29,5 +29,5 @@ urlpatterns = patterns(
             navigation=ATNavigation("base")
         )
     ),
-)
+]
 

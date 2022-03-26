@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load url from future %}
 
 {% block title %}
     Shop Owner Apps Login
@@ -10,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-
     {% if form.errors %}
         <p style="color:red;">Your username and password didn't match. Please try again.</p>
     {% endif %}
@@ -19,7 +17,7 @@
         Please log in to access this website.
     </p>
 
-    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    <form action="" method="post">
         {% csrf_token %}
 
         <table>

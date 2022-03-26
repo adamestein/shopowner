@@ -49,9 +49,8 @@ class SelectWithAdd(forms.Select):
 
         self.popup_add = create_popup_anchor(defaults)
 
-    def render(self, name, value, attrs=None, choices=()):
-        html = super(SelectWithAdd, self).render(name, value, attrs, choices)
-
+    def render(self, name, value, attrs=None, renderer=None):
+        html = super(SelectWithAdd, self).render(name, value, attrs, renderer)
         return mark_safe(html + self.popup_add % {"field": name, "static_url": settings.STATIC_URL})
 
 
@@ -63,8 +62,8 @@ class MultipleSelectWithAdd(forms.SelectMultiple):
 
         self.popup_add = create_popup_anchor(defaults)
 
-    def render(self, name, value, attrs=None, choices=()):
-        html = super(MultipleSelectWithAdd, self).render(name, value, attrs, choices)
+    def render(self, name, value, attrs=None, renderer=None):
+        html = super(MultipleSelectWithAdd, self).render(name, value, attrs, renderer)
 
         return mark_safe(html + self.popup_add % {"field": name, "static_url": settings.STATIC_URL})
 

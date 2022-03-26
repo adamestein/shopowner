@@ -4,15 +4,12 @@ import os
 import sys
 
 DEBUG = True                # Dev Setting
-TEMPLATE_DEBUG = DEBUG      # Dev Setting
 
 # DEBUG = False             # Prod Setting
-# TEMPLATE_DEBUG = False    # Prod Setting
 
 # Override if necessary to migrate release databases
 if bool(os.environ.get("RELEASE", False)):
     DEBUG = False
-    TEMPLATE_DEBUG = False
 
 REMOTE_SERVER = False       # Local Setting
 # REMOTE_SERVER = True      # Remote Setting
@@ -35,15 +32,14 @@ DATABASES = {
 }
 
 if DEBUG:
-    DATABASES["default"]["NAME"] += "_sandbox"
+    DATABASES["default"]["HOST"] = "localhost"
 
 if "test" in sys.argv:
     DATABASES["default"] = {'ENGINE': 'django.db.backends.sqlite3'}
-    SOUTH_TESTS_MIGRATE = False
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["stein.alwaysdata.net", ]
+ALLOWED_HOSTS = ['smeg.steinhome.net', ]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -102,18 +98,31 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'qnajvv@#pkfuin*bzy4i52mr#hgg-k@ek+jhvc#qxcej8&-4p0'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.contrib.messages.context_processors.messages",
-    "django.core.context_processors.static",
-    "common.context_processors.version",
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.abspath(os.path.join(os.path.dirname(__file__), '../templates')),
+            os.path.abspath(os.path.join(os.path.dirname(__file__), '../admintools/templates')),
+            os.path.abspath(os.path.join(os.path.dirname(__file__), '../inventory/templates'))
+        ],
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.request',
+                'django.template.context_processors.media',
+                'django.template.context_processors.debug',
+                'django.contrib.messages.context_processors.messages',
+                'django_settings_export.settings_export',
+                'common.context_processors.version'
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader'
+            ]
+        }
+    }
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -129,12 +138,6 @@ ROOT_URLCONF = 'system.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'system.wsgi.application'
 
-TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), '../templates').replace('\\', '/'),
-    os.path.join(os.path.dirname(__file__), '../admintools/templates').replace('\\', '/'),
-    os.path.join(os.path.dirname(__file__), '../inventory/templates').replace('\\', '/'),
-)
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -145,7 +148,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'db_file_storage',
-    'south',
     'django_behave',
     'common',
     'inventory',

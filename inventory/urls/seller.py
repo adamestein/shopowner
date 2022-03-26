@@ -1,5 +1,5 @@
+from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
-from django.conf.urls import patterns, url
 
 from common.views.generic import *
 
@@ -7,9 +7,8 @@ from ..forms import SellerEditForm, SellerEditListForm, SellerForm
 from ..models import Seller
 from ..navigation import navigation
 
-urlpatterns = patterns(
-    'seller',
-
+app_name = 'seller'
+urlpatterns = [
     url(
         r'^add/$',
         NavigationCreateView.as_view(
@@ -60,5 +59,5 @@ urlpatterns = patterns(
             navigation=navigation(""),
             template_name="seller_updated.html"
         )
-    ),
-)
+    )
+]

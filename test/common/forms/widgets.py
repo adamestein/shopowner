@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from common.forms import *
 
+
 class WidgetsTestCase(TestCase):
     def test_SelectWithAdd(self):
         # Default values
