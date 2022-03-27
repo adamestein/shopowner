@@ -42,7 +42,7 @@ class Ajax(object):
 </script>
         """
         
-        for name in self.params.keys():
+        for name in list(self.params.keys()):
             params = self.params[name]
 
             script += """

@@ -1,9 +1,10 @@
 from django.conf.urls import url
 
 
-from admintools.navigation import ATNavigation
+from .navigation import ATNavigation
+from .dbcopy import DBCopy
+
 from common.views.generic import NavigationTemplateView
-from dbcopy import DBCopy
 
 app_name = 'admintools'
 urlpatterns = [

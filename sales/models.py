@@ -62,7 +62,7 @@ class Sale(models.Model):
         ordering = ("item__number", "date", "item__desc")
         unique_together = ("item", "user")
 
-    def __unicode__(self):
+    def __str__(self):
         formatted_text = "'%s' sold for %s" % (self.item.desc, currency(self.price))
 
         if self.date:
@@ -87,6 +87,6 @@ class Tax(models.Model):
         verbose_name_plural = "Taxes"
         unique_together = ("county", "state")
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s, %s County = %0.2f%%" % (self.state, self.county, float(self.sales_tax))
 

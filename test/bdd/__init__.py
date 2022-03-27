@@ -1,3 +1,3 @@
-from form import *
-from system import *
+from .form import *
+from .system import *
 

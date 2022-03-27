@@ -10,7 +10,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
+            '<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
         )
 
         # Change alt
@@ -18,7 +18,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="my alt"/> </a>'
+            '<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="my alt"/> </a>'
         )
 
         # Change onclick
@@ -26,7 +26,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="my onclick"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
+            '<select name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="my onclick"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
         )
 
         # Change URL
@@ -34,7 +34,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select name="foo">\n</select><a href="my url" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
+            '<select name="foo">\n</select><a href="my url" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
         )
 
     def test_MultipleSelectWithAdd(self):
@@ -43,7 +43,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select multiple="multiple" name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
+            '<select multiple="multiple" name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
         )
 
         # Change alt
@@ -51,7 +51,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select multiple="multiple" name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="my alt"/> </a>'
+            '<select multiple="multiple" name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="my alt"/> </a>'
         )
 
         # Change onclick
@@ -59,7 +59,7 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select multiple="multiple" name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="my onclick"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
+            '<select multiple="multiple" name="foo">\n</select><a href="/popup_add/foo" class="add-another" id="add_id_foo" onclick="my onclick"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
         )
 
         # Change URL
@@ -67,12 +67,12 @@ class WidgetsTestCase(TestCase):
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<select multiple="multiple" name="foo">\n</select><a href="my url" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
+            '<select multiple="multiple" name="foo">\n</select><a href="my url" class="add-another" id="add_id_foo" onclick="return showAddAnotherPopup(this);"> <img src="/shopowner_static/admin/img/icon_addlink.gif" width="10" height="10" alt="Add another foo"/> </a>'
         )
     def test_TextInputWithTextSpan(self):
         widget = TextInputWithTextSpan()
 
         self.assertEqual(
             widget.render("foo", None),
-            u'<input name="foo" type="text" /><span id="id_text_span_foo" style="margin-left: .4em;"></span>'
+            '<input name="foo" type="text" /><span id="id_text_span_foo" style="margin-left: .4em;"></span>'
         )

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from forms import ItemEditForm
-from models import *
+from .forms import ItemEditForm
+from .models import *
 
 class CategoryAdmin(admin.ModelAdmin):
     list_filter = ("user",)

@@ -1,9 +1,10 @@
-from django.utils import unittest
+import unittest
 
 from test.common.cp import CPTestCase
 from test.common.format import FormatTestCase
 from test.common.views.generic import BaseViewsTestCase, EditViewsTestCase, ListViewsTestCase
 from test.common.forms import WidgetsTestCase
+
 
 def suite():
     loader = unittest.TestLoader()

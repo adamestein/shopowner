@@ -1,6 +1,6 @@
 from django.views.generic import CreateView, FormView, UpdateView
 
-from mixins import PopupAddMixin, NavigationContextMixin, NavigationEditMixin
+from .mixins import PopupAddMixin, NavigationContextMixin, NavigationEditMixin
 
 
 # noinspection PyUnresolvedReferences

@@ -201,4 +201,4 @@ TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
 # To store images in database
 DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
 
-VERSION = "1.18"
+VERSION = "2.0"

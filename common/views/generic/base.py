@@ -4,7 +4,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 
-from mixins import NavigationContextMixin
+from .mixins import NavigationContextMixin
 
 
 class AJAXView(TemplateView):

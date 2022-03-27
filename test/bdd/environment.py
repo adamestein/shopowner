@@ -39,7 +39,7 @@ def before_all(context):
 # noinspection PyUnusedLocal
 def before_step(context, step):
     if "pause" in context and context.pause:
-        raw_input("Press Enter to execute this step ...")
+        input("Press Enter to execute this step ...")
 
 
 def before_tag(context, tag):

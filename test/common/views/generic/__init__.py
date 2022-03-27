@@ -1,4 +1,4 @@
-from base import BaseViewsTestCase
-from edit import EditViewsTestCase
-from list import ListViewsTestCase
+from .base import BaseViewsTestCase
+from .edit import EditViewsTestCase
+from .list import ListViewsTestCase
 

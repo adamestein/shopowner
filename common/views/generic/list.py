@@ -1,6 +1,6 @@
 from django.views.generic import ListView
 
-from mixins import NavigationContextMixin
+from .mixins import NavigationContextMixin
 
 class NavigationListView(NavigationContextMixin, ListView):
     def get_queryset(self):

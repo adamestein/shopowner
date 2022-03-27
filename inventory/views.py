@@ -2,7 +2,7 @@ from django.core import serializers
 from django.db.models import Q
 
 from common.views.generic import AJAXView, NavigationListView
-from models import Category, Item, Seller
+from .models import Category, Item, Seller
 
 
 class ItemListView(NavigationListView):

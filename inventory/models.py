@@ -34,7 +34,7 @@ class Category(models.Model):
         unique_together = (("user", "name"),)
         verbose_name_plural = "Categories"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -110,7 +110,7 @@ class Item(models.Model):
         delete_file_if_needed(self, "picture")
         super(Item, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.number) + ": " + str(self.desc) + " (%s)" % currency(self.price)
 
 
@@ -145,6 +145,6 @@ class Seller(models.Model):
         ordering = ("last_name", "first_name")
         unique_together = (("first_name", "last_name", "user"),)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.last_name + ", " + self.first_name
 
