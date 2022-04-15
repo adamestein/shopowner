@@ -1,4 +1,5 @@
 -r requirements.txt
+https://github.com/adamestein/django-behave/archive/v0.1.7.zip
 behave==1.2.6
 bpython==0.18
 django-extensions==2.2.9
