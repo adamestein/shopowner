@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load format %}
+
+{% block title %}
+    Sales Applications: Sale View
+{% endblock %}
+
+{% block header %}
+    Sale View
+{% endblock %}
+
+{% block content %}
+    {% if object_list %}
+        <p>
+            Click on the image to get the full sized version.
+        </p>
+
+        <table border="1">
+            <caption><strong>Sales</strong></caption>
+
+            <tr>
+                <th>&nbsp;#&nbsp;</th>
+                <th>Description</th>
+                <th>Sell Price</th>
+                <th>Comission</th>
+                <th>Sales Tax</th>
+                <th>Image</th>
+            </tr>
+
+            {% for sale in object_list %}
+                <tr>
+                    <td style="text-align: center;">
+                        <a href="{% url "item:list_specific_item" sale.item.pk %}">
+                            {{ sale.item.number }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url "item:list_specific_item" sale.item.pk %}">
+                            {{ sale.item.desc }}
+                        </a>
+                    </td>
+                    <td style="text-align: right;">{{ sale.price|currency_format }}</td>
+
+                    {% if sale.item.commission %}
+                        <td style="text-align: right;">{{sale.commission }}</td>
+                    {% else %}
+                        <td style="text-align: center;">N/A</td>
+                    {% endif %}
+
+                    <td style="text-align: right;">{{ sale.tax_rate }}%</td>
+                    <td>
+                        {% if sale.item.picture %}
+                            <a href="{% url 'db_file_storage.get_file' %}?name={{ sale.item.picture }}" target="_blank">
+                                <img height=64 width=64 src="{% url 'db_file_storage.get_file' %}?name={{ sale.item.picture }}">
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>You have not sold any items yet.</p>
+    {% endif %}
+{% endblock %}
+

@@ -4,7 +4,9 @@ Fabric==2.6.0
 behave==1.2.6
 django-db-file-storage==0.5.5
 django-localflavor==2.2
+django-settings-export==1.2.1
 docutils==0.14
 mysqlclient==1.4.4
+python-decouple==3.3
 selenium==3.141.0
 splinter==0.14.0

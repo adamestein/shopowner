@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from sales.navigation import Navigation
+from sales.navigation import navigation
 
 class NavigationTestCase(TestCase):
     def test_no_subject(self):
@@ -11,7 +11,7 @@ class NavigationTestCase(TestCase):
             ["View Sales", "/shopowner/sales/view/"],
         )
 
-        self.assertEqual(Navigation(""), ans)
+        self.assertEqual(navigation(""), ans)
 
     def test_record_sale(self):
         ans = (
@@ -21,7 +21,7 @@ class NavigationTestCase(TestCase):
             ["View Sales",          "/shopowner/sales/view/"],
         )
 
-        self.assertEqual(Navigation("record_sale"), ans)
+        self.assertEqual(navigation("record_sale"), ans)
 
     def test_edit_sale(self):
         ans = (
@@ -31,7 +31,7 @@ class NavigationTestCase(TestCase):
             ["View Sales",          "/shopowner/sales/view/"],
         )
 
-        self.assertEqual(Navigation("edit_sale"), ans)
+        self.assertEqual(navigation("edit_sale"), ans)
 
     def test_view_sales(self):
         ans = (
@@ -41,5 +41,5 @@ class NavigationTestCase(TestCase):
             ["View Sales",          ""],
         )
 
-        self.assertEqual(Navigation("view_sales"), ans)
+        self.assertEqual(navigation("view_sales"), ans)
 

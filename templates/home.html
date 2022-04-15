@@ -15,14 +15,14 @@
 
     <ul>
         <li class="aligned_bullet">
-            <a class="aligned_link" href="/shopowner/inventory/">Inventory</a>
+            <a class="aligned_link" href="{% url "item:inventory" %}">Inventory</a>
             <span class="aligned_desc">
                 Add and List inventory
             </span>
         </li>
 
         <li class="aligned_bullet">
-            <a class="aligned_link" href="/shopowner/sales/">Sales</a>
+            <a class="aligned_link" href="{% url "sales:sales" %}">Sales</a>
             <span class="aligned_desc">
                 Track sales over time
             </span>

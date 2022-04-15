@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sales Applications
+{% endblock %}
+
+{% block header %}
+    Sales Applications
+{% endblock %}
+
+{% block content %}
+    <p>
+        Keep track of shop sales.
+    </p>
+
+    <ul>
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="{% url "sales:edit" %}">Edit Sale</a>
+            <span class="aligned_desc">
+                Edit an existing sale
+            </span>
+        </li>
+
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="{% url "sales:record" %}">Record Sale</a>
+            <span class="aligned_desc">
+                Record the selling of an item
+            </span>
+        </li>
+
+        <li class="aligned_bullet">
+            <a class="aligned_link" href="{% url "sales:view" %}">View Sales</a>
+            <span class="aligned_desc">
+                View the history of sales made
+            </span>
+        </li>
+    </ul>
+{% endblock %}
+

@@ -1,9 +1,8 @@
 {% load static %}
 {% get_static_prefix as STATIC_URL %}
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html style="direction: ltr;" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type"
         content="text/html; charset=windows-1252" />
@@ -18,7 +17,7 @@
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/error.css" />
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/print.css" media="print" />
 
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
         {% block extrahead %}{% endblock %}
 
@@ -32,16 +31,16 @@
     <body>
         <div id="perm-links" class="no_print">
             <ul>
-                <li><a href="/shopowner/">Home</a></li>
-                <li><a href="/shopowner/inventory/">Inventory</a></li>
-                <li><a href="/shopowner/sales/">Sales</a></li>
+                <li><a href="{% url "home" %}">Home</a></li>
+                <li><a href="{% url "item:inventory" %}">Inventory</a></li>
+                <li><a href="{% url "sales:sales" %}">Sales</a></li>
                 {% if user.is_superuser %}
-                    <li><a href="/shopowner/admin/tools/">Admin</a></li>
+                    <li><a href="{% url "admin:index" %}">Admin</a></li>
                 {% endif %}
                 <li>&nbsp;</li>
                 <li>&nbsp;</li>
                 {% if user.is_authenticated %}
-                    <li><a href="/shopowner/accounts/logout/" style="color:#880000;">Logout</a></li>
+                    <li><a href="{% url "logout" %}" style="color:#880000;">Logout</a></li>
                 {% else %}
                     <li>Logout</li>
                 {% endif %}
@@ -80,8 +79,10 @@
         <div style="margin-bottom: 1em;" class="no_print"></div>
 
         <div id="footer" class="no_print">
-            <h5 style="float: left;">{{ version }}</h5>
-            <h5>&copy; <a href="mailto:adam@csh.rit.edu">Adam Stein</a>.  All rights reserved. </h5>
+            <h5 style="float: left;">
+                {% if settings.DEBUG %}[Development] {% endif %}ShopOwner v{{ settings.VERSION }}
+            </h5>
+            <h5>&copy; <a href="mailto:adam@csh.rit.edu">Adam Stein</a>.  All rights reserved.</h5>
         </div>
     </body>
 </html>
