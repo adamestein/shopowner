@@ -1,0 +1,6 @@
+-r requirements.txt
+behave==1.2.6
+bpython==0.18
+django-extensions==2.2.9
+selenium==3.141.0
+splinter==0.14.0
