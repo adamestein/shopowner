@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load format %}
+{% load static %}
 
 {% block title %}
     Sales Applications: Record Sale
@@ -10,17 +11,25 @@
 {% endblock %}
 
 {% block extrahead %}
-     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/calendar.css" />
-     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
-     <script type="text/javascript" src="{{ STATIC_URL }}js/accounting.min.js"></script>
-     <script type="text/javascript" src="{{ STATIC_URL }}js/utils.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/calendar.css" %}" />
+
+    <script src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{% static "js/accounting.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/utils.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/datadumper.js" %}"></script>
+
+    <style>
+        .ui-datepicker-trigger {
+            padding-left: 0.5em;
+        }
+    </style>
 
      <script type="text/javascript">
         $(document).ready(function() {
             // Set up the calculator icon
             $("#calculator").click(function() {
-                if ($("#id_item").val() == "")
+                if ($("#id_item").val() === "")
                 {
                     warning("An item must be chosen before auto calculating the discount");
                 }
@@ -34,7 +43,7 @@
 
             // Set up the jQuery datepicker with the calendar icon
             $("#datepicker").datepicker({
-                buttonImage: '{{ STATIC_URL }}admin/img/icon_calendar.gif',
+                buttonImage: "{% static '/img/calendar.gif' %}",
                 buttonImageOnly: true,
                 buttonText: 'Click to show the calendar',
                 altField: "#id_date",
@@ -44,8 +53,7 @@
                 showButtonPanel: true
              });
 
-            // Update the calculated sales price when any of these
-            // related things change
+            // Update the calculated sales price when any of these related things change
             $("#id_item").change(updateSalesValues);
             $("#id_tax_rate").change(updateSalesValues);
             $("#id_discount").change(updateSalesValues);
@@ -56,8 +64,8 @@
         function overrideSalePrice()
         {
             // #item_price will always have the original price, #id_price is updated so we can't use that
-            var price = accounting.unformat($("#item_price").text());
-            var discount = accounting.toFixed((price - $("#id_sale_price").val())/price * 100.0, 2);
+            let price = accounting.unformat($("#item_price").text());
+            let discount = accounting.toFixed((price - $("#id_sale_price").val())/price * 100.0, 2);
 
             $("#id_discount").val(discount);
 
@@ -69,12 +77,12 @@
         // Validate that the sale price entered when clicking the calculator icon is a valid positive number
         function calculatorValidation()
         {
-            if ($("#id_sale_price").val() == "")
+            if ($("#id_sale_price").val() === "")
             {
                 warning("No sale price given");
                 return false;
             }
-            else if (validatePositiveDecimal($("#id_sale_price").val()) == false)
+            else if (validatePositiveDecimal($("#id_sale_price").val()) === false)
             {
                 warning("Sale price is an illegal value");
                 return false;
@@ -89,7 +97,7 @@
         function cleanForm()
         {
             // If 'commission' is set to "N/A", change to an empty string so Django validation works
-            if ($("#id_commission").val() == "N/A") $("#id_commission").val("");
+            if ($("#id_commission").val() === "N/A") $("#id_commission").val("");
 
             return true;
         }
@@ -99,12 +107,10 @@
         {
             let itemValue = $("#id_item").val();
 
-            if (itemValue !== "")
-            {
+            if (itemValue !== "") {
                 let taxRateValue = $("#id_tax_rate").val();
 
-                if (taxRateValue !== "")
-                {
+                if (taxRateValue !== "") {
                     let discount = $("#id_discount");
 
                     if (discount.val() === "")
@@ -121,24 +127,22 @@
                             "tax_rate":     taxRateValue,
                             "sale_price":   salePrice
                         },
-                        function(data) {
+                        function(response) {
+                            let data = JSON.parse(response);
                             $("#id_commission").val(data.commission);
                             $("#id_price").val(data.price);
                             $("#item_price").text(accounting.formatMoney(data.price));
+                            $("#id_qty").attr("max", data.qty_max);
                         }
                     )
                     .fail(function(jqXHR, textStatus, errorThrown) {
                         // Show Django error page so we can easily see the error
                         error_page(jqXHR, textStatus, errorThrown);
                     });
-                }
-                else
-                {
+                } else {
                     warning("Can't automatically calculate price or commission without the tax rate.");
                 }
-            }
-            else
-            {
+            } else {
                 $("#id_commission").val("");
                 $("#id_price").val("");
                 $("#item_price").text("");

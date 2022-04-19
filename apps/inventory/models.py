@@ -1,5 +1,6 @@
 from db_file_storage.model_utils import delete_file_if_needed
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from common.format import currency
@@ -42,60 +43,58 @@ class Category(models.Model):
 class Item(models.Model):
     user = models.ForeignKey(
         User,
-        help_text="User account this item belongs to",
+        help_text="User account this item belongs to"
     )
 
-    number = models.PositiveIntegerField(
-        help_text="Item number",
-    )
+    sku = models.SlugField(max_length=50)
 
     desc = models.CharField(
         max_length=100,
-        help_text="Description of the item",
+        help_text="Description of the item"
     )
 
     category = models.ForeignKey(
         Category,
         blank=True,
         null=True,
-        help_text="Category this item is in",
+        help_text="Category this item is in"
     )
 
     sellers = models.ManyToManyField(
         "Seller",
-        help_text="Seller(s) of this item",
+        help_text="Seller(s) of this item"
+    )
+
+    supplier = models.CharField(max_length=50)
+
+    wholesale = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
+        help_text="Wholesale price of the item"
     )
 
     price = models.DecimalField(
         decimal_places=2,
         max_digits=10,
-        help_text="Price of the item",
+        help_text="Price of the item"
     )
 
-    worth = models.DecimalField(
-        decimal_places=2,
-        max_digits=10,
-        blank=True,
-        null=True,
-        help_text="How much is the item actually worth"
-    )
+    qty = models.PositiveIntegerField(validators=[MinValueValidator(1)])
 
     picture = models.ImageField(
         upload_to="inventory.ItemImage/data/filename/mimetype",
         blank=True,
         null=True,
-        help_text="Item image",
+        help_text="Item image"
     )
 
     commission = models.CharField(
         max_length=5,
         blank=True,
-        help_text="Commission on this item (use % to indicate percentage)",
+        help_text="Commission on this item (use % to indicate percentage)"
     )
 
-    comments = models.TextField(
-        blank=True,
-    )
+    comments = models.TextField(blank=True)
 
     remove = models.BooleanField(
         default=False,
@@ -103,15 +102,15 @@ class Item(models.Model):
     )
 
     class Meta:
-        ordering = ("number",)
-        unique_together = (("user", "number", "category"),)
+        ordering = ("sku",)
+        unique_together = ('sku', 'user', 'category')
 
     def save(self, *args, **kwargs):
         delete_file_if_needed(self, "picture")
         super(Item, self).save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.number) + ": " + str(self.desc) + " (%s)" % currency(self.price)
+        return str(self.sku) + ": " + str(self.desc) + " (%s)" % currency(self.price)
 
 
 # Image of the item

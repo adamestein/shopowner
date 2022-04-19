@@ -72,8 +72,10 @@ class TextInputWithImage(forms.TextInput):
     def render(self, name, value, attrs=None):
         html = super(TextInputWithImage, self).render(name, value, attrs)
 
-        return mark_safe(html + '<img style="vertical-align: middle;" src="' + settings.STATIC_URL +
-                         'img/calculator.png" alt="Auto calculate discount %" id="calculator">')
+        return mark_safe(
+            html + '<img style="padding-left: 0.5em; vertical-align: middle;" src="' + settings.STATIC_URL +
+            'img/calculator.png" alt="Auto calculate discount %" id="calculator">'
+        )
 
 
 class TextInputWithTextSpan(forms.TextInput):

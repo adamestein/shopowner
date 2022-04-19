@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import include, url
 
 from common.views.generic import NavigationTemplateView
@@ -16,3 +17,4 @@ urlpatterns = [
     url(r'^inventory/seller/', include('inventory.urls.seller')),
     url(r'^sales/', include('sales.urls.sales'))
 ]
+

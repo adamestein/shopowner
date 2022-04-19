@@ -3,6 +3,7 @@ import re
 from db_file_storage.form_widgets import DBClearableFileInput
 from django import forms
 from django.http import QueryDict
+from django.urls import reverse, reverse_lazy
 
 from common.forms import MultipleSelectWithAdd, SelectWithAdd, TextInputWithTextSpan
 from inventory.models import Category, Item, Seller
@@ -67,7 +68,7 @@ class ItemEditForm(forms.ModelForm):
     category = forms.ModelChoiceField(
         queryset=Category.objects.filter(remove=False),
         required=False,
-        widget=SelectWithAdd(attrs={"url": "/shopowner/category/add/"}),
+        widget=SelectWithAdd(attrs={'url': '<placeholder>'}),
         help_text='Category this item is in.',
     )
 
@@ -81,7 +82,7 @@ class ItemEditForm(forms.ModelForm):
     # Only put active sellers in this choice
     sellers = forms.ModelMultipleChoiceField(
         queryset=Seller.objects.filter(remove=False),
-        widget=MultipleSelectWithAdd(attrs={"url": "/shopowner/seller/add/"}),
+        widget=MultipleSelectWithAdd(attrs={'url': '<placeholder>'}),
         help_text='Seller(s) of this item (hold down "Control", or "Command" on a Mac, to select more than one).',
     )
 
@@ -101,6 +102,16 @@ class ItemEditForm(forms.ModelForm):
         if isinstance(user, QueryDict):
             args = (user,) + args
             user = None
+
+        # Since we can't reverse URL names when fields are first created, we'll replace the <placeholder> value with
+        # the correct URL
+        self.base_fields['category'].widget.popup_add = self.base_fields['category'].widget.popup_add.replace(
+            '<placeholder>', reverse('category:add')
+        )
+
+        self.base_fields['sellers'].widget.popup_add = self.base_fields['sellers'].widget.popup_add.replace(
+            '<placeholder>', reverse('seller:add')
+        )
 
         super(ItemEditForm, self).__init__(*args, **kwargs)
 
@@ -125,19 +136,6 @@ class ItemAddForm(ItemEditForm):
         exclude = ("user", "remove")
 
     def __init__(self, user=None, *args, **kwargs):
-        try:
-            number = int(Item.objects.filter(user=user).latest("id").number) + 1
-        except Item.DoesNotExist:
-            # No items in database, so no latest item to get number from, so start with 1
-            number = 1
-        except ValueError:
-            number = None   # Item number isn't an integer, so we can't increment value
-
-        if number is not None:
-            initial = kwargs.get("initial", {})
-            initial["number"] = number
-            kwargs["initial"] = initial
-
         super(ItemAddForm, self).__init__(*args, **kwargs)
         self.user = user
 
@@ -146,9 +144,9 @@ class ItemAddForm(ItemEditForm):
 
     def clean(self):
         category = self.cleaned_data["category"]
-        number = self.cleaned_data["number"]
+        sku = self.cleaned_data["sku"]
 
-        if Item.objects.filter(category=category, number=number, user=self.user):
+        if Item.objects.filter(category=category, sku=sku, user=self.user):
             raise forms.ValidationError("You have already added this item")
         else:
             return self.cleaned_data

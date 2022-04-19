@@ -6,6 +6,7 @@ from behave import given, then
 from inventory.models import Category, Item, Seller
 from test.utils import almost_equal
 
+
 @given('the {page} page')
 def impl(context, page):
     if page == "Add Item":

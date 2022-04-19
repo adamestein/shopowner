@@ -29,7 +29,7 @@
 
             {% for sale in object_list %}
                 <tr>
-                    <td style="text-align: center;">
+                    <td class="centered_text">
                         <a href="{% url "item:list_specific_item" sale.item.pk %}">
                             {{ sale.item.number }}
                         </a>
@@ -39,15 +39,15 @@
                             {{ sale.item.desc }}
                         </a>
                     </td>
-                    <td style="text-align: right;">{{ sale.price|currency_format }}</td>
+                    <td class="number">{{ sale.price|currency_format }}</td>
 
                     {% if sale.item.commission %}
-                        <td style="text-align: right;">{{sale.commission }}</td>
+                        <td class="number">{{sale.commission }}</td>
                     {% else %}
-                        <td style="text-align: center;">N/A</td>
+                        <td class="centered_text">N/A</td>
                     {% endif %}
 
-                    <td style="text-align: right;">{{ sale.tax_rate }}%</td>
+                    <td class="number">{{ sale.tax_rate }}%</td>
                     <td>
                         {% if sale.item.picture %}
                             <a href="{% url 'db_file_storage.get_file' %}?name={{ sale.item.picture }}" target="_blank">

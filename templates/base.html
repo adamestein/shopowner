@@ -12,10 +12,20 @@
 
         <title>{% block title %}{% endblock %}</title>
 
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/layout.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/color.css" />
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/error.css" />
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/print.css" media="print" />
+        <link rel="stylesheet" type="text/css" href="{% static "css/layout.css" %}" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{% static "css/color.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "css/error.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "css/print.css" %}" media="print" />
+
+        <style>
+            .centered_text {
+                text-align: center;
+            }
+
+            .number {
+                text-align :right;
+            }
+        </style>
 
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
@@ -58,7 +68,7 @@
                                 <li>&nbsp;</li>
                             {% else %}
                                 {% if not link %}
-                                    <li style="text-align: center; border: solid 1px #666666;">{{ label }}</li>
+                                    <li class="centered_text" style="border: solid 1px #666666;">{{ label }}</li>
                                 {% else %}
                                     <li><a href="{{ link }}">{{ label }}</a></li>
                                 {% endif %}
@@ -68,7 +78,7 @@
             {% endif %}
 
             {% if user.is_authenticated %}
-                <p style="text-align: center;">You are logged in as <em>{{ user }}</em></p>
+                <p class="centered_text">You are logged in as <em>{{ user }}</em></p>
             {% endif %}
         </div>
 

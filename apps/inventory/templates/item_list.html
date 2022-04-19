@@ -65,7 +65,7 @@
             $.get(
                 "{% url 'item:search' %}",
                 {
-                    "number":       $("#id_number").val(),
+                    "sku":       $("#id_sku").val(),
                     "desc":         $("#id_desc").val(),
                     "categories":   $("#id_categories").val(),
                     "sellers":      $("#id_sellers").val()
@@ -85,42 +85,40 @@
                         let editLink = editLinkTmpl.replace("0", value.pk);
                         let imageLink;
                         let status = $.inArray(value.pk, data.sold) === -1 ? "Unsold" : "Sold";
-                        let worth = fields.worth ? accounting.formatMoney(fields.worth) : "";
 
-                        if (fields.category)
-                        {
+                        if (fields.category) {
                             // Can get the category name from the form menu
                             category = $("#id_categories option[value='" + fields.category + "']").text();
-                        }
-                        else
-                        {
+                        } else {
                             category = "None";
                         }
 
-                        if (fields.picture)
-                        {
+                        if (fields.picture) {
                             imageLink = imageLinkTmpl + fields.picture;
                             image = "<a href='" + imageLink + "' target='_blank'>" +
                                     "    <img height=64 width=64 src='" + imageLink + "'>" +
                                     "</a>";
-                        }
-                        else
-                        {
+                        } else {
                             image = "";
                         }
 
                         // Need to match what we would normally get below in the HTML code
-                        html += "<tr>" +
-                                "    <td style='text-align: center;'>" + fields.number + "</td>" +
-                                "    <td>" +
-                                "        <a href='" + editLink + "'>" + fields.desc + "</a>" +
-                                "    </td>" +
-                                "    <td style='text-align: right;'>" + accounting.formatMoney(fields.price) + "</td>" +
-                                "    <td style='text-align: right;'>" + worth + "</td>" +
-                                "    <td style='text-align: center;'>" + category + "</td>" +
-                                "    <td>" + image + "</td>" +
-                                "    <td style='text-align: center;'>" + status + "</td>" +
-                                "</tr>";
+                        let formattedPrice = accounting.formatMoney(fields.price);
+                        let formattedWholesale = accounting.formatMoney(fields.wholesale)
+
+                        html += `
+                            <tr>
+                                <td class="centered_text">${fields.sku}</td>
+                                <td><a href="${editLink}">${fields.desc}</a></td>
+                                <td class="centered_text">${fields.supplier}</td>
+                                <td class="number">${formattedWholesale}</td>
+                                <td class="number">${formattedPrice}</td>
+                                <td class="number">${fields.qty}</td>
+                                <td class="centered_text">${category}</td>
+                                <td>${image}</td>
+                                <td class="centered_text">${status}</td>
+                            </tr>
+                        `;
                     });
 
                     $("#list_table").append(html);
@@ -155,19 +153,18 @@
             <h3>Search Parameters</h3>
             <div>
                 <p>
-                    Fill in the parameters to match.  An empty parameter will match all values.  A
-                    <strong>number</strong> will match exactly.  The phrase (one or more words) given
-                    in the <strong>desc</strong> field will match any items containing that phrase. Any
-                    selection made in <strong>category</strong> or <strong>seller</strong>  counts as a match.
+                    Fill in the parameters to match.  An empty parameter will match all values.  Text given
+                    in the <strong>SKU</strong> or <strong>Desc</strong> field will match any items containing that
+                    text. Any selection made in <strong>Category</strong> or <strong>Seller</strong> counts as a match.
                 </p>
 
                 <table>
                     <tr>
                         <th>
-                            <label for="id_number">Number:</label>
+                            <label for="id_sku">SKU:</label>
                         </th>
                         <td>
-                            <input id="id_number" name="number" type="text" />
+                            <input id="id_sku" name="sku" type="text" />
                         </td>
                     </tr>
 
@@ -218,10 +215,12 @@
             <caption><strong>Inventory</strong></caption>
 
             <tr>
-                <th>&nbsp;#&nbsp;</th>
+                <th>SKU</th>
                 <th>Description</th>
+                <th>Supplier</th>
+                <th>Wholesale</th>
                 <th>Price</th>
-                <th>Worth</th>
+                <th>Quantity</th>
                 <th>Category</th>
                 <th>Image</th>
                 <th>Status</th>
@@ -229,17 +228,18 @@
 
             {% for item in object_list %}
                 <tr>
-                    <td style="text-align: center;">{{ item.number }}</td>
+                    <td class="centered_text">{{ item.sku }}</td>
+
                     <td>
                         <a href="{% url 'item:edit_specific_item' item.id %}">{{ item.desc }}</a>
                     </td>
-                    <td style="text-align: right;">{{ item.price|currency_format }}</td>
-                    <td style="text-align: right;">
-                        {% if item.worth %}
-                            {{ item.worth|currency_format }}
-                        {% endif %}
-                    </td>
-                    <td style="text-align: center;">{{ item.category }}</td>
+
+                    <td class="centered_text">{{ item.supplier }}</td>
+                    <td class="number">{{ item.wholesale|currency_format }}</td>
+                    <td class="number">{{ item.price|currency_format }}</td>
+                    <td class="number">{{ item.qty }}</td>
+                    <td class="centered_text">{{ item.category }}</td>
+
                     <td>
                         {% if item.picture %}
                             <a href="{% url 'db_file_storage.get_file' %}?name={{ item.picture }}" target="_blank">
@@ -247,7 +247,8 @@
                             </a>
                         {% endif %}
                     </td>
-                    <td style="text-align: center;">
+
+                    <td class="centered_text">
                         {% if item.sale_set.all %}
                             Sold
                         {% else %}

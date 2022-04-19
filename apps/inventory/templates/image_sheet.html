@@ -38,7 +38,7 @@
                 <a href="{% url 'db_file_storage.get_file' %}?name={{ item.picture }}" target="_blank">
                     <img height=64 width=64 src="{% url 'db_file_storage.get_file' %}?name={{ item.picture }}">
                 </a>
-                <p style="text-align: center;">
+                <p class="centered_text">
                     {{ item.desc }}
                     <br />
                     {{ item.price|currency_format }}

@@ -1,20 +1,13 @@
+# noinspection PyPackageRequirements
+from localflavor.us.models import USStateField
+
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.dateformat import DateFormat
-from localflavor.us.models import USStateField
 
 from common.format import currency
 from inventory.models import Item
-
-try:
-    # noinspection PyUnresolvedReferences
-    from south.modelsinspector import add_introspection_rules
-except ImportError:
-    # Only need this on development machine, so if it fails on production
-    # server, it's ok
-    pass
-else:
-    add_introspection_rules([], ["^localflavor\.us\.models\.USStateField"])
 
 
 class Sale(models.Model):
@@ -43,6 +36,12 @@ class Sale(models.Model):
         help_text="Price the item sold for (includes sales tax)",
     )
 
+    qty = models.PositiveIntegerField(
+        default=1,
+        help_text='How many were sold',
+        validators=[MinValueValidator(1)]
+    )
+
     commission = models.DecimalField(
         decimal_places=2,
         max_digits=10,
@@ -59,7 +58,7 @@ class Sale(models.Model):
     )
 
     class Meta:
-        ordering = ("item__number", "date", "item__desc")
+        ordering = ("item__sku", "date", "item__desc")
         unique_together = ("item", "user")
 
     def __str__(self):
@@ -78,9 +77,7 @@ class Tax(models.Model):
 
     state = USStateField()
 
-    sales_tax = models.FloatField(
-        help_text = "Current tax rate (in percentage)",
-    )
+    sales_tax = models.FloatField(help_text='Current tax rate (in percentage)')
 
     class Meta:
         ordering = ("state", "county")

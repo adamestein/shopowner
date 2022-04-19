@@ -30,17 +30,17 @@ class ItemView(ItemListView):
 class SearchView(AJAXView):
     # noinspection PyUnresolvedReferences
     def get_context_data(self, **kwargs):
-        number = self.request.GET["number"]
+        sku = self.request.GET["sku"]
         desc = self.request.GET["desc"]
         categories = self.request.GET.getlist("categories[]")
         sellers = self.request.GET.getlist("sellers[]")
 
         query = Q(user=self.request.user)
 
-        if number != "":
-            query &= Q(number=number)
+        if sku:
+            query &= Q(sku__icontains=sku)
 
-        if desc != "":
+        if desc:
             query &= Q(desc__icontains=desc)
 
         if len(categories):

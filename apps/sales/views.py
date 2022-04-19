@@ -1,6 +1,17 @@
-from common.views.generic import AJAXView
+from common.views.generic import AJAXView, NavigationCreateView
 from inventory.models import Item
 from sales.utils import calculate_sale_price, round_currency
+
+
+class RecordSale(NavigationCreateView):
+    def form_valid(self, form):
+        item = form.cleaned_data['item']
+        qty_sold = form.cleaned_data['qty']
+
+        item.qty -= qty_sold
+        item.save()
+
+        return super().form_valid(form)
 
 
 # noinspection PyUnresolvedReferences
@@ -36,6 +47,7 @@ class UpdateSaleValues(AJAXView):
 
         return {
             "commission": commission,
-            "price": calculate_sale_price(item_price, discount, tax_rate)
+            "price": calculate_sale_price(item_price, discount, tax_rate),
+            "qty_max": item.qty
         }
 
