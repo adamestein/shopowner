@@ -145,9 +145,10 @@ USE_TZ = True
 STATIC_ROOT = path.abspath(path.join(BASE_DIR, 'static'))
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    path.abspath(path.join(BASE_DIR, 'public'))
-]
+# Don't have need for this, maybe at some point
+# STATICFILES_DIRS = [
+#     path.abspath(path.join(BASE_DIR, 'public'))
+# ]
 
 # Account URLs
 
