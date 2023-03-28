@@ -15,12 +15,13 @@ import sys
 
 from decouple import config, Csv
 
+from django.contrib.messages import constants as messages
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 
-# Add the apps directory to the path since all code lives under there
+# Add the 'apps' directory to the path since all code lives under there
 sys.path.append(path.join(BASE_DIR, 'apps'))
 
 
@@ -46,13 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 3rd Party Apps
-    'db_file_storage',
-
     # Apps
-    'common',
     'inventory',
-    'sales'
+    'library'
 ]
 
 MIDDLEWARE = [
@@ -152,17 +149,13 @@ STATICFILES_DIRS = [
     path.abspath(path.join(BASE_DIR, 'public'))
 ]
 
-# To store images in database
-
-DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
-
 # Account URLs
 
 LOGOUT_REDIRECT_URL = reverse_lazy('home')
 
 # Version information
 
-VERSION = '2.1'
+VERSION = '3.0'
 
 # List of settings to export to templates (django-settings-export)
 
@@ -170,6 +163,16 @@ SETTINGS_EXPORT = [
     'DEBUG',
     'VERSION'
 ]
+
+# Connect Bootstrap alerts to Django message tags
+
+MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+ }
 
 # Production vs Development specific stuff
 
@@ -196,3 +199,24 @@ else:
             },
         },
     }
+
+# If running test suite use any settings from tests.py
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    testing = True
+
+    try:
+        from .tests import *
+    except ImportError:
+        pass
+
+    # Use SQLite3 databases for testing instead of MySQL because:
+    #
+    #   o faster to start, faster to run, no cleanup needed
+    #   o multiple tests can run at the same time
+    #   o no need to 'destroy' the test database when starting a new test if the previous test
+    #     stopped before cleaning up
+    #
+    # Need to set this here since tests.py will have no idea what DATABASES is.
+    DATABASES["default"] = {'ENGINE': 'django.db.backends.sqlite3', 'NAME': '/tmp/default.db'}
+else:
+    testing = False

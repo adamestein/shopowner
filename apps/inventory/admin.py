@@ -1,19 +1,11 @@
 from django.contrib import admin
 
-from .forms import ItemEditForm
-from .models import *
+from .models import Inventory, Vendor
 
-class CategoryAdmin(admin.ModelAdmin):
-    list_filter = ("user",)
 
-class ItemAdmin(admin.ModelAdmin):
-    form = ItemEditForm
-    list_filter = ("user",)
+@admin.register(Inventory)
+class InventoryAdmin(admin.ModelAdmin):
+    list_filter = ('user',)
 
-class SellerAdmin(admin.ModelAdmin):
-    list_filter = ("user",)
 
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Item, ItemAdmin)
-admin.site.register(Seller, SellerAdmin)
-
+admin.site.register(Vendor)

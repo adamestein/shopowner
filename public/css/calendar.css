@@ -1,4 +1,0 @@
-/* Causes the jQuery datepicker icon to be vertically aligned with the text */
-.ui-datepicker-trigger {
-    vertical-align : middle;
-}

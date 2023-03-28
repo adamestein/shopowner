@@ -1,20 +1,12 @@
-from django.conf import settings
 from django.conf.urls import include, url
-
-from common.views.generic import NavigationTemplateView
-
 from django.contrib import admin
-admin.autodiscover()
+
+from library.views.generic import AppTemplateView
 
 urlpatterns = [
-    url(r'^$', NavigationTemplateView.as_view(template_name="home.html"), name='home'),
+    url(r'^$', AppTemplateView.as_view(template_name='dashboard.html'), name='home'),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^files/', include('db_file_storage.urls')),
-    url(r'^inventory/item/', include('inventory.urls.item')),
-    url(r'^inventory/category/', include('inventory.urls.category')),
-    url(r'^inventory/seller/', include('inventory.urls.seller')),
-    url(r'^sales/', include('sales.urls.sales'))
+    url(r'^external/', include('external.urls')),
+    url(r'^inventory/', include('inventory.urls'))
 ]
-

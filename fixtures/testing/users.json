@@ -1,0 +1,16 @@
+[
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "email": "adam@csh.rit.edu",
+            "first_name": "Adam",
+            "is_active": 1,
+            "is_staff": 1,
+            "is_superuser": 1,
+            "last_name": "Stein",
+            "password": "plain$$password",
+            "username": "adam"
+        }
+    }
+]

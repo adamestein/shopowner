@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    {{ block.super }}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+    <script>
+        function importing() {
+            if ($("form").valid()) {
+                $(".btn .fa-spinner").show();
+                $(".btn .btn-text").html("Importing Data");
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="pb-2 mt-4 mb-2 border-bottom"><h1>Import Data</h1></div>
+
+    <p>Select the file to upload. File format can be CSV or OSF Spreadsheet (i.e. LibreOffice Calc native format).</p>
+
+    <p>
+        Be aware that importing a file containing inventory items that already exist will overwrite the
+        <em>quantity bought</em>, and <em>quantity sold</em> values.
+    </p>
+
+    <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+
+        <div>{{ form }}</div>
+
+        <button class="btn btn-primary mt-5" id="submit" onclick="importing()" type="submit">
+           <em class="fas fa-spinner fa-spin" style="display:none;"></em>
+          <span class="btn-text plg-5">Submit</span>
+        </button>
+    </form>
+{% endblock %}
