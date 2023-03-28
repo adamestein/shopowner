@@ -2,5 +2,5 @@ Django==1.11.29
 django-settings-export==1.2.1
 filemagic==1.6
 mysqlclient==1.4.4
-pyexcel-odsr-0.6.0
+pyexcel-odsr==0.6.0
 python-decouple==3.3
