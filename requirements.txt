@@ -1,5 +1,6 @@
 Django==1.11.29
 django-settings-export==1.2.1
+django-widget-tweaks==1.4.12
 filemagic==1.6
 mysqlclient==1.4.4
 pyexcel-odsr==0.6.0

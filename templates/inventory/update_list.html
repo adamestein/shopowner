@@ -1,0 +1,11 @@
+{% extends "inventory/_inventory_list.html" %}
+
+{% block header %}Update Inventory{% endblock %}
+
+{% block data_table_handler %}
+    window.location.replace(updateURL.replace('0', $(this).data("id")));
+{% endblock %}
+
+{% block instructions %}
+    <p>Click on an item's row to edit the information.</p>
+{% endblock %}

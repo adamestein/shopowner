@@ -4,6 +4,8 @@ from django.db import models
 
 
 class Inventory(models.Model):
+    deleted = models.BooleanField(default=False, help_text='Delete this item from inventory')
+
     label = models.CharField(
         help_text="Item label for display",
         max_length=100
@@ -42,10 +44,14 @@ class Inventory(models.Model):
         help_text="User account this item belongs to"
     )
 
-    vendor = models.ForeignKey('Vendor')
+    vendor = models.ForeignKey(
+        'Vendor',
+        help_text='Vendor this item was purchased from'
+    )
 
     class Meta:
         ordering = ('label',)
+        unique_together = ('label', 'product_number', 'stock_number', 'user', 'vendor')
         verbose_name_plural = 'Inventories'
 
     def price_per_unit(self, total_cost):

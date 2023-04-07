@@ -64,12 +64,12 @@
                             </li>
 
                             <li>
-                                <a href="#external" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                                <a href="#externalSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
                                     <em class="fs-4 bi-database-gear"></em>
                                     <span class="ms-1 d-none d-sm-inline">External</span>
                                 </a>
 
-                                <ul class="collapse nav flex-column ms-1" id="external" data-bs-parent="#menu">
+                                <ul class="collapse nav flex-column ms-1" id="externalSubmenu" data-bs-parent="#menu">
                                     <li class="w-100">
                                         <a href="{% url "external:import_data" %}" class="nav-link  ps-lg-3 px-0">
                                             <em class="fs-4 bi-upload"></em>
@@ -80,12 +80,46 @@
                             </li>
 
                             <li>
-                                <a href="#reports" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                                <a href="#inventorySubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                                    <em class="fs-4 bi-collection"></em>
+                                    <span class="ms-1 d-none d-sm-inline">Inventory</span>
+                                </a>
+
+                                <ul class="collapse nav flex-column ms-1" id="inventorySubmenu" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="{% url "inventory:add" %}" class="nav-link  ps-lg-3 px-0">
+                                            <em class="fs-4 bi-file-earmark"></em>
+                                            <span class="d-none d-sm-inline">Add Item</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="collapse nav flex-column ms-1" id="inventorySubmenu" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="{% url "inventory:list" %}" class="nav-link  ps-lg-3 px-0">
+                                            <em class="fs-4 bi-file-earmark-diff"></em>
+                                            <span class="d-none d-sm-inline">Update Item</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="collapse nav flex-column ms-1" id="inventorySubmenu" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="{% url "inventory:quick_quantity_update" %}" class="nav-link  ps-lg-3 px-0">
+                                            <em class="fs-4 bi-file-earmark-plus"></em>
+                                            <span class="d-none d-sm-inline">Update Quantities</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="#reportSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
                                     <em class="fs-4 bi-folder"></em>
                                     <span class="ms-1 d-none d-sm-inline">Reports</span>
                                 </a>
 
-                                <ul class="collapse nav flex-column ms-1" id="reports" data-bs-parent="#menu">
+                                <ul class="collapse nav flex-column ms-1" id="reportSubmenu" data-bs-parent="#menu">
                                     <li class="w-100">
                                         <a href="{% url "inventory:report" %}" class="nav-link  ps-lg-3 px-0">
                                             <em class="fs-4 bi-collection"></em>

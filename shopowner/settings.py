@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 from os import path
 import sys
 
+# noinspection PyPackageRequirements
 from decouple import config, Csv
 
 from django.contrib.messages import constants as messages
@@ -46,6 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 3rd party apps
+    'widget_tweaks',
 
     # Apps
     'inventory',
@@ -145,10 +149,9 @@ USE_TZ = True
 STATIC_ROOT = path.abspath(path.join(BASE_DIR, 'static'))
 STATIC_URL = '/static/'
 
-# Don't have need for this, maybe at some point
-# STATICFILES_DIRS = [
-#     path.abspath(path.join(BASE_DIR, 'public'))
-# ]
+STATICFILES_DIRS = [
+    path.abspath(path.join(BASE_DIR, 'public'))
+]
 
 # Account URLs
 

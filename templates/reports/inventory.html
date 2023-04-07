@@ -1,84 +1,23 @@
-{% extends "base.html" %}
+{% extends "inventory/_inventory_list.html" %}
 
-{% block css %}
-    {{ block.super }}
+{% block header %}Inventory Report{% endblock %}
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+{% block data_table_handler %}
+    let extraInfoModal = new bootstrap.Modal(document.getElementById("extraInfo"));
 
-    <style>
-        #inventory {
-            cursor: pointer;
-        }
+    $("#item_label").html(inventoryTable.row(this).data()[0]);
+    $("#notes").html($(this).data("notes"));
+    $("#my_stock_number").html($(this).data("my_stock_number"));
+    $("#vendor_product_number").html($(this).data("vendor_product_number"));
 
-        th {
-            text-align: center !important;
-        }
-    </style>
+    extraInfoModal.show();
 {% endblock %}
 
-{% block js %}
-    {{ block.super }}
-
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-
-    <!--suppress JSUnresolvedFunction -->
-    <script>
-        $(document).ready(function () {
-            let extraInfoModal = new bootstrap.Modal(document.getElementById("extraInfo"));
-
-            let inventoryTable = $("#inventory").DataTable({
-                pageLength: 25
-            });
-
-            $(".dataTable").on("click", "tbody tr", function() {
-                $("#item_label").html(inventoryTable.row(this).data()[0]);
-                $("#notes").html($(this).data("notes"));
-                $("#my_stock_number").html($(this).data("my_stock_number"));
-                $("#vendor_product_number").html($(this).data("vendor_product_number"));
-
-                extraInfoModal.show();
-            });
-        });
-    </script>
+{% block instructions %}
+    <p>Click on an item's row to pop up more information.</p>
 {% endblock %}
 
-{% block content %}
-    <div class="pb-2 mt-4 mb-2 border-bottom"><h1>Inventory Report</h1></div>
-
-    {% if object_list %}
-        <p>Click on an item's row to pop up more information.</p>
-
-        <table class="table table-striped table-bordered" id="inventory">
-            <thead>
-                <tr>
-                    <th>Label</th>
-                    <th>Vendor</th>
-                    <th>Wholesale Price/Unit</th>
-                    <th>Quantity Bought</th>
-                    <th>Quantity Sold</th>
-                    <th>Quantity Remaining</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for item in object_list %}
-                    <tr data-my_stock_number="{{ item.stock_number }}"
-                        data-vendor_product_number="{{ item.product_number }}" data-notes="{{ item.notes }}">
-                        <td>{{ item.label }}</td>
-                        <td>{{ item.vendor }}</td>
-                        <td class="text-end">${{ item.wholesale_price }}</td>
-                        <td class="text-end">{{ item.qty_bought }}</td>
-                        <td class="text-end">{{ item.qty_sold }}</td>
-                        <td class="text-end">{{ item.remaining }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No items in inventory to list</p>
-    {% endif %}
-
+{% block extra_content %}
     <div class="modal fade" id="extraInfo" tabindex="-1" aria-labelledby="extraInfoLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
