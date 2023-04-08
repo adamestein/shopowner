@@ -29,10 +29,10 @@ HEADER = [
 ]
 
 
-class ImportDataView(AppFormView):
+class ImportView(AppFormView):
     form_class = ImportForm
-    success_url = reverse_lazy('external:import_data')
-    template_name = 'external/import.html'
+    success_url = reverse_lazy('data_transfer:import')
+    template_name = 'data_transfer/import.html'
 
     def form_valid(self, form):
         try:

@@ -10,10 +10,10 @@ from inventory.models import Inventory, Vendor
 
 from library.testing.cbv import setup_view
 
-from ..import_data import ImportDataView
+from ..import_data import ImportView
 
 
-@patch('external.import_data.success')
+@patch('data_transfer.import_data.success')
 class ImportTestCase(TestCase):
     fixtures = [
         'fixtures/testing/users.json'
@@ -25,16 +25,16 @@ class ImportTestCase(TestCase):
     def test_import_csv(self, mock_success):
         # First import, all inventory items will be new
 
-        with open(join('apps', 'external', 'tests', 'data1.csv'), 'rb') as input_file:
+        with open(join('apps', 'data_transfer', 'tests', 'data1.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
-        view = setup_view(ImportDataView(), request)
+        view = setup_view(ImportView(), request)
 
         response = view.post(request)
 
         response.client = Client()      # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('external:import_data'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
 
         inventory = Inventory.objects.all()
         self.assertEqual(4, inventory.count())
@@ -90,16 +90,16 @@ class ImportTestCase(TestCase):
 
         # Second import, some inventory items are the same which should increase the bought quantity
 
-        with open(join('apps', 'external', 'tests', 'data2.csv')) as input_file:
+        with open(join('apps', 'data_transfer', 'tests', 'data2.csv')) as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
-        view = setup_view(ImportDataView(), request)
+        view = setup_view(ImportView(), request)
 
         response = view.post(request)
 
         response.client = Client()  # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('external:import_data'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
 
         inventory = Inventory.objects.all()
         self.assertEqual(6, inventory.count())
@@ -176,11 +176,11 @@ class ImportTestCase(TestCase):
         self.assertEqual('Successfully import 4 items into your inventory', mock_success.call_args_list[1][0][1])
 
     def test_bad_header_csv(self, mock_success):
-        with open(join('apps', 'external', 'tests', 'bad_header.csv'), 'rb') as input_file:
+        with open(join('apps', 'data_transfer', 'tests', 'bad_header.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
-        view = setup_view(ImportDataView(), request)
+        view = setup_view(ImportView(), request)
 
         response = view.post(request)
 
@@ -193,16 +193,16 @@ class ImportTestCase(TestCase):
     def test_import_ods(self, mock_success):
         # First import, all inventory items will be new
 
-        with open(join('apps', 'external', 'tests', 'data1.ods'), 'rb') as input_file:
+        with open(join('apps', 'data_transfer', 'tests', 'data1.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
-        view = setup_view(ImportDataView(), request)
+        view = setup_view(ImportView(), request)
 
         response = view.post(request)
 
         response.client = Client()  # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('external:import_data'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
 
         inventory = Inventory.objects.all()
         self.assertEqual(4, inventory.count())
@@ -258,16 +258,16 @@ class ImportTestCase(TestCase):
 
         # Second import, some inventory items are the same which should increase the bought quantity
 
-        with open(join('apps', 'external', 'tests', 'data2.csv')) as input_file:
+        with open(join('apps', 'data_transfer', 'tests', 'data2.csv')) as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
-        view = setup_view(ImportDataView(), request)
+        view = setup_view(ImportView(), request)
 
         response = view.post(request)
 
         response.client = Client()  # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('external:import_data'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
 
         inventory = Inventory.objects.all()
         self.assertEqual(6, inventory.count())
@@ -344,11 +344,11 @@ class ImportTestCase(TestCase):
         self.assertEqual('Successfully import 4 items into your inventory', mock_success.call_args_list[1][0][1])
 
     def test_no_inventory_tab_ods(self, mock_success):
-        with open(join('apps', 'external', 'tests', 'no_inventory_tab.ods'), 'rb') as input_file:
+        with open(join('apps', 'data_transfer', 'tests', 'no_inventory_tab.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
-        view = setup_view(ImportDataView(), request)
+        view = setup_view(ImportView(), request)
 
         response = view.post(request)
 
@@ -360,11 +360,11 @@ class ImportTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_bad_header_ods(self, mock_success):
-        with open(join('apps', 'external', 'tests', 'bad_header.ods'), 'rb') as input_file:
+        with open(join('apps', 'data_transfer', 'tests', 'bad_header.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
-        view = setup_view(ImportDataView(), request)
+        view = setup_view(ImportView(), request)
 
         response = view.post(request)
 

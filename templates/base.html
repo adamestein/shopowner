@@ -64,14 +64,14 @@
                             </li>
 
                             <li>
-                                <a href="#externalSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                                <a href="#dataTransferSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
                                     <em class="fs-4 bi-database-gear"></em>
-                                    <span class="ms-1 d-none d-sm-inline">External</span>
+                                    <span class="ms-1 d-none d-sm-inline">Data Transfer</span>
                                 </a>
 
-                                <ul class="collapse nav flex-column ms-1" id="externalSubmenu" data-bs-parent="#menu">
+                                <ul class="collapse nav flex-column ms-1" id="dataTransferSubmenu" data-bs-parent="#menu">
                                     <li class="w-100">
-                                        <a href="{% url "external:import_data" %}" class="nav-link  ps-lg-3 px-0">
+                                        <a href="{% url "data_transfer:import" %}" class="nav-link  ps-lg-3 px-0">
                                             <em class="fs-4 bi-upload"></em>
                                             <span class="d-none d-sm-inline">Import</span>
                                         </a>

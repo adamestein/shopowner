@@ -7,6 +7,6 @@ urlpatterns = [
     url(r'^$', AppTemplateView.as_view(template_name='dashboard.html'), name='home'),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^external/', include('external.urls')),
+    url(r'^data_transfer/', include('data_transfer.urls')),
     url(r'^inventory/', include('inventory.urls'))
 ]
