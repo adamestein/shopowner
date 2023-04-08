@@ -136,12 +136,12 @@ class ImportView(AppFormView):
             product_number=row['There Product #'],
             stock_number=row['Stock Number'],
             vendor=vendor,
-            wholesale_price=price,
             user=user,
             defaults={
                 'notes': row['Gifted or Other'].strip(),
                 'qty_bought': int(row['Qty Purchased']),
-                'qty_sold': sold
+                'qty_sold': sold,
+                'wholesale_price': price
             }
         )
 
@@ -151,4 +151,5 @@ class ImportView(AppFormView):
                 record.notes += '\n' + row['Gifted or Other'].strip()
             record.qty_bought = int(row['Qty Purchased'])
             record.qty_sold = sold
+            record.wholesale_price = price
             record.save()
