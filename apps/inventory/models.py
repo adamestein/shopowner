@@ -46,7 +46,9 @@ class Inventory(models.Model):
 
     vendor = models.ForeignKey(
         'Vendor',
-        help_text='Vendor this item was purchased from'
+        blank=True,
+        help_text='Vendor this item was purchased from',
+        null=True
     )
 
     class Meta:

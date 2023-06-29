@@ -86,7 +86,7 @@ class ImportTestCase(TestCase):
         self.assertEqual(4, Vendor.objects.all().count())
 
         self.assertEqual(1, mock_success.call_count)
-        self.assertEqual('Successfully import 4 items into your inventory', mock_success.call_args_list[0][0][1])
+        self.assertEqual('Successfully imported 4 items into your inventory', mock_success.call_args_list[0][0][1])
 
         # Second import, some inventory items are the same which should increase the bought quantity
 
@@ -173,7 +173,7 @@ class ImportTestCase(TestCase):
         self.assertEqual(4, Vendor.objects.all().count())
 
         self.assertEqual(2, mock_success.call_count)
-        self.assertEqual('Successfully import 4 items into your inventory', mock_success.call_args_list[1][0][1])
+        self.assertEqual('Successfully imported 4 items into your inventory', mock_success.call_args_list[1][0][1])
 
     def test_bad_header_csv(self, mock_success):
         with open(join('apps', 'data_transfer', 'tests', 'bad_header.csv'), 'rb') as input_file:
@@ -254,7 +254,7 @@ class ImportTestCase(TestCase):
         self.assertEqual(4, Vendor.objects.all().count())
 
         self.assertEqual(1, mock_success.call_count)
-        self.assertEqual('Successfully import 5 items into your inventory', mock_success.call_args_list[0][0][1])
+        self.assertEqual('Successfully imported 4 items into your inventory', mock_success.call_args_list[0][0][1])
 
         # Second import, some inventory items are the same which should increase the bought quantity
 
@@ -341,7 +341,7 @@ class ImportTestCase(TestCase):
         self.assertEqual(4, Vendor.objects.all().count())
 
         self.assertEqual(2, mock_success.call_count)
-        self.assertEqual('Successfully import 4 items into your inventory', mock_success.call_args_list[1][0][1])
+        self.assertEqual('Successfully imported 4 items into your inventory', mock_success.call_args_list[1][0][1])
 
     def test_no_inventory_tab_ods(self, mock_success):
         with open(join('apps', 'data_transfer', 'tests', 'no_inventory_tab.ods'), 'rb') as input_file:
@@ -374,3 +374,69 @@ class ImportTestCase(TestCase):
         )
 
         self.assertEqual(0, mock_success.call_count)
+
+    def test_missing_data(self, mock_success):
+        # Not all fields are filled in
+
+        with open(join('apps', 'data_transfer', 'tests', 'missing_data.ods'), 'rb') as input_file:
+            request = RequestFactory().post('/', {'file': input_file})
+            request.user = self.user
+
+        view = setup_view(ImportView(), request)
+
+        response = view.post(request)
+
+        response.client = Client()  # Needed for assertRedirects()
+        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
+
+        inventory = Inventory.objects.all()
+        self.assertEqual(4, inventory.count())
+
+        self.assertEqual('Added Inventory – Tinte', inventory[0].label)
+        self.assertEqual('', inventory[0].notes)
+        self.assertEqual('', inventory[0].product_number)
+        self.assertEqual(0, inventory[0].qty_bought)
+        self.assertEqual(0, inventory[0].qty_sold)
+        self.assertEqual(0, inventory[0].remaining)
+        self.assertEqual('', inventory[0].stock_number)
+        self.assertEqual(self.user, inventory[0].user)
+        self.assertIsNone(inventory[0].vendor)
+        self.assertEqual(Decimal('0'), inventory[0].wholesale_price)
+
+        self.assertEqual('Grape Potion (orig sample)', inventory[1].label)
+        self.assertEqual('', inventory[1].notes)
+        self.assertEqual('', inventory[1].product_number)
+        self.assertEqual(1, inventory[1].qty_bought)
+        self.assertEqual(0, inventory[1].qty_sold)
+        self.assertEqual(1, inventory[1].remaining)
+        self.assertEqual('', inventory[1].stock_number)
+        self.assertEqual(self.user, inventory[1].user)
+        self.assertIsNone(inventory[1].vendor)
+        self.assertEqual(Decimal('0'), inventory[1].wholesale_price)
+
+        self.assertEqual('Peace Hand - Gold', inventory[2].label)
+        self.assertEqual('', inventory[2].notes)
+        self.assertEqual('Go-1046-G', inventory[2].product_number)
+        self.assertEqual(6, inventory[2].qty_bought)
+        self.assertEqual(0, inventory[2].qty_sold)
+        self.assertEqual(6, inventory[2].remaining)
+        self.assertEqual('ORN', inventory[2].stock_number)
+        self.assertEqual(self.user, inventory[2].user)
+        self.assertEqual(Vendor.objects.get(name='Cody Foster'), inventory[2].vendor)
+        self.assertEqual(Decimal('8.35'), inventory[2].wholesale_price)
+
+        self.assertEqual('Soul Flower Journals', inventory[3].label)
+        self.assertEqual('', inventory[3].notes)
+        self.assertEqual('', inventory[3].product_number)
+        self.assertEqual(0, inventory[3].qty_bought)
+        self.assertEqual(0, inventory[3].qty_sold)
+        self.assertEqual(0, inventory[3].remaining)
+        self.assertEqual('', inventory[3].stock_number)
+        self.assertEqual(self.user, inventory[3].user)
+        self.assertIsNone(inventory[3].vendor)
+        self.assertEqual(Decimal('7.33'), inventory[3].wholesale_price)
+
+        self.assertEqual(1, Vendor.objects.all().count())
+
+        self.assertEqual(1, mock_success.call_count)
+        self.assertEqual('Successfully imported 4 items into your inventory', mock_success.call_args_list[0][0][1])

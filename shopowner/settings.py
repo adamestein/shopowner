@@ -159,7 +159,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy('home')
 
 # Version information
 
-VERSION = '3.0'
+VERSION = '3.0.1'
 
 # List of settings to export to templates (django-settings-export)
 

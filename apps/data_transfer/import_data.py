@@ -12,6 +12,7 @@ from .forms import ImportForm
 from inventory.models import Inventory, Vendor
 
 from library.formats import MIMETYPE_CSV, convert_currency_text
+from library.lists import get_list_value
 from library.views.generic import AppFormView
 
 HEADER = [
@@ -43,7 +44,7 @@ class ImportView(AppFormView):
 
             num_items = read_func(self.request.user, form['file'].data)
 
-            success(self.request, f'Successfully import {num_items} items into your inventory')
+            success(self.request, f'Successfully imported {num_items} items into your inventory')
 
             return super().form_valid(form)
         except RuntimeError as e:
@@ -73,28 +74,23 @@ class ImportView(AppFormView):
         try:
             # Don't get the empty header string on the last column with data like for CSV, so remove for header test
             if tabs['Inventory'][0] == HEADER[:-1]:
-                num_items = 1
+                num_items = 0
 
                 for row in tabs['Inventory'][1:]:
                     if len(row):
-                        try:
-                            extra_column_data = row[10]
-                        except IndexError:
-                            extra_column_data = ''
-
                         self._save_data(
                             user,
                             {
-                                '': extra_column_data,
-                                'Gifted or Other': row[8],
+                                '': get_list_value(row, 10),
+                                'Gifted or Other': get_list_value(row, 8),
                                 'Item': row[1],
-                                'Priced': row[6],
-                                'Qty Purchased': row[5],
-                                'Sold': row[7],
+                                'Priced': get_list_value(row, 6),
+                                'Qty Purchased': get_list_value(row, 5, default_value=0),
+                                'Sold': get_list_value(row, 7),
                                 'Stock Number': row[0],
-                                'Supplier': row[2],
-                                'There Product #': row[3],
-                                'Wholesale Price/Unit Price': row[4]
+                                'Supplier': get_list_value(row, 2, default_value=None),
+                                'There Product #': get_list_value(row, 3),
+                                'Wholesale Price/Unit Price': get_list_value(row, 4)
                             }
                         )
 
@@ -108,7 +104,7 @@ class ImportView(AppFormView):
 
     @staticmethod
     def _save_data(user, row):
-        vendor, _ = Vendor.objects.get_or_create(name=row['Supplier'])
+        vendor, _ = Vendor.objects.get_or_create(name=row['Supplier']) if row['Supplier'] else (None, None)
 
         if row['Wholesale Price/Unit Price'] == '':
             if row['Qty Purchased']:
