@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .import_data import ImportView
+from .import_data.inventory import ImportView
 
 app_name = 'data_transfer'
 urlpatterns = [

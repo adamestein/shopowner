@@ -7,7 +7,7 @@ from pyexcel_odsr import get_data
 from django.contrib.messages import success
 from django.urls import reverse_lazy
 
-from .forms import ImportForm
+from data_transfer.import_data.forms import ImportInventoryForm
 
 from inventory.models import Inventory, Vendor
 
@@ -31,7 +31,7 @@ HEADER = [
 
 
 class ImportView(AppFormView):
-    form_class = ImportForm
+    form_class = ImportInventoryForm
     success_url = reverse_lazy('data_transfer:import')
     template_name = 'data_transfer/import.html'
 

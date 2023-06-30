@@ -6,7 +6,7 @@ from django import forms
 from library.formats import MIMETYPE_CSV, MIMETYPE_ODS
 
 
-class ImportForm(forms.Form):
+class ImportInventoryForm(forms.Form):
     file = forms.FileField()
     filetype = None
 

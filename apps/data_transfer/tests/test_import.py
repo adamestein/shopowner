@@ -10,10 +10,10 @@ from inventory.models import Inventory, Vendor
 
 from library.testing.cbv import setup_view
 
-from ..import_data import ImportView
+from ..import_data.inventory import ImportView
 
 
-@patch('data_transfer.import_data.success')
+@patch('data_transfer.import_data.inventory.success')
 class ImportTestCase(TestCase):
     fixtures = [
         'fixtures/testing/users.json'

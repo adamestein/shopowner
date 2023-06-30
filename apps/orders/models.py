@@ -25,7 +25,7 @@ class Order(models.Model):
     )
 
     date_ordered = models.DateField(help_text='Date when order was placed')
-    
+
     date_received = models.DateField(
         blank=True,
         help_text='Date when order was received',
