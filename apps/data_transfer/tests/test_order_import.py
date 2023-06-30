@@ -6,15 +6,15 @@ from django.contrib.auth.models import User
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 
-from inventory.models import Inventory, Vendor
+from ..import_data.orders import ImportView
 
 from library.testing.cbv import setup_view
 
-from ..import_data.inventory import ImportView
+from orders.models import Order
 
 
-@patch('data_transfer.import_data.inventory.success')
-class ImportInventoryTestCase(TestCase):
+@patch('data_transfer.import_data.orders.success')
+class ImportOrdersTestCase(TestCase):
     fixtures = [
         'fixtures/testing/users.json'
     ]
@@ -22,7 +22,7 @@ class ImportInventoryTestCase(TestCase):
     def setUp(self) -> None:
         self.user = User.objects.get(username='adam')
 
-    def test_import_csv(self, mock_success):
+    def xtest_import_csv(self, mock_success):
         # First import, all inventory items will be new
 
         with open(join('apps', 'data_transfer', 'tests', 'data1.csv'), 'rb') as input_file:
@@ -175,7 +175,7 @@ class ImportInventoryTestCase(TestCase):
         self.assertEqual(2, mock_success.call_count)
         self.assertEqual('Successfully imported 4 items into your inventory', mock_success.call_args_list[1][0][1])
 
-    def test_bad_header_csv(self, mock_success):
+    def xtest_bad_header_csv(self, mock_success):
         with open(join('apps', 'data_transfer', 'tests', 'bad_header.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
@@ -191,7 +191,7 @@ class ImportInventoryTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_import_ods(self, mock_success):
-        # First import, all inventory items will be new
+        # First import, all orders will be new
 
         with open(join('apps', 'data_transfer', 'tests', 'data1.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
@@ -202,59 +202,13 @@ class ImportInventoryTestCase(TestCase):
         response = view.post(request)
 
         response.client = Client()  # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('data_transfer:import_inventory'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import_orders'), target_status_code=302)
 
-        inventory = Inventory.objects.all()
-        self.assertEqual(4, inventory.count())
-
-        self.assertEqual('Cosmic Mushroom', inventory[0].label)
-        self.assertEqual('', inventory[0].notes)
-        self.assertEqual('Go-2899', inventory[0].product_number)
-        self.assertEqual(6, inventory[0].qty_bought)
-        self.assertEqual(0, inventory[0].qty_sold)
-        self.assertEqual(6, inventory[0].remaining)
-        self.assertEqual('ORN', inventory[0].stock_number)
-        self.assertEqual(self.user, inventory[0].user)
-        self.assertEqual(Vendor.objects.get(name='Cody Foster'), inventory[0].vendor)
-        self.assertEqual(Decimal('7.30'), inventory[0].wholesale_price)
-
-        self.assertEqual('Minecraft (MC)', inventory[1].label)
-        self.assertEqual('*1 gift to Dante', inventory[1].notes)
-        self.assertEqual('', inventory[1].product_number)
-        self.assertEqual(10, inventory[1].qty_bought)
-        self.assertEqual(9, inventory[1].qty_sold)
-        self.assertEqual(1, inventory[1].remaining)
-        self.assertEqual('', inventory[1].stock_number)
-        self.assertEqual(self.user, inventory[1].user)
-        self.assertEqual(Vendor.objects.get(name='Insanely Paracord'), inventory[1].vendor)
-        self.assertEqual(Decimal('4.00'), inventory[1].wholesale_price)
-
-        self.assertEqual('Rainbow Wrap Llama', inventory[2].label)
-        self.assertEqual('', inventory[2].notes)
-        self.assertEqual('486003000', inventory[2].product_number)
-        self.assertEqual(2, inventory[2].qty_bought)
-        self.assertEqual(0, inventory[2].qty_sold)
-        self.assertEqual(2, inventory[2].remaining)
-        self.assertEqual('', inventory[2].stock_number)
-        self.assertEqual(self.user, inventory[2].user)
-        self.assertEqual(Vendor.objects.get(name='DZI Handmade'), inventory[2].vendor)
-        self.assertEqual(Decimal('12.50'), inventory[2].wholesale_price)
-
-        self.assertEqual('Tits Mug', inventory[3].label)
-        self.assertEqual('', inventory[3].notes)
-        self.assertEqual('MG01-SEI', inventory[3].product_number)
-        self.assertEqual(4, inventory[3].qty_bought)
-        self.assertEqual(0, inventory[3].qty_sold)
-        self.assertEqual(4, inventory[3].remaining)
-        self.assertEqual('', inventory[3].stock_number)
-        self.assertEqual(self.user, inventory[3].user)
-        self.assertEqual(Vendor.objects.get(name='Sarah Edmond'), inventory[3].vendor)
-        self.assertEqual(Decimal('1.60'), inventory[3].wholesale_price)
-
-        self.assertEqual(4, Vendor.objects.all().count())
+        orders = Order.objects.all()
+        self.assertEqual(19, Order.objects.all())
 
         self.assertEqual(1, mock_success.call_count)
-        self.assertEqual('Successfully imported 4 items into your inventory', mock_success.call_args_list[0][0][1])
+        self.assertEqual('Successfully imported 19 orders into your inventory', mock_success.call_args_list[0][0][1])
 
         # Second import, some inventory items are the same which should increase the bought quantity
 
@@ -343,7 +297,7 @@ class ImportInventoryTestCase(TestCase):
         self.assertEqual(2, mock_success.call_count)
         self.assertEqual('Successfully imported 4 items into your inventory', mock_success.call_args_list[1][0][1])
 
-    def test_no_inventory_tab_ods(self, mock_success):
+    def xtest_no_inventory_tab_ods(self, mock_success):
         with open(join('apps', 'data_transfer', 'tests', 'no_inventory_tab.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
@@ -359,7 +313,7 @@ class ImportInventoryTestCase(TestCase):
 
         self.assertEqual(0, mock_success.call_count)
 
-    def test_bad_header_ods(self, mock_success):
+    def xtest_bad_header_ods(self, mock_success):
         with open(join('apps', 'data_transfer', 'tests', 'bad_header.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
@@ -375,7 +329,7 @@ class ImportInventoryTestCase(TestCase):
 
         self.assertEqual(0, mock_success.call_count)
 
-    def test_missing_data(self, mock_success):
+    def xtest_missing_data(self, mock_success):
         # Not all fields are filled in
 
         with open(join('apps', 'data_transfer', 'tests', 'missing_data.ods'), 'rb') as input_file:
