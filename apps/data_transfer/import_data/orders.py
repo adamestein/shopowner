@@ -32,8 +32,8 @@ HEADER = [
 
 class ImportView(AppFormView):
     form_class = ImportInventoryForm
-    success_url = reverse_lazy('data_transfer:import_inventory')
-    template_name = 'data_transfer/import/inventory.html'
+    success_url = reverse_lazy('data_transfer:import_orders')
+    template_name = 'data_transfer/import/orders.html'
 
     def form_valid(self, form):
         try:
@@ -44,7 +44,7 @@ class ImportView(AppFormView):
 
             num_items = read_func(self.request.user, form['file'].data)
 
-            success(self.request, f'Successfully imported {num_items} items into your inventory')
+            success(self.request, f'Successfully imported {num_items} orders')
 
             return super().form_valid(form)
         except RuntimeError as e:

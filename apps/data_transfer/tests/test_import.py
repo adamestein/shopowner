@@ -14,7 +14,7 @@ from ..import_data.inventory import ImportView
 
 
 @patch('data_transfer.import_data.inventory.success')
-class ImportTestCase(TestCase):
+class ImportInventoryTestCase(TestCase):
     fixtures = [
         'fixtures/testing/users.json'
     ]
@@ -34,11 +34,11 @@ class ImportTestCase(TestCase):
         response = view.post(request)
 
         response.client = Client()      # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import_inventory'), target_status_code=302)
 
         inventory = Inventory.objects.all()
         self.assertEqual(4, inventory.count())
-        
+
         self.assertEqual('Cosmic Mushroom', inventory[0].label)
         self.assertEqual('', inventory[0].notes)
         self.assertEqual('Go-2899', inventory[0].product_number)
@@ -71,7 +71,7 @@ class ImportTestCase(TestCase):
         self.assertEqual(self.user, inventory[2].user)
         self.assertEqual(Vendor.objects.get(name='DZI Handmade'), inventory[2].vendor)
         self.assertEqual(Decimal('12.50'), inventory[2].wholesale_price)
-        
+
         self.assertEqual('Tits Mug', inventory[3].label)
         self.assertEqual('', inventory[3].notes)
         self.assertEqual('MG01-SEI', inventory[3].product_number)
@@ -99,11 +99,11 @@ class ImportTestCase(TestCase):
         response = view.post(request)
 
         response.client = Client()  # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import_inventory'), target_status_code=302)
 
         inventory = Inventory.objects.all()
         self.assertEqual(6, inventory.count())
-        
+
         self.assertEqual('Boobies Mug', inventory[0].label)
         self.assertEqual('', inventory[0].notes)
         self.assertEqual('MG02-SEI', inventory[0].product_number)
@@ -125,7 +125,7 @@ class ImportTestCase(TestCase):
         self.assertEqual(self.user, inventory[1].user)
         self.assertEqual(Vendor.objects.get(name='Cody Foster'), inventory[1].vendor)
         self.assertEqual(Decimal('7.30'), inventory[1].wholesale_price)
-        
+
         self.assertEqual('Ginger Bread Yoga', inventory[2].label)
         self.assertEqual('', inventory[2].notes)
         self.assertEqual('Go-6696', inventory[2].product_number)
@@ -202,7 +202,7 @@ class ImportTestCase(TestCase):
         response = view.post(request)
 
         response.client = Client()  # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import_inventory'), target_status_code=302)
 
         inventory = Inventory.objects.all()
         self.assertEqual(4, inventory.count())
@@ -267,7 +267,7 @@ class ImportTestCase(TestCase):
         response = view.post(request)
 
         response.client = Client()  # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import_inventory'), target_status_code=302)
 
         inventory = Inventory.objects.all()
         self.assertEqual(6, inventory.count())
@@ -387,7 +387,7 @@ class ImportTestCase(TestCase):
         response = view.post(request)
 
         response.client = Client()  # Needed for assertRedirects()
-        self.assertRedirects(response, reverse('data_transfer:import'), target_status_code=302)
+        self.assertRedirects(response, reverse('data_transfer:import_inventory'), target_status_code=302)
 
         inventory = Inventory.objects.all()
         self.assertEqual(4, inventory.count())
