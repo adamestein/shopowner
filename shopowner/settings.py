@@ -49,11 +49,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd party apps
+    'django_cleanup.apps.CleanupConfig',
     'widget_tweaks',
 
     # Apps
     'inventory',
-    'library'
+    'library',
+    'orders',
+    'vendors'
 ]
 
 MIDDLEWARE = [
@@ -159,7 +162,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy('home')
 
 # Version information
 
-VERSION = '3.0.1'
+VERSION = '3.1'
 
 # List of settings to export to templates (django-settings-export)
 

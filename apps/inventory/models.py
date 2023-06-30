@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db import models
 
+from vendors.models import Vendor
+
 
 class Inventory(models.Model):
     deleted = models.BooleanField(default=False, help_text='Delete this item from inventory')
@@ -11,7 +13,10 @@ class Inventory(models.Model):
         max_length=100
     )
 
-    notes = models.TextField(help_text='Any miscellaneous information can go here')
+    notes = models.TextField(
+        blank=True,
+        help_text='Any miscellaneous information can go here'
+    )
 
     qty_bought = models.PositiveIntegerField(
         help_text='Quantity of this item purchased',
@@ -45,7 +50,7 @@ class Inventory(models.Model):
     )
 
     vendor = models.ForeignKey(
-        'Vendor',
+        Vendor,
         blank=True,
         help_text='Vendor this item was purchased from',
         null=True
@@ -65,16 +70,3 @@ class Inventory(models.Model):
 
     def __str__(self):
         return self.label
-
-
-class Vendor(models.Model):
-    name = models.CharField(
-        help_text="Vendor's name",
-        max_length=50
-    )
-
-    class Meta:
-        ordering = ('name',)
-
-    def __str__(self):
-        return self.name
