@@ -7,13 +7,15 @@ from pyexcel_odsr import get_data
 from django.contrib.messages import success
 from django.urls import reverse_lazy
 
-from data_transfer.import_data.forms import ImportInventoryForm
+from data_transfer.import_data.forms import ImportForm
 
-from inventory.models import Inventory, Vendor
+from inventory.models import Inventory
 
 from library.formats import MIMETYPE_CSV, convert_currency_text
 from library.lists import get_list_value
 from library.views.generic import AppFormView
+
+from vendors.models import Vendor
 
 HEADER = [
     'Stock Number',
@@ -31,7 +33,7 @@ HEADER = [
 
 
 class ImportView(AppFormView):
-    form_class = ImportInventoryForm
+    form_class = ImportForm
     success_url = reverse_lazy('data_transfer:import_inventory')
     template_name = 'data_transfer/import/inventory.html'
 

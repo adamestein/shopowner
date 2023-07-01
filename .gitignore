@@ -2,8 +2,10 @@
 *.swp
 .env
 .idea
+.~lock*
 datadumper.js
 /media
 /static
+upload
 
 

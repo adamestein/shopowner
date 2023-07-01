@@ -3,10 +3,10 @@ import magic
 
 from django import forms
 
-from library.formats import MIMETYPE_CSV, MIMETYPE_ODS
+from library.formats import MIMETYPE_CSV, MIMETYPE_ODS, MIMETYPE_PLAIN
 
 
-class ImportInventoryForm(forms.Form):
+class ImportForm(forms.Form):
     file = forms.FileField()
     filetype = None
 
@@ -17,7 +17,7 @@ class ImportInventoryForm(forms.Form):
             mimetype_str = m.id_buffer(data.read())
             data.seek(0)
 
-            if mimetype_str in [MIMETYPE_CSV, MIMETYPE_ODS]:
+            if mimetype_str in [MIMETYPE_CSV, MIMETYPE_ODS, MIMETYPE_PLAIN]:
                 self.filetype = mimetype_str
             else:
                 with magic.Magic() as m2:

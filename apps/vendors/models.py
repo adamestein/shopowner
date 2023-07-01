@@ -4,7 +4,8 @@ from django.db import models
 class Vendor(models.Model):
     name = models.CharField(
         help_text="Vendor's name",
-        max_length=50
+        max_length=50,
+        unique=True
     )
 
     website = models.URLField(

@@ -1,6 +1,9 @@
 from os.path import join
 
+from django.contrib.auth.models import User
 from django.db import models
+
+from inventory.models import Inventory
 
 from vendors.models import Vendor
 
@@ -12,6 +15,11 @@ def update_receipt_filename(instance, filename):
 
 
 class Order(models.Model):
+    user = models.ForeignKey(
+        User,
+        help_text="User account this order belongs to"
+    )
+
     reference_number = models.CharField(
         blank=True,
         help_text='Order number/reference number',
@@ -24,7 +32,13 @@ class Order(models.Model):
         help_text='Vendor this order was purchased from'
     )
 
-    date_ordered = models.DateField(help_text='Date when order was placed')
+    items = models.ManyToManyField(Inventory)
+
+    date_ordered = models.DateField(
+        blank=True,
+        help_text='Date when order was placed',
+        null=True
+    )
 
     date_received = models.DateField(
         blank=True,
@@ -72,7 +86,7 @@ class Order(models.Model):
     )
 
     class Meta:
-        ordering = ('vendor', 'reference_number')
+        ordering = ('date_ordered', 'date_received', 'vendor', 'reference_number')
 
     def save(self, *args, **kwargs):
         # Need to save the instance without a receipt file first so there is a database row ID that can be added
@@ -81,16 +95,26 @@ class Order(models.Model):
             receipt = self.receipt
             self.receipt = None
             super().save(*args, **kwargs)
-            self.receipt = receipt
+            if receipt:
+                self.receipt = receipt
+                super().save(*args, **kwargs)
+        else:
+            super().save(*args, **kwargs)
 
-        super().save(*args, **kwargs)
+    @property
+    def total_cost(self):
+        return self.net_cost + self.shipping_cost
 
     def __str__(self):
         return f'[{self.vendor.name}] {self.reference_number}'
 
 
 class PaymentMethod(models.Model):
-    label = models.TextField(help_text='Method of payment', max_length=30)
+    label = models.TextField(
+        help_text='Method of payment',
+        max_length=30,
+        unique=True
+    )
 
     class Meta:
         ordering = ('label', )
