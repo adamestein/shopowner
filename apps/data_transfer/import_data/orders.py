@@ -5,6 +5,7 @@ import io
 from pyexcel_odsr import get_data
 
 from django.contrib.messages import success
+from django.db import transaction
 from django.urls import reverse_lazy
 
 from data_transfer.import_data.forms import ImportForm
@@ -48,7 +49,8 @@ class ImportView(AppFormView):
             else:
                 read_func = self._read_ods
 
-            num_items = read_func(self.request.user, form['file'].data)
+            with transaction.atomic():
+                num_items = read_func(self.request.user, form['file'].data)
 
             success(self.request, f'Successfully imported {num_items} orders')
 
