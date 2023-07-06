@@ -5,11 +5,11 @@
     {{ block.super }}
 
     <style>
-        #inventory {
+        #data_table {
             cursor: default;
         }
 
-        #inventory tr td:nth-of-type(4), #inventory tr td:nth-of-type(5) {
+        #data_table tr td:nth-of-type(4), #data_table tr td:nth-of-type(5) {
             cursor: pointer;
         }
     </style>
@@ -31,7 +31,7 @@
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
 
-    inventoryTable.MakeCellsEditable({
+    dataTable.MakeCellsEditable({
         "allowNulls": {
             "columns": []
         },

@@ -3,7 +3,7 @@
 {% block header %}Update Inventory{% endblock %}
 
 {% block data_table_handler %}
-    window.location.replace(updateURL.replace('0', $(this).data("id")));
+    window.location.replace("{% url "inventory:update" 0 %}".replace('0', $(this).data("id")));
 {% endblock %}
 
 {% block instructions %}

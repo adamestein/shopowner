@@ -10,6 +10,7 @@ from django.urls import reverse
 from ..import_data.orders import ImportView
 
 from library.testing.cbv import setup_view
+from library.testing.const import TESTING_ASSETS
 
 from orders.models import Order, PaymentMethod
 
@@ -23,10 +24,11 @@ class ImportOrdersTestCase(TestCase):
     ]
 
     def setUp(self) -> None:
+        self.data_dir = join(TESTING_ASSETS, 'data')
         self.user = User.objects.get(username='adam')
 
     def test_import_csv(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'orders.csv'), 'rb') as input_file:
+        with open(join(self.data_dir, 'orders.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -43,7 +45,7 @@ class ImportOrdersTestCase(TestCase):
         self._check_vendors()
 
     def test_bad_header_csv(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'bad_order_header.csv'), 'rb') as input_file:
+        with open(join(self.data_dir, 'bad_order_header.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -59,7 +61,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_import_ods(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'data1.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'data1.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -76,7 +78,7 @@ class ImportOrdersTestCase(TestCase):
         self._check_vendors()
 
     def test_no_orders_tab_ods(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'missing_tabs.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'missing_tabs.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -92,7 +94,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_bad_header_ods(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'bad_order_header.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'bad_order_header.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -101,14 +103,14 @@ class ImportOrdersTestCase(TestCase):
         response = view.post(request)
 
         self.assertEqual(
-            'Header mismatch for "bad_order_header.ods" on the Inventory tab',
+            'Header mismatch for "bad_order_header.ods" on the Orders tab',
             response.context_data['form'].errors['file'].data[0].message.args[0]
         )
 
         self.assertEqual(0, mock_success.call_count)
 
     def test_missing_vendor_csv(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'missing_vendor.csv'), 'rb') as input_file:
+        with open(join(self.data_dir, 'missing_vendor.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -124,7 +126,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_missing_vendor_ods(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'missing_vendor.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'missing_vendor.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -140,7 +142,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_missing_net_cost_csv(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'missing_net_cost.csv'), 'rb') as input_file:
+        with open(join(self.data_dir, 'missing_net_cost.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -156,7 +158,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_missing_net_cost_ods(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'missing_net_cost.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'missing_net_cost.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -172,7 +174,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_bad_receiving_date_csv(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'bad_receiving_date.csv'), 'rb') as input_file:
+        with open(join(self.data_dir, 'bad_receiving_date.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -188,7 +190,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_bad_receiving_date_ods(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'bad_receiving_date.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'bad_receiving_date.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -213,7 +215,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('225'), orders[0].net_cost)
         self.assertEqual('little keychains and pals\n\npicked up', orders[0].notes)
         self.assertIsNone(orders[0].payment_method)
-        self.assertFalse(orders[0].receipt)
+        self.assertEqual(0, orders[0].receipts.count())
         self.assertEqual('#1721', orders[0].reference_number)
         self.assertEqual(Decimal('0'), orders[0].shipping_cost)
         self.assertEqual(Decimal('18'), orders[0].tax)
@@ -227,7 +229,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('30'), orders[1].net_cost)
         self.assertEqual('little keychains and pals\n\npicked up', orders[1].notes)
         self.assertIsNone(orders[1].payment_method)
-        self.assertFalse(orders[1].receipt)
+        self.assertEqual(0, orders[1].receipts.count())
         self.assertEqual('#1724', orders[1].reference_number)
         self.assertEqual(Decimal('0'), orders[1].shipping_cost)
         self.assertEqual(Decimal('2.40'), orders[1].tax)
@@ -241,7 +243,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('128'), orders[2].net_cost)
         self.assertEqual('Fair Trade Items- Various Items', orders[2].notes)
         self.assertIsNone(orders[2].payment_method)
-        self.assertFalse(orders[2].receipt)
+        self.assertEqual(0, orders[2].receipts.count())
         self.assertEqual('0039823', orders[2].reference_number)
         self.assertEqual(Decimal('24.29'), orders[2].shipping_cost)
         self.assertEqual(Decimal('0'), orders[2].tax)
@@ -255,7 +257,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('63.40'), orders[3].net_cost)
         self.assertEqual('Rose Buds, Chamomile Flowers and Lavender Flowers', orders[3].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Visa'), orders[3].payment_method)
-        self.assertFalse(orders[3].receipt)
+        self.assertEqual(0, orders[3].receipts.count())
         self.assertEqual('1464787', orders[3].reference_number)
         self.assertEqual(Decimal('18.26'), orders[3].shipping_cost)
         self.assertEqual(Decimal('1.46'), orders[3].tax)
@@ -269,7 +271,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('90'), orders[4].net_cost)
         self.assertEqual('Sunflower Chocolate for Ukraine\n\nFor donation', orders[4].notes)
         self.assertIsNone(orders[4].payment_method)
-        self.assertFalse(orders[4].receipt)
+        self.assertEqual(0, orders[4].receipts.count())
         self.assertEqual('', orders[4].reference_number)
         self.assertEqual(Decimal('0'), orders[4].shipping_cost)
         self.assertEqual(Decimal('7.20'), orders[4].tax)
@@ -283,7 +285,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('463'), orders[5].net_cost)
         self.assertEqual('Lip Balm and Lip Potion', orders[5].notes)
         self.assertIsNone(orders[5].payment_method)
-        self.assertFalse(orders[5].receipt)
+        self.assertEqual(0, orders[5].receipts.count())
         self.assertEqual('W10004527', orders[5].reference_number)
         self.assertEqual(Decimal('24'), orders[5].shipping_cost)
         self.assertEqual(Decimal('0'), orders[5].tax)
@@ -297,7 +299,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('14.75'), orders[6].net_cost)
         self.assertEqual('essential oils for dry herbs', orders[6].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[6].payment_method)
-        self.assertFalse(orders[6].receipt)
+        self.assertEqual(0, orders[6].receipts.count())
         self.assertEqual('', orders[6].reference_number)
         self.assertEqual(Decimal('6.25'), orders[6].shipping_cost)
         self.assertEqual(Decimal('0'), orders[6].tax)
@@ -315,7 +317,7 @@ class ImportOrdersTestCase(TestCase):
             orders[7].notes
         )
         self.assertEqual(PaymentMethod.objects.get(label='Mastercard 1709'), orders[7].payment_method)
-        self.assertFalse(orders[7].receipt)
+        self.assertEqual(0, orders[7].receipts.count())
         self.assertEqual('', orders[7].reference_number)
         self.assertEqual(Decimal('0'), orders[7].shipping_cost)
         self.assertEqual(Decimal('0'), orders[7].tax)
@@ -329,7 +331,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('250'), orders[8].net_cost)
         self.assertEqual('Hippie Iron On Patch and Journals', orders[8].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[8].payment_method)
-        self.assertFalse(orders[8].receipt)
+        self.assertEqual(0, orders[8].receipts.count())
         self.assertEqual('475656', orders[8].reference_number)
         self.assertEqual(Decimal('17.60'), orders[8].shipping_cost)
         self.assertEqual(Decimal('0'), orders[8].tax)
@@ -343,7 +345,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('159.39'), orders[9].net_cost)
         self.assertEqual('Pun Mugs', orders[9].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[9].payment_method)
-        self.assertFalse(orders[9].receipt)
+        self.assertEqual(0, orders[9].receipts.count())
         self.assertEqual('10390', orders[9].reference_number)
         self.assertEqual(Decimal('59.06'), orders[9].shipping_cost)
         self.assertEqual(Decimal('0'), orders[9].tax)
@@ -357,7 +359,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('326.10'), orders[10].net_cost)
         self.assertEqual('Christmas Ornaments', orders[10].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[10].payment_method)
-        self.assertFalse(orders[10].receipt)
+        self.assertEqual(0, orders[10].receipts.count())
         self.assertEqual('SO4484', orders[10].reference_number)
         self.assertEqual(Decimal('0'), orders[10].shipping_cost)
         self.assertEqual(Decimal('0'), orders[10].tax)
@@ -371,7 +373,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('559'), orders[11].net_cost)
         self.assertEqual('Solid Perfumes', orders[11].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[11].payment_method)
-        self.assertFalse(orders[11].receipt)
+        self.assertEqual(0, orders[11].receipts.count())
         self.assertEqual('#4925', orders[11].reference_number)
         self.assertEqual(Decimal('0'), orders[11].shipping_cost)
         self.assertEqual(Decimal('0'), orders[11].tax)
@@ -385,7 +387,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('68.73'), orders[12].net_cost)
         self.assertEqual('Back Ordered Ornament', orders[12].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[12].payment_method)
-        self.assertFalse(orders[12].receipt)
+        self.assertEqual(0, orders[12].receipts.count())
         self.assertEqual('SO4484', orders[12].reference_number)
         self.assertEqual(Decimal('0'), orders[12].shipping_cost)
         self.assertEqual(Decimal('0'), orders[12].tax)
@@ -399,7 +401,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('175.50'), orders[13].net_cost)
         self.assertEqual('refill of popular items', orders[13].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Mastercard 1986'), orders[13].payment_method)
-        self.assertFalse(orders[13].receipt)
+        self.assertEqual(0, orders[13].receipts.count())
         self.assertEqual('W10005990', orders[13].reference_number)
         self.assertEqual(Decimal('9.55'), orders[13].shipping_cost)
         self.assertEqual(Decimal('0'), orders[13].tax)
@@ -413,7 +415,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('15.45'), orders[14].net_cost)
         self.assertEqual('Cranes for resell (intended orig for display)', orders[14].notes)
         self.assertIsNone(orders[14].payment_method)
-        self.assertFalse(orders[14].receipt)
+        self.assertEqual(0, orders[14].receipts.count())
         self.assertEqual('#2798397966 ', orders[14].reference_number)
         self.assertEqual(Decimal('6.99'), orders[14].shipping_cost)
         self.assertEqual(Decimal('1.80'), orders[14].tax)
@@ -426,8 +428,8 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(0, orders[15].items.count())
         self.assertEqual(Decimal('26'), orders[15].net_cost)
         self.assertEqual('Cranes for resell (intended orig for display)', orders[15].notes)
-        self.assertIsNone(orders[15].payment_method)
-        self.assertFalse(orders[15].receipt)
+        self.assertEqual(0, orders[15].receipts.count())
+        self.assertEqual(0, orders[15].receipts.count())
         self.assertEqual('#2796822537 ', orders[15].reference_number)
         self.assertEqual(Decimal('6.99'), orders[15].shipping_cost)
         self.assertEqual(Decimal('2.64'), orders[15].tax)

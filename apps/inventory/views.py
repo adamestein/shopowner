@@ -15,12 +15,6 @@ class QuickQuantityUpdateView(AppListView):
 
 
 class SaveQuantityValue(AJAXResponseMixin, AppTemplateView):
-    content_type = 'application/json'
-
-    def get_context_data(self, **kwargs):
-        # Don't need anything returned
-        return {}
-
     def post(self, request, *args, **kwargs):
         item = Inventory.objects.get(id=self.request.POST['item_id'])
         setattr(item, self.request.POST['field'], self.request.POST['new_value'])

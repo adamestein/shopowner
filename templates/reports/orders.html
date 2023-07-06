@@ -1,0 +1,144 @@
+{% extends "reports/_list_base.html" %}
+
+{% block header %}Order Report{% endblock %}
+
+{% block data_table_headers %}
+    <th>Date Ordered</th>
+    <th>Date Received</th>
+    <th>Vendor</th>
+    <th>Total Cost</th>
+    <th>Receipts</th>
+{% endblock %}
+
+{% block data_table_data %}
+    {% for order in object_list %}
+        <tr data-id="{{ order.id }}" data-reference_number="{{ order.reference_number|default_if_none:"" }}"
+            data-net_cost="{{ order.net_cost }}" data-notes="{{ order.notes|linebreaksbr }}"
+            data-payment_method="{{ order.payment_method|default_if_none:"" }}"
+            data-shipping_cost="{{ order.shipping_cost }}" data-tax="{{ order.tax }}">
+            <td>{{ order.date_ordered|default_if_none:"" }}</td>
+            <td>{{ order.date_received|default_if_none:"" }}</td>
+            <td>
+                {% if order.vendor.website %}
+                    <a href="{{ order.vendor.website }}" target="_blank">{{ order.vendor }}</a>
+                {% else %}
+                    {{ order.vendor }}
+                {% endif %}
+            </td>
+            <td class="text-end">${{ order.total_cost }}</td>
+            <td>
+                <ol>
+                    {% for receipt in order.receipts.all %}
+                        <li>
+                            <a href="{{ receipt.file.url }}" target="_blank">
+                                {{ receipt.original_filename }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block data_table_no_item_label %}orders{% endblock %}
+
+{% block data_table_handler %}
+    let row = this;
+
+    $.get(
+        "{% url "orders:fetch_inventory" %}",
+        {"order_id": $(row).data("id")},
+        function(response) {
+            let data = JSON.parse(response);
+
+            $("#item_label").html(dataTable.row(row).data()[2]);
+            $("#net_cost").html($(row).data("net_cost"));
+            $("#notes").html($(row).data("notes"));
+            $("#payment_method").html($(row).data("payment_method"));
+            $("#reference_number").html($(row).data("reference_number"));
+            $("#shipping_cost").html($(row).data("shipping_cost"));
+            $("#tax").html($(row).data("tax"));
+
+            let inventory_rows = "";
+            $.each(data, function(index, value) {
+                inventory_rows += `<tr><td>${value[0]}</td><td>${value[1]}</td></tr>`;
+            });
+
+            $("#inventory_list").find("tr:gt(0)").remove();
+            $("#inventory_list tr:last").after(inventory_rows);
+
+            new bootstrap.Modal(document.getElementById("extraInfo")).show();
+        }
+    ).fail(function(jqXHR, textStatus, errorThrown) {
+        alert(
+            "Could not retrieve inventory information for this order.\n\nError: " + jqXHR.responseText
+        );
+    });
+{% endblock %}
+
+{% block instructions %}
+    <p>Click on an item's row to pop up more information.</p>
+{% endblock %}
+
+{% block extra_content %}
+    <div class="modal fade" id="extraInfo" tabindex="-1" aria-labelledby="extraInfoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="extraInfoLabel">
+                        Extra Information for order from <span id="item_label"></span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td class="text-end" style="width: 20%;">Reference Number:</td>
+                            <td class="ps-2"><span id="reference_number"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-end">Net Cost:</td>
+                            <td class="ps-2">$<span id="net_cost"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-end">Shipping Cost:</td>
+                            <td class="ps-2">$<span id="shipping_cost"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-end">Tax:</td>
+                            <td class="ps-2">$<span id="tax"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-end">Payment Method:</td>
+                            <td class="ps-2"><span id="payment_method"></span></td>
+                        </tr>
+
+                        <tr class="top_align">
+                            <td class="text-end">Notes:</td>
+                            <td class="ps-2"><span id="notes"></span></td>
+                        </tr>
+                    </table>
+
+                    <table class="caption-top mt-4 table table-bordered table-sm table-striped" id="inventory_list">
+                        <caption style="text-align: center;"><strong>Inventory</strong></caption>
+
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

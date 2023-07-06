@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
     # Apps
+    'artifacts',
     'inventory',
     'library',
     'orders',
@@ -155,6 +156,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     path.abspath(path.join(BASE_DIR, 'public'))
 ]
+
+# Uploaded files
+
+MEDIA_URL = 'http://smeg.steinhome.net:8002/files/'
 
 # Account URLs
 

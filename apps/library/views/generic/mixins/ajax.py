@@ -5,6 +5,14 @@ from django.views.generic.base import TemplateResponseMixin
 
 
 class AJAXResponseMixin(TemplateResponseMixin):
+    content_type = 'application/json'
+
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def get_context_data(**kwargs):
+        # Don't need anything returned
+        return {}
+
     def post(self, request, *args, **kwargs):
         # noinspection PyUnresolvedReferences
         context = self.get_context_data(**kwargs)

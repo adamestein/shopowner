@@ -1,20 +1,28 @@
-from os.path import join
-
 from django.contrib.auth.models import User
 from django.db import models
 
+from artifacts.models import Artifact
 from inventory.models import Inventory
 
 from vendors.models import Vendor
 
 
-def update_receipt_filename(instance, filename):
-    # Change the saved receipt file to contain the database row ID of the order to make the filename distinct
-    _, _, extension = filename.rpartition('.')
-    return f'{join("upload", "receipts", str(instance.id).zfill(10) + "." + extension)}'
+class Item(models.Model):
+    item = models.ForeignKey(Inventory)
+    order = models.ForeignKey('Order', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ('order', 'item')
+        unique_together = ('order', 'item')
+
+    def __str__(self):
+        return f'{self.item} <--> {self.order}'
 
 
 class Order(models.Model):
+    deleted = models.BooleanField(default=False, help_text='Delete this order from the database')
+
     user = models.ForeignKey(
         User,
         help_text="User account this order belongs to"
@@ -32,7 +40,11 @@ class Order(models.Model):
         help_text='Vendor this order was purchased from'
     )
 
-    items = models.ManyToManyField(Inventory)
+    items = models.ManyToManyField(
+        Inventory,
+        help_text='Items bought in this order',
+        through=Item
+    )
 
     date_ordered = models.DateField(
         blank=True,
@@ -73,11 +85,10 @@ class Order(models.Model):
         null=True
     )
 
-    receipt = models.FileField(
+    receipts = models.ManyToManyField(
+        Artifact,
         blank=True,
-        help_text='Receipt file (leave empty for hardcopy)',
-        null=True,
-        upload_to=update_receipt_filename
+        help_text='Uploaded receipt documents associated with this order'
     )
 
     notes = models.TextField(
@@ -87,19 +98,6 @@ class Order(models.Model):
 
     class Meta:
         ordering = ('date_ordered', 'date_received', 'vendor', 'reference_number')
-
-    def save(self, *args, **kwargs):
-        # Need to save the instance without a receipt file first so there is a database row ID that can be added
-        # to the uploaded filename
-        if self.pk is None:
-            receipt = self.receipt
-            self.receipt = None
-            super().save(*args, **kwargs)
-            if receipt:
-                self.receipt = receipt
-                super().save(*args, **kwargs)
-        else:
-            super().save(*args, **kwargs)
 
     @property
     def total_cost(self):

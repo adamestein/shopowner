@@ -126,7 +126,7 @@ class ImportView(AppFormView):
 
                 return num_items
             else:
-                raise RuntimeError(f'Header mismatch for "{data.name}" on the Order tab')
+                raise RuntimeError(f'Header mismatch for "{data.name}" on the Orders tab')
         except KeyError:
             raise RuntimeError(f'Orders tab not found in "{data.name}"')
 
@@ -158,7 +158,7 @@ class ImportView(AppFormView):
             net_cost=convert_currency_text(row['Net Cost']),
             notes=row['Notes'],
             payment_method=payment_method,
-            reference_number=str(row['Order #/Ref']).encode('ascii', 'ignore'),
+            reference_number=str(row['Order #/Ref']).encode('ascii', 'ignore').decode('ascii'),
             shipping_cost=convert_currency_text(row['Shipping Cost'] or '0'),
             tax=convert_currency_text(row['Tax Credit Paid'] or '0'),
             vendor=vendor,

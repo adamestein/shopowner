@@ -5,7 +5,7 @@
 {% block data_table_handler %}
     let extraInfoModal = new bootstrap.Modal(document.getElementById("extraInfo"));
 
-    $("#item_label").html(inventoryTable.row(this).data()[0]);
+    $("#item_label").html(dataTable.row(this).data()[0]);
     $("#notes").html($(this).data("notes"));
     $("#my_stock_number").html($(this).data("my_stock_number"));
     $("#vendor_product_number").html($(this).data("vendor_product_number"));

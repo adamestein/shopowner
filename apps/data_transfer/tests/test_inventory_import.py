@@ -11,6 +11,7 @@ from ..import_data.inventory import ImportView
 from inventory.models import Inventory
 
 from library.testing.cbv import setup_view
+from library.testing.const import TESTING_ASSETS
 
 from vendors.models import Vendor
 
@@ -22,12 +23,13 @@ class ImportInventoryTestCase(TestCase):
     ]
 
     def setUp(self) -> None:
+        self.data_dir = join(TESTING_ASSETS, 'data')
         self.user = User.objects.get(username='adam')
 
     def test_import_csv(self, mock_success):
         # First import, all inventory items will be new
 
-        with open(join('apps', 'data_transfer', 'tests', 'inventory1.csv'), 'rb') as input_file:
+        with open(join(self.data_dir, 'inventory1.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -42,7 +44,7 @@ class ImportInventoryTestCase(TestCase):
 
         # Second import, some inventory items are the same which should increase the bought quantity
 
-        with open(join('apps', 'data_transfer', 'tests', 'inventory2.csv')) as input_file:
+        with open(join(self.data_dir, 'inventory2.csv')) as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -56,7 +58,7 @@ class ImportInventoryTestCase(TestCase):
         self._check_data2(mock_success)
 
     def test_bad_header_csv(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'bad_inventory_header.csv'), 'rb') as input_file:
+        with open(join(self.data_dir, 'bad_inventory_header.csv'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -74,7 +76,7 @@ class ImportInventoryTestCase(TestCase):
     def test_import_ods(self, mock_success):
         # First import, all inventory items will be new
 
-        with open(join('apps', 'data_transfer', 'tests', 'data1.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'data1.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -89,7 +91,7 @@ class ImportInventoryTestCase(TestCase):
 
         # Second import, some inventory items are the same which should increase the bought quantity
 
-        with open(join('apps', 'data_transfer', 'tests', 'inventory2.csv')) as input_file:
+        with open(join(self.data_dir, 'inventory2.csv')) as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -103,7 +105,7 @@ class ImportInventoryTestCase(TestCase):
         self._check_data2(mock_success)
 
     def test_no_inventory_tab_ods(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'missing_tabs.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'missing_tabs.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -119,7 +121,7 @@ class ImportInventoryTestCase(TestCase):
         self.assertEqual(0, mock_success.call_count)
 
     def test_bad_header_ods(self, mock_success):
-        with open(join('apps', 'data_transfer', 'tests', 'bad_inventory_header.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'bad_inventory_header.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
@@ -137,7 +139,7 @@ class ImportInventoryTestCase(TestCase):
     def test_missing_data(self, mock_success):
         # Not all fields are filled in
 
-        with open(join('apps', 'data_transfer', 'tests', 'missing_inventory_data.ods'), 'rb') as input_file:
+        with open(join(self.data_dir, 'missing_inventory_data.ods'), 'rb') as input_file:
             request = RequestFactory().post('/', {'file': input_file})
             request.user = self.user
 
