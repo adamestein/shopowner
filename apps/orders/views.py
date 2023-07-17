@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 
 from .models import Order
 
@@ -6,10 +6,23 @@ from library.views.generic import AppCreateView, AppListView, AppTemplateView, A
 from library.views.generic.mixins.ajax import AJAXResponseMixin
 
 
-# class AddInventoryView(AppCreateView):
-#     pass
-#
-#
+class CreateOrderView(AppCreateView):
+    object = None
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+
+        for item in form.cleaned_data['items'].save(commit=False):
+            item.order = self.object
+            item.save()
+
+        if self.success_message:
+            self.success_message = self.success_message % form.cleaned_data
+
+        return HttpResponseRedirect(self.get_success_url())
+
 
 class FetchInventory(AJAXResponseMixin, AppTemplateView):
     def get_context_data(self, **kwargs):

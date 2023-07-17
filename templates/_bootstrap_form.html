@@ -6,14 +6,16 @@
     {% for field in form %}
         {% if field.errors %}
             <div class="form-group has-error">
+                <div class="error-block">
+                    {% for error in  field.errors %}
+                        <span class="bi-arrow-down-circle">&nbsp;{{ error }}</span>
+                    {% endfor %}
+                </div>
+
                 <label class="col-sm-2 control-label" for="id_{{ field.name }}">{{ field.label }}</label>
 
                 <div class="col-sm-10">
                     {{ field|attr:"class:form-control"|attr:"style: display: inline !important; width: 98% !important;" }}
-
-                    <span class="help-block">
-                        {% for error in  field.errors %}{{ error }}{% endfor %}
-                    </span>
                 </div>
             </div>
         {% elif field.label != "Deleted" %}
@@ -22,12 +24,27 @@
             {% endcomment %}
 
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+                {% with widget_type=field|widget_type %}
+                    <label class="col-sm-2 control-label" for="id_{{ field.name }}">
+                        {{ field.label }}
+                    </label>
 
-                <div class="col-sm-10">
-                    {{ field|attr:"class:form-control"|attr:"style: display: inline !important; width: 98% !important;" }}
-                    <p class="help-block"><small>{{ field.help_text }}</small></p>
-                </div>
+                    {% if widget_type == "inlineformset" and field.help_text %}
+                        <p class="help-block"><small>({{ field.help_text }})</small></p>
+                    {% endif %}
+
+                    <div class="col-sm-10">
+                        {% with field_type=field|field_type %}
+                            {% ifequal field_type "decimalfield" %}${% endifequal %}
+                        {% endwith %}
+
+                        {{ field|attr:"class:form-control"|attr:"style: display: inline !important; width: 98% !important;" }}
+
+                        {% ifnotequal widget_type "inlineformset" %}
+                            <p class="help-block"><small>{{ field.help_text }}</small></p>
+                        {% endifnotequal %}
+                    </div>
+                {% endwith %}
             </div>
         {% endif %}
     {% endfor %}

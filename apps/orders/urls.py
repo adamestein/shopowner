@@ -1,27 +1,27 @@
 from django.conf.urls import url
 from django.urls import reverse_lazy
 
-# from .forms import AddItemForm, UpdateItemForm
+from .forms import CreateOrderForm, UpdateOrderForm
 from .models import Order
 from .views import (
-    FetchInventory, ReportView
+    CreateOrderView, FetchInventory, ReportView
 )
 
 app_name = 'orders'
 urlpatterns = [
-    # url(
-    #     r'^add/$',
-    #     AddInventoryView.as_view(
-    #         action='Add',
-    #         form_class=AddItemForm,
-    #         model=Inventory,
-    #         success_message='Item "%(label)s" has been added',
-    #         success_url=reverse_lazy('inventory:add'),
-    #         template_name='inventory/form.html'
-    #     ),
-    #     name='add'
-    # ),
-    #
+    url(
+        r'^create/$',
+        CreateOrderView.as_view(
+            action='Create',
+            form_class=CreateOrderForm,
+            model=Order,
+            success_message='Order has been created',
+            success_url=reverse_lazy('orders:create'),
+            template_name='orders/form.html'
+        ),
+        name='create'
+    ),
+
     # url(
     #     r'^quick/$',
     #     QuickQuantityUpdateView.as_view(

@@ -1,0 +1,39 @@
+.error-block {
+    color: red;
+}
+
+.formset_table {
+    border-collapse: collapse;
+    font-size: 90%;
+}
+
+.formset_table .delete_icon {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.formset_table td {
+    border: none !important;
+    padding: 6px !important;
+}
+
+.formset_table tr:first-child {
+    background-color: #f6f6f6;
+}
+
+.formset_table .add-row {
+    background-color: #f6f6f6;
+    border-top: 3px #eeeeee solid !important;
+    cursor: pointer;
+    font-size: 70%;
+    text-decoration: underline;
+}
+
+.formset_table .delete-row {
+    cursor: pointer;
+}
+
+.formset_table .row2 {
+    background-color: #f6f6f6;
+}

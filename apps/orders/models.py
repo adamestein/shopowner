@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from artifacts.models import Artifact
@@ -10,7 +11,7 @@ from vendors.models import Vendor
 class Item(models.Model):
     item = models.ForeignKey(Inventory)
     order = models.ForeignKey('Order', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
 
     class Meta:
         ordering = ('order', 'item')
@@ -108,7 +109,7 @@ class Order(models.Model):
 
 
 class PaymentMethod(models.Model):
-    label = models.TextField(
+    label = models.CharField(
         help_text='Method of payment',
         max_length=30,
         unique=True

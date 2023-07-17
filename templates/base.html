@@ -123,6 +123,22 @@
                             </li>
 
                             <li>
+                                <a href="#ordersSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                                    <em class="fs-4 bi-collection"></em>
+                                    <span class="ms-1 d-none d-sm-inline">Orders</span>
+                                </a>
+
+                                <ul class="collapse nav flex-column ms-1" id="ordersSubmenu" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="{% url "orders:create" %}" class="nav-link  ps-lg-3 px-0">
+                                            <em class="fs-4 bi-file-earmark"></em>
+                                            <span class="d-none d-sm-inline">Create Order</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
                                 <a href="#reportSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
                                     <em class="fs-4 bi-folder"></em>
                                     <span class="ms-1 d-none d-sm-inline">Reports</span>
@@ -177,7 +193,7 @@
                                     </li>
                                 {% endif %}
 
-                                <li><a class="dropdown-item" href="{% url "logout" %}">Sign out</a></li>
+                                <li><a class="dropdown-item" href="{% url "logout" %}">Sign Out</a></li>
                             </ul>
                         </div>
                     </div>

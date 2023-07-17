@@ -10,7 +10,7 @@ class BaseItemForm(forms.ModelForm):
         fields = ['label', 'stock_number', 'vendor', 'product_number', 'wholesale_price', 'qty_bought', 'notes']
         model = Inventory
         widgets = {
-            'vendor': SelectWithAdd()
+            'vendor': SelectWithAdd(Inventory.vendor)
         }
 
     def __init__(self, *args, **kwargs):
