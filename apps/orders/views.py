@@ -23,6 +23,11 @@ class CreateOrderView(AppCreateView):
 
         return HttpResponseRedirect(self.get_success_url())
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
 
 class FetchInventory(AJAXResponseMixin, AppTemplateView):
     def get_context_data(self, **kwargs):

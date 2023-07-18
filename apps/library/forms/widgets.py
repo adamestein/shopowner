@@ -16,11 +16,11 @@ class HTML5DateInput(DateInput):
 
 
 class InlineFormset(Widget):
-    def __init__(self, formset, attrs=None):
+    def __init__(self, formset, attrs=None, form_kwargs=None):
         super().__init__(attrs)
         self.delete_icon = join(settings.STATIC_URL, 'img', 'delete.png')
-        self.formset = formset()
         self.formset_class = formset
+        self.form_kwargs = form_kwargs or {}
 
     def value_from_datadict(self, data, files, name):
         formset = self.formset_class(data, files)
@@ -33,18 +33,19 @@ class InlineFormset(Widget):
 
     def render(self, name, value, attrs=None, renderer=None):
         add_icon = join(settings.STATIC_URL, 'img', 'add.png')
+        formset = self.formset_class(form_kwargs=self.form_kwargs)
 
         data_html = ''
         header_html = ''
 
-        field_names = self.formset.form.base_fields.keys()
+        field_names = formset.form.base_fields.keys()
 
         for field in field_names:
             header_html += f'<th style="width: 45%;">{field.capitalize()}</th>'
         header_html += '<th style="font-weight: normal !important; text-align: center;">Delete?</th>'
 
         row_iter = cycle(range(1, 3))
-        for form in self.formset:
+        for form in formset:
             data_html += f'''
                 <tr class="row{next(row_iter)}">
                     {self._cells(form)}
@@ -55,10 +56,10 @@ class InlineFormset(Widget):
         # <table></table> tags around the empty form row is so that all the <tr> and <td> tags show up correctly
         # (without <table></table>, those tags disappear).
         return mark_safe(f'''
-            {self.formset.management_form}
+            {formset.management_form}
                         
             <div id="forset_table_empty_form" style="display: none;">
-                <table><tr>{self._cells(self.formset.empty_form, empty_form=True)}</tr></table>
+                <table><tr>{self._cells(formset.empty_form, empty_form=True)}</tr></table>
             </div>
             
             <table class="formset_table table" id="{attrs["id"] + "_table"}">
@@ -67,7 +68,7 @@ class InlineFormset(Widget):
                 {data_html}
 
                 <tr class="add-row">
-                    <td colspan="{len(field_names) + int(self.formset.can_delete)}">
+                    <td colspan="{len(field_names) + int(formset.can_delete)}">
                         <img src="{add_icon}" />
                         <a id="add_item">Add another item</a>
                     </td>
@@ -82,13 +83,13 @@ class InlineFormset(Widget):
                 }}
                 
                 $(".add-row").click(function() {{
-                    let form_idx = parseInt($("#id_{self.formset.prefix}-TOTAL_FORMS").val());
+                    let form_idx = parseInt($("#id_{formset.prefix}-TOTAL_FORMS").val());
                     let cells = $("#forset_table_empty_form tr").html();
                     let rowColor = (form_idx % 2 === 0) ? "row1" : "row2";
                     let row = `<tr class="${{rowColor}}">${{cells}}</tr>`;
                     
                     $("#{attrs["id"] + "_table"} tr:last").before(row.replace(/__prefix__/g, form_idx));
-                    $("#id_{self.formset.prefix}-TOTAL_FORMS").val(form_idx + 1);
+                    $("#id_{formset.prefix}-TOTAL_FORMS").val(form_idx + 1);
                 }});
                 
                 $(".formset_table").on("click", ".delete-row", function() {{

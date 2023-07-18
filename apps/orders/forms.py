@@ -4,8 +4,23 @@ from library.forms import FormsetField, HTML5DateInput, SelectWithAdd, SelectMul
 
 from .models import Item, Order
 
+from inventory.models import Inventory
 
-ItemFormSet = forms.inlineformset_factory(Order, Item, exclude=['order'], extra=0)
+
+class ItemForm(forms.ModelForm):
+    class Meta:
+        exclude = ()
+        model = Item
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if user:
+            self.fields['item'].queryset = Inventory.objects.filter(user=user)
+
+
+ItemFormSet = forms.inlineformset_factory(Order, Item, exclude=['order'], extra=0, form=ItemForm)
 
 
 class BaseOrderForm(forms.ModelForm):
@@ -33,6 +48,13 @@ class BaseOrderForm(forms.ModelForm):
             ),
             'vendor': SelectWithAdd(Order.vendor)
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if user:
+            self.fields['items'].create_widget(ItemFormSet, form_kwargs={'user': user})
 
 
 class CreateOrderForm(BaseOrderForm):
