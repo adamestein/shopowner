@@ -1,0 +1,11 @@
+{% extends "orders/_list.html" %}
+
+{% block header %}Update Order{% endblock %}
+
+{% block data_table_handler %}
+    window.location.replace("{% url "orders:update" 0 %}".replace('0', $(this).data("id")));
+{% endblock %}
+
+{% block instructions %}
+    <p>Click on an order's row to edit the information.</p>
+{% endblock %}

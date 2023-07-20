@@ -60,9 +60,32 @@ class ReportView(AppListView):
     pass
 
 
-# class UpdateInventoryListView(AppListView):
-#     pass
-#
-#
-# class UpdateInventoryView(AppUpdateView):
-#     pass
+class UpdateOrderListView(AppListView):
+    pass
+
+
+class UpdateOrderView(AppUpdateView):
+    object = None
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+
+        for item in form.cleaned_data['items'].deleted_forms:
+            item.instance.delete()
+
+        for item in form.cleaned_data['items'].save(commit=False):
+            item.order = self.object
+            item.save()
+
+        if self.success_message:
+            self.success_message = self.success_message % form.cleaned_data
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+

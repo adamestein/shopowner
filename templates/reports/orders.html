@@ -1,47 +1,6 @@
-{% extends "reports/_list_base.html" %}
+{% extends "orders/_list.html" %}
 
 {% block header %}Order Report{% endblock %}
-
-{% block data_table_headers %}
-    <th>Date Ordered</th>
-    <th>Date Received</th>
-    <th>Vendor</th>
-    <th>Total Cost</th>
-    <th>Receipts</th>
-{% endblock %}
-
-{% block data_table_data %}
-    {% for order in object_list %}
-        <tr data-id="{{ order.id }}" data-reference_number="{{ order.reference_number|default_if_none:"" }}"
-            data-net_cost="{{ order.net_cost }}" data-notes="{{ order.notes|linebreaksbr }}"
-            data-payment_method="{{ order.payment_method|default_if_none:"" }}"
-            data-shipping_cost="{{ order.shipping_cost }}" data-tax="{{ order.tax }}">
-            <td>{{ order.date_ordered|default_if_none:"" }}</td>
-            <td>{{ order.date_received|default_if_none:"" }}</td>
-            <td>
-                {% if order.vendor.website %}
-                    <a href="{{ order.vendor.website }}" target="_blank">{{ order.vendor }}</a>
-                {% else %}
-                    {{ order.vendor }}
-                {% endif %}
-            </td>
-            <td class="text-end">${{ order.total_cost }}</td>
-            <td>
-                <ol>
-                    {% for receipt in order.receipts.all %}
-                        <li>
-                            <a href="{{ receipt.file.url }}" target="_blank">
-                                {{ receipt.original_filename }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ol>
-            </td>
-        </tr>
-    {% endfor %}
-{% endblock %}
-
-{% block data_table_no_item_label %}orders{% endblock %}
 
 {% block data_table_handler %}
     let row = this;

@@ -21,9 +21,10 @@ class InlineFormset(Widget):
         self.delete_icon = join(settings.STATIC_URL, 'img', 'delete.png')
         self.formset_class = formset
         self.form_kwargs = form_kwargs or {}
+        self.instance = self.form_kwargs.pop('instance', None)
 
     def value_from_datadict(self, data, files, name):
-        formset = self.formset_class(data, files)
+        formset = self.formset_class(data, files, instance=self.instance)
         if formset.is_valid():
             ret_value = formset
         else:
@@ -33,7 +34,7 @@ class InlineFormset(Widget):
 
     def render(self, name, value, attrs=None, renderer=None):
         add_icon = join(settings.STATIC_URL, 'img', 'add.png')
-        formset = self.formset_class(form_kwargs=self.form_kwargs)
+        formset = self.formset_class(instance=self.instance, form_kwargs=self.form_kwargs)
 
         data_html = ''
         header_html = ''
@@ -104,6 +105,8 @@ class InlineFormset(Widget):
         for field in form:
             if not field.is_hidden and (not empty_form or 'DELETE' not in field.auto_id):
                 html += f'<td>{field}</td>'
+            else:
+                html += str(field)
 
         if empty_form:
             html += f'<td class="delete-row"><img class="delete_icon" src="{self.delete_icon}"></td>'

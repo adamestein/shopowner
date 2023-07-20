@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from library.forms import FormsetField, HTML5DateInput, SelectWithAdd, SelectMultipleWithAdd
 
@@ -54,7 +55,7 @@ class BaseOrderForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if user:
-            self.fields['items'].create_widget(ItemFormSet, form_kwargs={'user': user})
+            self.fields['items'].create_widget(ItemFormSet, form_kwargs={'instance': kwargs['instance'], 'user': user})
 
 
 class CreateOrderForm(BaseOrderForm):
@@ -63,4 +64,15 @@ class CreateOrderForm(BaseOrderForm):
 
 class UpdateOrderForm(BaseOrderForm):
     class Meta(BaseOrderForm.Meta):
-        fields = []
+        fields = [
+            'date_ordered', 'date_received', 'reference_number', 'vendor', 'items', 'net_cost', 'shipping_cost',
+            'tax', 'payment_method', 'receipts', 'notes', 'deleted'
+        ]
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if len(cleaned_data['items'].deleted_forms) == len(cleaned_data['items']):
+            raise ValidationError('Items bought in this order must be listed', code='required')
+
+        return cleaned_data

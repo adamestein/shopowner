@@ -3,9 +3,7 @@ from django.urls import reverse_lazy
 
 from .forms import CreateOrderForm, UpdateOrderForm
 from .models import Order
-from .views import (
-    CreateOrderView, FetchInventory, ReportView
-)
+from .views import CreateOrderView, FetchInventory, ReportView, UpdateOrderListView, UpdateOrderView
 
 app_name = 'orders'
 urlpatterns = [
@@ -50,26 +48,26 @@ urlpatterns = [
     #     SaveQuantityValue.as_view(),
     #     name='save_quantity_values'
     # ),
-    #
-    # url(
-    #     r'^update/$',
-    #     UpdateInventoryListView.as_view(
-    #         model=Inventory,
-    #         template_name='inventory/update_list.html'
-    #     ),
-    #     name='list'
-    # ),
-    #
-    # url(
-    #     r'^update/(?P<pk>[\d]+)$',
-    #     UpdateInventoryView.as_view(
-    #         action='Update',
-    #         form_class=UpdateItemForm,
-    #         model=Inventory,
-    #         success_message='Item "%(label)s" has been updated',
-    #         success_url=reverse_lazy('inventory:list'),
-    #         template_name='inventory/form.html'
-    #     ),
-    #     name='update'
-    # )
+
+    url(
+        r'^update/$',
+        UpdateOrderListView.as_view(
+            model=Order,
+            template_name='orders/update_list.html'
+        ),
+        name='list'
+    ),
+
+    url(
+        r'^update/(?P<pk>[\d]+)$',
+        UpdateOrderView.as_view(
+            action='Update',
+            form_class=UpdateOrderForm,
+            model=Order,
+            success_message='Order has been updated',
+            success_url=reverse_lazy('orders:list'),
+            template_name='orders/form.html'
+        ),
+        name='update'
+    )
 ]
