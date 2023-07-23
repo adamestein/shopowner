@@ -10,6 +10,8 @@ class CreateOrderView(AppCreateView):
     object = None
 
     def form_valid(self, form):
+        update_quantity = 'update_quantity' in form.cleaned_data and form.cleaned_data['update_quantity']
+
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
@@ -17,6 +19,10 @@ class CreateOrderView(AppCreateView):
         for item in form.cleaned_data['items'].save(commit=False):
             item.order = self.object
             item.save()
+
+            if update_quantity:
+                item.item.qty_bought += item.quantity
+                item.item.save()
 
         if self.success_message:
             self.success_message = self.success_message % form.cleaned_data

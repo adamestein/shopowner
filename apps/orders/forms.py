@@ -59,7 +59,7 @@ class BaseOrderForm(forms.ModelForm):
 
 
 class CreateOrderForm(BaseOrderForm):
-    pass
+    update_quantity = forms.BooleanField(widget=forms.HiddenInput(), required=False)
 
 
 class UpdateOrderForm(BaseOrderForm):
