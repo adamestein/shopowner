@@ -159,7 +159,7 @@ STATICFILES_DIRS = [
 
 # Uploaded files
 
-MEDIA_URL = 'http://smeg.steinhome.net:8002/files/'
+MEDIA_URL = f'http://{config("MEDIA_HOST")}/files/'
 
 # Account URLs
 
