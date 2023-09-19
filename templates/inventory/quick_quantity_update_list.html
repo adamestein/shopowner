@@ -66,13 +66,20 @@
         function storeUpdatedValue(updatedCell, updatedRow, oldValue) {
             if (updatedCell.data() !== oldValue) {
                 let field = (updatedCell.index()["column"] === 3) ? "qty_bought" : "qty_sold";
+                let newValue = updatedCell.data();
 
                 $.post(
                     "{% url "inventory:save_quantity_values" %}",
                     {
                         "field": field,
                         "item_id": updatedRow.nodes().to$().data("id"),
-                        "new_value": updatedCell.data()
+                        "new_value": newValue
+                    },
+                    function() {
+                        // Update the Quantity Remaining column after the bought or sold value has been changed
+                        let data = updatedRow.data();
+                        data[5] = data[3] - data[4];
+                        updatedRow.data(data).draw();
                     }
                 ).fail(function(jqXHR, textStatus, errorThrown) {
                     alert(
