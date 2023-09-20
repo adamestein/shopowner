@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd party apps
+    'compressor',
+    'dashing',
     'django_cleanup.apps.CleanupConfig',
     'widget_tweaks',
 
@@ -157,6 +159,12 @@ STATICFILES_DIRS = [
     path.abspath(path.join(BASE_DIR, 'public'))
 ]
 
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder'
+]
+
 # Uploaded files
 
 MEDIA_URL = f'http://{config("MEDIA_HOST")}/files/'
@@ -167,7 +175,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy('home')
 
 # Version information
 
-VERSION = '3.1.1'
+VERSION = '3.2'
 
 # List of settings to export to templates (django-settings-export)
 
@@ -185,6 +193,18 @@ MESSAGE_TAGS = {
         messages.WARNING: 'alert-warning',
         messages.ERROR: 'alert-danger',
  }
+
+# Compressor settings
+
+COMPRESS_ENABLED = True
+
+# Dashboard settings
+
+DASHING = {
+    'PERMISSION_CLASSES':  (
+        'dashing.permissions.IsAuthenticated',
+    )
+}
 
 # Production vs Development specific stuff
 

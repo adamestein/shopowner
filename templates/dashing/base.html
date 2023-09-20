@@ -1,11 +1,15 @@
 <!doctype html>
+{% load static %}
+{% load dashing_tags %}
+
 <html lang="en">
     <head>
-        <!-- Required meta tags for Bootstrap-->
-        <meta charset="utf-8">
+        <meta charset="utf-8"/>
+        <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-        <title>Show Owner Applications</title>
+        <title>{% block title %}{% endblock %}</title>
 
         {% block css %}
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -24,10 +28,26 @@
             </style>
         {% endblock %}
 
+        {% compress css %}
+            <link rel="stylesheet" href="{% static 'dashing/libs/jquery-gridster/jquery.gridster.css' %}">
+            <link rel="stylesheet" href="{% static 'dashing/libs/rickshaw/rickshaw.css' %}">
+            <link rel="stylesheet" href="{% static 'dashing/libs/font-awesome/font-awesome.css' %}">
+            <link rel="stylesheet" href="{% static 'css/dashing.css' %}">
+        {% endcompress %}
+
+        {% widget_styles %}
+        {% block stylesheets %}{% endblock %}
+        {% widget_templates %}
+        {% block templates %}{% endblock %}
+        {% block external_resources %}
+            <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+        {% endblock %}
+
         {% block js %}
             <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.4.min.js" crossorigin="anonymous"></script>
             <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         {% endblock %}
+        <script type="text/javascript" src="{% static 'js/datadumper.js' %}"></script>
     </head>
 
     <body>
@@ -208,7 +228,65 @@
                     </div>
                 </div>
 
-                <div class="col py-3">{% block content %}{% endblock %}</div>
+                <div class="col py-3">
+                    {% block main_container %}
+                        <div  id="app" rv-on-keydown="toggleOverlay">
+                            <div id="container">
+                                <div class="gridster fade" rv-each-grid="grids" rv-gridsterify="grid" rv-class-in="grid.active">
+                                    <ul></ul>
+                                </div>
+                            </div>
+
+                            <div id="overlayContainer">
+                                <div class="overlay fade" rv-class-in="showingOverlay" rv-on-click="hideOverlay">
+                                    <div class="box" rv-each-dashboard="dashboards" rv-on-click="swapDashboard">{ dashboard.name }</div>
+
+                                    <div id="actionContainer">
+                                        <div class="action" id="rollingMenu" rv-if="rollingMenu">
+                                            <span rv-on-click="rollingMenu.toggle">Rolling Time</span>
+
+                                            <ul rv-class-in="rollingMenu.showing">
+                                                <li rv-on-click="rollingMenu.set" data-time="60" style="transition-delay:0.3s">One minute</li>
+                                                <li rv-on-click="rollingMenu.set" data-time="30" style="transition-delay:0.2s">30 seconds</li>
+                                                <li rv-on-click="rollingMenu.set" data-time="5" style="transition-delay:0.1s">5 seconds</li>
+                                                <li rv-on-click="rollingMenu.set" data-time="0" style="transition-delay:0s">Not rolling</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="action" rv-each-action="actions">
+                                            <span rv-on-click="action.func">{ action.name }</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock %}
+
+                    {% compress js %}
+                        <script type="text/javascript">let DASHING_STATIC = "{% static 'dashing/' %}";</script>
+
+                        {% widget_configs %}
+
+                        <script type="text/javascript" src="{% static 'dashing/libs/jquery-1.11.0.js' %}"></script>
+                        <script type="text/javascript" src="{% static 'dashing/libs/sightglass.js' %}"></script>
+                        <script type="text/javascript" src="{% static 'dashing/libs/rivets.js' %}"></script>
+                        <script type="text/javascript" src="{% static 'dashing/libs/jquery-gridster/jquery.gridster.js' %}"></script>
+                        <script type="text/javascript" src="{% static 'dashing/libs/preloadjs/preloadjs-0.6.1.combined.js' %}"></script>
+                        <script type="text/javascript" src="{% static 'dashing/libs/moment/moment.js' %}"></script>
+
+                        {% moment_locales %}
+
+                        <script type="text/javascript" src="{% static 'dashing/version.js' %}"></script>
+                        <script type="text/javascript" src="{% static 'dashing/dashing.js' %}"></script>
+                        <script type="text/javascript" src="{% static 'dashing/dashing.utils.js' %}"></script>
+                    {% endcompress %}
+
+                    {% widget_scripts %}
+                    {% block scripts %}{% endblock %}
+                    {% block config_file %}
+                        <script type="text/javascript" src="{% static 'dashing-config.js' %}"></script>
+                    {% endblock %}
+                </div>
             </div>
         </div>
 

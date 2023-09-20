@@ -1,5 +1,7 @@
 Django==1.11.29
 django-cleanup==8.0.0
+django-compressor==4.4
+django-dashing==0.3.4
 django-settings-export==1.2.1
 django-widget-tweaks==1.4.12
 filemagic==1.6
