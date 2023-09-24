@@ -171,11 +171,11 @@ MEDIA_URL = f'http://{config("MEDIA_HOST")}/files/'
 
 # Account URLs
 
-LOGOUT_REDIRECT_URL = reverse_lazy('home')
+LOGOUT_REDIRECT_URL = '/'
 
 # Version information
 
-VERSION = '3.2'
+VERSION = '3.2.1'
 
 # List of settings to export to templates (django-settings-export)
 
