@@ -86,8 +86,8 @@ class ImportView(AppFormView):
 
                 row['Notes'] = self._create_notes(row['Items'], row['Notes'])
 
-                self._save_data(data, reader.line_num, user, row)
-                num_items += 1
+                if self._save_data(data, reader.line_num, user, row):
+                    num_items += 1
 
             return num_items
         else:
@@ -102,26 +102,24 @@ class ImportView(AppFormView):
                 num_items = 0
 
                 for line_num, row in enumerate(tabs['Orders'][1:], start=2):
-                    if len(row):
-                        self._save_data(
-                            data,
-                            line_num,
-                            user,
-                            {
-                                'Company': get_list_value(row, 4),
-                                'Company Email Site': get_list_value(row, 5),
-                                'Date Ordered': get_list_value(row, 1, default_value=None),
-                                'Date Received': get_list_value(row, 2, default_value=None),
-                                'Net Cost': row[7],
-                                'Notes': self._create_notes(get_list_value(row, 6), get_list_value(row, 14)),
-                                'Payment Used': get_list_value(row, 12, default_value=None),
-                                'Order #/Ref': get_list_value(row, 3),
-                                'Running Investment': row[11],
-                                'Shipping Cost': get_list_value(row, 9),
-                                'Tax Credit Paid': get_list_value(row, 8)
-                            }
-                        )
-
+                    if len(row) and self._save_data(
+                        data,
+                        line_num,
+                        user,
+                        {
+                            'Company': get_list_value(row, 4),
+                            'Company Email Site': get_list_value(row, 5),
+                            'Date Ordered': get_list_value(row, 1, default_value=None),
+                            'Date Received': get_list_value(row, 2, default_value=None),
+                            'Net Cost': row[7],
+                            'Notes': self._create_notes(get_list_value(row, 6), get_list_value(row, 14)),
+                            'Payment Used': get_list_value(row, 12, default_value=None),
+                            'Order #/Ref': get_list_value(row, 3),
+                            'Running Investment': row[11],
+                            'Shipping Cost': get_list_value(row, 9),
+                            'Tax Credit Paid': get_list_value(row, 8)
+                        }
+                    ):
                         num_items += 1
 
                 return num_items
@@ -133,7 +131,8 @@ class ImportView(AppFormView):
     @staticmethod
     def _save_data(data, line_num, user, row):
         if not row['Company']:
-            raise RuntimeError(f'Missing vendor in "{data.name}" (line {line_num})')
+            # Ignore lines that don't have a vendor value
+            return False
 
         if row['Date Ordered'] and row['Date Received'] and row['Date Received'] < row['Date Ordered']:
             raise RuntimeError(f'Received date is BEFORE the order date in "{data.name}" (line {line_num})')
@@ -164,3 +163,5 @@ class ImportView(AppFormView):
             vendor=vendor,
             user=user
         )
+
+        return True
