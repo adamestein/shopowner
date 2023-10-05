@@ -25,6 +25,20 @@ class AddItemForm(BaseItemForm):
     pass
 
 
+class AddItemPopupForm(BaseItemForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['qty_bought'].required = False
+        self.fields['wholesale_price'].required = False
+
+    class Meta(BaseItemForm.Meta):
+        fields = ['label', 'stock_number', 'vendor', 'product_number', 'wholesale_price', 'qty_bought', 'notes', 'user']
+        widgets = {
+            'user': forms.HiddenInput
+        }
+
+
 class UpdateItemForm(BaseItemForm):
     class Meta(BaseItemForm.Meta):
         fields = [

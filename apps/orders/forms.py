@@ -12,6 +12,9 @@ class ItemForm(forms.ModelForm):
     class Meta:
         exclude = ()
         model = Item
+        widgets = {
+            'item': SelectWithAdd(Item.item)
+        }
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)

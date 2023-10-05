@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
 from django.db import models
 
 from vendors.models import Vendor
@@ -19,8 +18,8 @@ class Inventory(models.Model):
     )
 
     qty_bought = models.PositiveIntegerField(
-        help_text='Quantity of this item purchased',
-        validators=[MinValueValidator(1)]
+        default=0,
+        help_text='Quantity of this item purchased'
     )
 
     qty_sold = models.PositiveIntegerField(
@@ -40,6 +39,7 @@ class Inventory(models.Model):
 
     wholesale_price = models.DecimalField(
         decimal_places=2,
+        default=0,
         help_text='Wholesale price per item unit',
         max_digits=10,
     )
