@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 
-from ..import_data.inventory import ImportView
+from ..import_data.inventory import ImportView, TAB_NAME
 
 from inventory.models import Inventory
 
@@ -114,7 +114,7 @@ class ImportInventoryTestCase(TestCase):
         response = view.post(request)
 
         self.assertEqual(
-            'Inventory tab not found in "missing_tabs.ods"',
+            f'{TAB_NAME} tab not found in "missing_tabs.ods"',
             response.context_data['form'].errors['file'].data[0].message.args[0]
         )
 
@@ -130,7 +130,7 @@ class ImportInventoryTestCase(TestCase):
         response = view.post(request)
 
         self.assertEqual(
-            'Header mismatch for "bad_inventory_header.ods" on the Inventory tab',
+            f'Header mismatch for "bad_inventory_header.ods" on the {TAB_NAME} tab',
             response.context_data['form'].errors['file'].data[0].message.args[0]
         )
 

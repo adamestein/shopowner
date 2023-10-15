@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 
-from ..import_data.orders import ImportView
+from ..import_data.orders import ImportView, TAB_NAME
 
 from library.testing.cbv import setup_view
 from library.testing.const import TESTING_ASSETS
@@ -87,7 +87,7 @@ class ImportOrdersTestCase(TestCase):
         response = view.post(request)
 
         self.assertEqual(
-            'Orders tab not found in "missing_tabs.ods"',
+            f'{TAB_NAME} tab not found in "missing_tabs.ods"',
             response.context_data['form'].errors['file'].data[0].message.args[0]
         )
 
@@ -103,7 +103,7 @@ class ImportOrdersTestCase(TestCase):
         response = view.post(request)
 
         self.assertEqual(
-            'Header mismatch for "bad_order_header.ods" on the Orders tab',
+            f'Header mismatch for "bad_order_header.ods" on the {TAB_NAME} tab',
             response.context_data['form'].errors['file'].data[0].message.args[0]
         )
 

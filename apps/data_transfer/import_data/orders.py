@@ -36,6 +36,8 @@ HEADER = [
     'Notes'
 ]
 
+TAB_NAME = 'G-Orders'
+
 
 class ImportView(AppFormView):
     form_class = ImportForm
@@ -98,10 +100,10 @@ class ImportView(AppFormView):
 
         try:
             # Don't get the empty header string on the last column with data like for CSV, so remove for header test
-            if tabs['Orders'][0] == HEADER:
+            if tabs[TAB_NAME][0] == HEADER:
                 num_items = 0
 
-                for line_num, row in enumerate(tabs['Orders'][1:], start=2):
+                for line_num, row in enumerate(tabs[TAB_NAME][1:], start=2):
                     if len(row) and self._save_data(
                         data,
                         line_num,
@@ -124,9 +126,9 @@ class ImportView(AppFormView):
 
                 return num_items
             else:
-                raise RuntimeError(f'Header mismatch for "{data.name}" on the Orders tab')
+                raise RuntimeError(f'Header mismatch for "{data.name}" on the {TAB_NAME} tab')
         except KeyError:
-            raise RuntimeError(f'Orders tab not found in "{data.name}"')
+            raise RuntimeError(f'{TAB_NAME} tab not found in "{data.name}"')
 
     @staticmethod
     def _save_data(data, line_num, user, row):

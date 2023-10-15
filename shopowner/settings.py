@@ -175,7 +175,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Version information
 
-VERSION = '3.4'
+VERSION = '3.5'
 
 # List of settings to export to templates (django-settings-export)
 
