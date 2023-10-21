@@ -207,6 +207,38 @@ class ImportOrdersTestCase(TestCase):
 
         self.assertEqual(0, mock_success.call_count)
 
+    def test_bad_shipping_cost_csv(self, mock_success):
+        with open(join(self.data_dir, 'bad_shipping_cost.csv'), 'rb') as input_file:
+            request = RequestFactory().post('/', {'file': input_file})
+            request.user = self.user
+
+        view = setup_view(ImportView(), request)
+
+        response = view.post(request)
+
+        self.assertEqual(
+            'Shipping Cost not a numeric value, found "PU" instead (line 18)',
+            response.context_data['form'].errors['file'].data[0].message.args[0]
+        )
+
+        self.assertEqual(0, mock_success.call_count)
+
+    def test_bad_shipping_cost_ods(self, mock_success):
+        with open(join(self.data_dir, 'bad_shipping_cost.ods'), 'rb') as input_file:
+            request = RequestFactory().post('/', {'file': input_file})
+            request.user = self.user
+
+        view = setup_view(ImportView(), request)
+
+        response = view.post(request)
+
+        self.assertEqual(
+            'Shipping Cost not a numeric value, found "PU" instead (line 18)',
+            response.context_data['form'].errors['file'].data[0].message.args[0]
+        )
+
+        self.assertEqual(0, mock_success.call_count)
+
     def _check_data(self, mock_success, missing_vendor_test=False):
         count = 15 if missing_vendor_test else 16
 

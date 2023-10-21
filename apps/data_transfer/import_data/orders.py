@@ -149,19 +149,19 @@ class ImportView(AppFormView):
 
         vendor, _ = Vendor.objects.get_or_create(name=row['Company'])
 
-        vendor.running_investment = convert_currency_text(row['Running Investment'])
+        vendor.running_investment = convert_currency_text(row['Running Investment'], 'Running Investment', line_num)
         vendor.website = row['Company Email Site']
         vendor.save()
 
         Order.objects.create(
             date_ordered=row['Date Ordered'] or None,
             date_received=row['Date Received'] or None,
-            net_cost=convert_currency_text(row['Net Cost']),
+            net_cost=convert_currency_text(row['Net Cost'], 'Net Cost', line_num),
             notes=row['Notes'],
             payment_method=payment_method,
             reference_number=str(row['Order #/Ref']).encode('ascii', 'ignore').decode('ascii'),
-            shipping_cost=convert_currency_text(row['Shipping Cost'] or '0'),
-            tax=convert_currency_text(row['Tax Credit Paid'] or '0'),
+            shipping_cost=convert_currency_text(row['Shipping Cost'] or '0', 'Shipping Cost', line_num),
+            tax=convert_currency_text(row['Tax Credit Paid'] or '0', 'Tax', line_num),
             vendor=vendor,
             user=user
         )

@@ -65,7 +65,7 @@ class ImportView(AppFormView):
             num_items = 0
 
             for row in reader:
-                self._save_data(user, row)
+                self._save_data(reader.line_num, user, row)
                 num_items += 1
 
             return num_items
@@ -80,9 +80,10 @@ class ImportView(AppFormView):
             if tabs[TAB_NAME][0] == HEADER[:-1]:
                 num_items = 0
 
-                for row in tabs[TAB_NAME][1:]:
+                for line_num, row in enumerate(tabs[TAB_NAME][1:], start=2):
                     if len(row):
                         self._save_data(
+                            line_num,
                             user,
                             {
                                 '': get_list_value(row, 10),
@@ -107,7 +108,7 @@ class ImportView(AppFormView):
             raise RuntimeError(f'{TAB_NAME} tab not found in "{data.name}"')
 
     @staticmethod
-    def _save_data(user, row):
+    def _save_data(line_num, user, row):
         vendor, _ = Vendor.objects.get_or_create(name=row['Supplier']) if row['Supplier'] else (None, None)
 
         if row['Wholesale Price/Unit Price'] == '':
@@ -115,9 +116,9 @@ class ImportView(AppFormView):
                 # We can calculate the missing wholesale price using the purchase price divided by the
                 # number of items purchased
                 if row['Priced']:
-                    total_price = Decimal(convert_currency_text(row['Priced']))
+                    total_price = Decimal(convert_currency_text(row['Priced'], 'Priced', line_num))
                 elif row['']:
-                    total_price = Decimal(convert_currency_text(row['']))
+                    total_price = Decimal(convert_currency_text(row[''], 'Total Price', line_num))
                 else:
                     # Don't have the purchase price
                     total_price = Decimal('0.00')
@@ -127,7 +128,9 @@ class ImportView(AppFormView):
                 # Don't have a wholesale price and don't have enough data to figure it out
                 price = Decimal('0.00')
         else:
-            price = Decimal(convert_currency_text(row['Wholesale Price/Unit Price']))
+            price = Decimal(
+                convert_currency_text(row['Wholesale Price/Unit Price'], 'Wholesale Price/Unit Price', line_num)
+            )
 
         sold = int(row['Sold']) if row['Sold'] else 0
 
