@@ -148,10 +148,16 @@ class ImportView(AppFormView):
             payment_method = None
 
         vendor, _ = Vendor.objects.get_or_create(name=row['Company'])
-
-        vendor.running_investment = convert_currency_text(row['Running Investment'], 'Running Investment', line_num)
         vendor.website = row['Company Email Site']
         vendor.save()
+
+        if row['Shipping Cost'].lower() == 'pu':
+            row['Shipping Cost'] = 0
+            picked_up = True
+        elif row['Shipping Cost']:
+            picked_up = False
+        else:
+            picked_up = None
 
         Order.objects.create(
             date_ordered=row['Date Ordered'] or None,
@@ -159,6 +165,7 @@ class ImportView(AppFormView):
             net_cost=convert_currency_text(row['Net Cost'], 'Net Cost', line_num),
             notes=row['Notes'],
             payment_method=payment_method,
+            picked_up=picked_up,
             reference_number=str(row['Order #/Ref']).encode('ascii', 'ignore').decode('ascii'),
             shipping_cost=convert_currency_text(row['Shipping Cost'] or '0', 'Shipping Cost', line_num),
             tax=convert_currency_text(row['Tax Credit Paid'] or '0', 'Tax', line_num),

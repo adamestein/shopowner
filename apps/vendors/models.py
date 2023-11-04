@@ -14,15 +14,12 @@ class Vendor(models.Model):
         null=True
     )
 
-    running_investment = models.DecimalField(
-        decimal_places=2,
-        default=0,
-        help_text='Total amount spent with this vendor',
-        max_digits=10,
-    )
-
     class Meta:
         ordering = ('name',)
+
+    @property
+    def running_investment(self):
+        return sum([order.total_cost for order in self.order_set.all()])
 
     def __str__(self):
         return self.name

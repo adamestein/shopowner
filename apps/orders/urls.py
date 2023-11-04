@@ -20,15 +20,6 @@ urlpatterns = [
         name='create'
     ),
 
-    # url(
-    #     r'^quick/$',
-    #     QuickQuantityUpdateView.as_view(
-    #         model=Inventory,
-    #         template_name='inventory/quick_quantity_update_list.html'
-    #     ),
-    #     name='quick_quantity_update'
-    # ),
-
     url(
         r'^fetch/inventory/$',
         FetchInventory.as_view(),
@@ -42,12 +33,6 @@ urlpatterns = [
         ),
         name='report'
     ),
-
-    # url(
-    #     r'^save/quantity/$',
-    #     SaveQuantityValue.as_view(),
-    #     name='save_quantity_values'
-    # ),
 
     url(
         r'^update/$',

@@ -39,8 +39,7 @@ class ImportOrdersTestCase(TestCase):
         response.client = Client()  # Needed for assertRedirects()
         self.assertRedirects(response, reverse('data_transfer:import_orders'), target_status_code=302)
 
-        self._check_data(mock_success)
-
+        self._check_data(mock_success, pickup_test=True)
         self._check_payment_methods()
         self._check_vendors()
 
@@ -72,8 +71,7 @@ class ImportOrdersTestCase(TestCase):
         response.client = Client()  # Needed for assertRedirects()
         self.assertRedirects(response, reverse('data_transfer:import_orders'), target_status_code=302)
 
-        self._check_data(mock_success)
-
+        self._check_data(mock_success, pickup_test=True)
         self._check_payment_methods()
         self._check_vendors()
 
@@ -122,7 +120,6 @@ class ImportOrdersTestCase(TestCase):
         self.assertRedirects(response, reverse('data_transfer:import_orders'), target_status_code=302)
 
         self._check_data(mock_success, missing_vendor_test=True)
-
         self._check_payment_methods()
         self._check_vendors(missing_vendor_test=True)
 
@@ -139,7 +136,6 @@ class ImportOrdersTestCase(TestCase):
         self.assertRedirects(response, reverse('data_transfer:import_orders'), target_status_code=302)
 
         self._check_data(mock_success, missing_vendor_test=True)
-
         self._check_payment_methods()
         self._check_vendors(missing_vendor_test=True)
 
@@ -217,7 +213,7 @@ class ImportOrdersTestCase(TestCase):
         response = view.post(request)
 
         self.assertEqual(
-            'Shipping Cost not a numeric value, found "PU" instead (line 18)',
+            'Shipping Cost not a numeric value, found "text" instead (line 18)',
             response.context_data['form'].errors['file'].data[0].message.args[0]
         )
 
@@ -233,13 +229,13 @@ class ImportOrdersTestCase(TestCase):
         response = view.post(request)
 
         self.assertEqual(
-            'Shipping Cost not a numeric value, found "PU" instead (line 18)',
+            'Shipping Cost not a numeric value, found "text" instead (line 18)',
             response.context_data['form'].errors['file'].data[0].message.args[0]
         )
 
         self.assertEqual(0, mock_success.call_count)
 
-    def _check_data(self, mock_success, missing_vendor_test=False):
+    def _check_data(self, mock_success, pickup_test=False, missing_vendor_test=False):
         count = 15 if missing_vendor_test else 16
 
         orders = Order.objects.all()
@@ -251,6 +247,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('225'), orders[0].net_cost)
         self.assertEqual('little keychains and pals\n\npicked up', orders[0].notes)
         self.assertIsNone(orders[0].payment_method)
+        self.assertIsNone(orders[0].picked_up)
         self.assertEqual(0, orders[0].receipts.count())
         self.assertEqual('#1721', orders[0].reference_number)
         self.assertEqual(Decimal('0'), orders[0].shipping_cost)
@@ -265,6 +262,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('30'), orders[1].net_cost)
         self.assertEqual('little keychains and pals\n\npicked up', orders[1].notes)
         self.assertIsNone(orders[1].payment_method)
+        self.assertTrue(orders[1].picked_up) if pickup_test else self.assertIsNone(orders[1].picked_up)
         self.assertEqual(0, orders[1].receipts.count())
         self.assertEqual('#1724', orders[1].reference_number)
         self.assertEqual(Decimal('0'), orders[1].shipping_cost)
@@ -279,6 +277,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('128'), orders[2].net_cost)
         self.assertEqual('Fair Trade Items- Various Items', orders[2].notes)
         self.assertIsNone(orders[2].payment_method)
+        self.assertFalse(orders[2].picked_up)
         self.assertEqual(0, orders[2].receipts.count())
         self.assertEqual('0039823', orders[2].reference_number)
         self.assertEqual(Decimal('24.29'), orders[2].shipping_cost)
@@ -293,6 +292,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('63.40'), orders[3].net_cost)
         self.assertEqual('Rose Buds, Chamomile Flowers and Lavender Flowers', orders[3].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Visa'), orders[3].payment_method)
+        self.assertFalse(orders[3].picked_up)
         self.assertEqual(0, orders[3].receipts.count())
         self.assertEqual('1464787', orders[3].reference_number)
         self.assertEqual(Decimal('18.26'), orders[3].shipping_cost)
@@ -312,6 +312,7 @@ class ImportOrdersTestCase(TestCase):
             self.assertEqual(Decimal('90'), orders[4].net_cost)
             self.assertEqual('Sunflower Chocolate for Ukraine\n\nFor donation', orders[4].notes)
             self.assertIsNone(orders[4].payment_method)
+            self.assertIsNone(orders[4].picked_up)
             self.assertEqual(0, orders[4].receipts.count())
             self.assertEqual('', orders[4].reference_number)
             self.assertEqual(Decimal('0'), orders[4].shipping_cost)
@@ -326,6 +327,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('463'), orders[start_index].net_cost)
         self.assertEqual('Lip Balm and Lip Potion', orders[start_index].notes)
         self.assertIsNone(orders[start_index].payment_method)
+        self.assertFalse(orders[5].picked_up)
         self.assertEqual(0, orders[start_index].receipts.count())
         self.assertEqual('W10004527', orders[start_index].reference_number)
         self.assertEqual(Decimal('24'), orders[start_index].shipping_cost)
@@ -340,6 +342,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('14.75'), orders[start_index + 1].net_cost)
         self.assertEqual('essential oils for dry herbs', orders[start_index + 1].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[start_index + 1].payment_method)
+        self.assertFalse(orders[6].picked_up)
         self.assertEqual(0, orders[start_index + 1].receipts.count())
         self.assertEqual('', orders[start_index + 1].reference_number)
         self.assertEqual(Decimal('6.25'), orders[start_index + 1].shipping_cost)
@@ -358,6 +361,7 @@ class ImportOrdersTestCase(TestCase):
             orders[start_index + 2].notes
         )
         self.assertEqual(PaymentMethod.objects.get(label='Mastercard 1709'), orders[start_index + 2].payment_method)
+        self.assertIsNone(orders[start_index + 2].picked_up)
         self.assertEqual(0, orders[start_index + 2].receipts.count())
         self.assertEqual('', orders[start_index + 2].reference_number)
         self.assertEqual(Decimal('0'), orders[start_index + 2].shipping_cost)
@@ -372,6 +376,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('250'), orders[start_index + 3].net_cost)
         self.assertEqual('Hippie Iron On Patch and Journals', orders[start_index + 3].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[start_index + 3].payment_method)
+        self.assertFalse(orders[start_index + 3].picked_up)
         self.assertEqual(0, orders[start_index + 3].receipts.count())
         self.assertEqual('475656', orders[start_index + 3].reference_number)
         self.assertEqual(Decimal('17.60'), orders[start_index + 3].shipping_cost)
@@ -386,6 +391,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('159.39'), orders[start_index + 4].net_cost)
         self.assertEqual('Pun Mugs', orders[start_index + 4].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[start_index + 4].payment_method)
+        self.assertFalse(orders[start_index + 4].picked_up)
         self.assertEqual(0, orders[start_index + 4].receipts.count())
         self.assertEqual('10390', orders[start_index + 4].reference_number)
         self.assertEqual(Decimal('59.06'), orders[start_index + 4].shipping_cost)
@@ -400,6 +406,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('326.10'), orders[start_index + 5].net_cost)
         self.assertEqual('Christmas Ornaments', orders[start_index + 5].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[start_index + 5].payment_method)
+        self.assertIsNone(orders[start_index + 5].picked_up)
         self.assertEqual(0, orders[start_index + 5].receipts.count())
         self.assertEqual('SO4484', orders[start_index + 5].reference_number)
         self.assertEqual(Decimal('0'), orders[start_index + 5].shipping_cost)
@@ -414,6 +421,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('559'), orders[start_index + 6].net_cost)
         self.assertEqual('Solid Perfumes', orders[start_index + 6].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[start_index + 6].payment_method)
+        self.assertIsNone(orders[start_index + 6].picked_up)
         self.assertEqual(0, orders[start_index + 6].receipts.count())
         self.assertEqual('#4925', orders[start_index + 6].reference_number)
         self.assertEqual(Decimal('0'), orders[start_index + 6].shipping_cost)
@@ -428,6 +436,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('68.73'), orders[start_index + 7].net_cost)
         self.assertEqual('Back Ordered Ornament', orders[start_index + 7].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Apple Card'), orders[start_index + 7].payment_method)
+        self.assertIsNone(orders[start_index + 7].picked_up)
         self.assertEqual(0, orders[start_index + 7].receipts.count())
         self.assertEqual('SO4484', orders[start_index + 7].reference_number)
         self.assertEqual(Decimal('0'), orders[start_index + 7].shipping_cost)
@@ -442,6 +451,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('175.50'), orders[start_index + 8].net_cost)
         self.assertEqual('refill of popular items', orders[start_index + 8].notes)
         self.assertEqual(PaymentMethod.objects.get(label='Mastercard 1986'), orders[start_index + 8].payment_method)
+        self.assertFalse(orders[start_index + 8].picked_up)
         self.assertEqual(0, orders[start_index + 8].receipts.count())
         self.assertEqual('W10005990', orders[start_index + 8].reference_number)
         self.assertEqual(Decimal('9.55'), orders[start_index + 8].shipping_cost)
@@ -456,6 +466,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(Decimal('15.45'), orders[start_index + 9].net_cost)
         self.assertEqual('Cranes for resell (intended orig for display)', orders[start_index + 9].notes)
         self.assertIsNone(orders[start_index + 9].payment_method)
+        self.assertFalse(orders[start_index + 9].picked_up)
         self.assertEqual(0, orders[start_index + 9].receipts.count())
         self.assertEqual('#2798397966 ', orders[start_index + 9].reference_number)
         self.assertEqual(Decimal('6.99'), orders[start_index + 9].shipping_cost)
@@ -469,6 +480,8 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(0, orders[start_index + 10].items.count())
         self.assertEqual(Decimal('26'), orders[start_index + 10].net_cost)
         self.assertEqual('Cranes for resell (intended orig for display)', orders[start_index + 10].notes)
+        self.assertIsNone(orders[start_index + 10].payment_method)
+        self.assertFalse(orders[start_index + 10].picked_up)
         self.assertEqual(0, orders[start_index + 10].receipts.count())
         self.assertEqual(0, orders[start_index + 10].receipts.count())
         self.assertEqual('#2796822537 ', orders[start_index + 10].reference_number)
@@ -495,7 +508,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual(11 if missing_vendor_test else 12, vendors.count())
 
         self.assertEqual('Cody and Foster', vendors[0].name)
-        self.assertEqual(Decimal('2825.88'), vendors[0].running_investment)
+        self.assertEqual(Decimal('394.83'), vendors[0].running_investment)
         self.assertEqual('', vendors[0].website)
 
         self.assertEqual('Dzi Handmade', vendors[1].name)
@@ -503,7 +516,7 @@ class ImportOrdersTestCase(TestCase):
         self.assertEqual('', vendors[1].website)
 
         self.assertEqual('Eden Botanicals', vendors[2].name)
-        self.assertEqual(Decimal('1086.95'), vendors[2].running_investment)
+        self.assertEqual(Decimal('21'), vendors[2].running_investment)
         self.assertEqual('', vendors[2].website)
         
         if missing_vendor_test:
@@ -512,37 +525,37 @@ class ImportOrdersTestCase(TestCase):
             start_index = 4
 
             self.assertEqual('Encore Chocolate', vendors[3].name)
-            self.assertEqual(Decimal('323.95'), vendors[3].running_investment)
+            self.assertEqual(Decimal('90'), vendors[3].running_investment)
             self.assertEqual('', vendors[3].website)
 
         self.assertEqual('Insanely Paracord', vendors[start_index].name)
-        self.assertEqual(Decimal('1065.95'), vendors[start_index].running_investment)
+        self.assertEqual(Decimal('255'), vendors[start_index].running_investment)
         self.assertEqual('https://insanelyparacord.com', vendors[start_index].website)
 
         self.assertEqual('PollyNitta – Etsy', vendors[start_index + 1].name)
-        self.assertEqual(Decimal('2881.31'), vendors[start_index + 1].running_investment)
+        self.assertEqual(Decimal('55.43'), vendors[start_index + 1].running_investment)
         self.assertEqual('', vendors[start_index + 1].website)
 
         self.assertEqual('Root To Vine', vendors[start_index + 2].name)
-        self.assertEqual(Decimal('1200.95'), vendors[start_index + 2].running_investment)
+        self.assertEqual(Decimal('114'), vendors[start_index + 2].running_investment)
         self.assertEqual('Etsy', vendors[start_index + 2].website)
 
         self.assertEqual('Sarah Edmonds', vendors[start_index + 3].name)
-        self.assertEqual(Decimal('1419.40'), vendors[start_index + 3].running_investment)
+        self.assertEqual(Decimal('218.45'), vendors[start_index + 3].running_investment)
         self.assertEqual('https://www.sarahedmondsillustration.com/tradeorders', vendors[start_index + 3].website)
 
         self.assertEqual('Soul Flower', vendors[start_index + 4].name)
-        self.assertEqual(Decimal('1687'), vendors[start_index + 4].running_investment)
+        self.assertEqual(Decimal('267.60'), vendors[start_index + 4].running_investment)
         self.assertEqual('https://www.soul-flower.com/mm5/merchant.mvc?Screen=ACLN', vendors[start_index + 4].website)
 
         self.assertEqual('Starwest Botanicals', vendors[start_index + 5].name)
-        self.assertEqual(Decimal('233.95'), vendors[start_index + 5].running_investment)
+        self.assertEqual(Decimal('81.66'), vendors[start_index + 5].running_investment)
         self.assertEqual('https://wholesale.starwest-botanicals.com/', vendors[start_index + 5].website)
 
         self.assertEqual('Tinte Cosmetics', vendors[start_index + 6].name)
-        self.assertEqual(Decimal('2757.15'), vendors[start_index + 6].running_investment)
+        self.assertEqual(Decimal('672.05'), vendors[start_index + 6].running_investment)
         self.assertEqual('', vendors[start_index + 6].website)
 
         self.assertEqual('Warm Human', vendors[start_index + 7].name)
-        self.assertEqual(Decimal('2572.10'), vendors[start_index + 7].running_investment)
+        self.assertEqual(Decimal('559.00'), vendors[start_index + 7].running_investment)
         self.assertEqual('', vendors[start_index + 7].website)

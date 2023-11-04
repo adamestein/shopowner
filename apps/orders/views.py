@@ -13,6 +13,8 @@ class CreateOrderView(AppCreateView):
         update_quantity = 'update_quantity' in form.cleaned_data and form.cleaned_data['update_quantity']
 
         self.object = form.save(commit=False)
+        if self.object.shipping_cost:
+            self.object.picked_up = False
         self.object.user = self.request.user
         self.object.save()
 
@@ -57,6 +59,8 @@ class UpdateOrderView(AppUpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
+        if self.object.shipping_cost:
+            self.object.picked_up = False
         self.object.user = self.request.user
         self.object.save()
 

@@ -72,6 +72,11 @@ class Order(models.Model):
         max_digits=10,
     )
 
+    picked_up = models.NullBooleanField(
+        default=None,
+        help_text='True if the order was picked up, False if shipping cost, otherwise None for unknown status'
+    )
+
     tax = models.DecimalField(
         decimal_places=2,
         default=0,
