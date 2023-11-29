@@ -104,7 +104,11 @@ class ImportView(AppFormView):
                 num_items = 0
 
                 for line_num, row in enumerate(tabs[TAB_NAME][1:], start=2):
-                    if len(row) and self._save_data(
+                    company = get_list_value(row, 4)
+
+                    # We only try to save the data if there is data and there is a vendor (company) value. We check
+                    # for the vendor value here to avoid lines that just have random data.
+                    if len(row) and company and self._save_data(
                         data,
                         line_num,
                         user,
