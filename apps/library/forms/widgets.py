@@ -8,7 +8,8 @@ from django.forms import DateInput, Widget
 from django.utils.safestring import mark_safe
 
 DEFAULT_ONCLICK = "return showAddAnotherPopup(this);"
-DEFAULT_URL = '/admin/%(app_label)s/%(model_name)s/add/?_to_field=id&_popup=1'
+# DEFAULT_URL = '/admin/%(app_label)s/%(model_name)s/add/?_to_field=id&_popup=1'
+DEFAULT_URL = '/add_popup/%(app_label)s/%(model_name)s/?_to_field=id&_popup=1'
 
 
 class HTML5DateInput(DateInput):

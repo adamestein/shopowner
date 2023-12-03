@@ -8,12 +8,15 @@ from django.views.static import serve
 from dashboard.widgets import QuickSummaryWidget
 from dashboard.wrapper import Wrapper
 
+from library.forms import popup
+
 router.register(QuickSummaryWidget, 'quick_summary_widget')
 
 
 urlpatterns = [
     url(r'^$', Wrapper.as_view()),
     url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^add_popup/(?P<app_label>\w*)/(?P<model_name>\w*)/', popup.popup_form),
     url(r'^admin/', admin.site.urls),
     url(r'^dashboard/', include(router.urls), name='dashboard'),
     url(r'^data_transfer/', include('data_transfer.urls')),

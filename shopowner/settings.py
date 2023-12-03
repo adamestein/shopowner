@@ -59,7 +59,9 @@ INSTALLED_APPS = [
     'inventory',
     'library',
     'orders',
-    'vendors'
+    'vendors',
+
+    'shopowner.apps.ShopOwnerAppConfig'   # Any configuration needed AFTER all the apps are ready
 ]
 
 MIDDLEWARE = [
@@ -175,7 +177,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Version information
 
-VERSION = '3.6.1'
+VERSION = '3.6.2'
 
 # List of settings to export to templates (django-settings-export)
 
